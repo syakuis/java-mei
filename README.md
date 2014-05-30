@@ -15,7 +15,7 @@ Apache Tomcat 5.x 이상<br>
 MySQL 5.x 이상<br/>
 
 
-= 소 개 =
+### 소 개
 
 *MEI (Modularize Extension Interaction)* 란 모듈기반 방식의 프로그래밍을 제시하는 프레임워크입니다.<br>
 모듈기반 방식이란, 하나의 어플리케이션을 기능별로 세분화하여 모듈화하는 방식을 말합니다.<br>
@@ -35,37 +35,36 @@ MEI는 다음과 같은 오픈 프레임워크를 이용하여 최적의 모듈�
  * 데이터베이스 맵퍼 myBatis
 <br/>
 
-= 사용된 라이브러리 =
+### 사용된 라이브러리 =
 
- * Struts 2.3.1.2
- # commons-beanutils-1.7.0.jar
- # commons-fileupload-1.2.2.jar
- # commons-validator-1.3.1.jar
- # commons-chain-1.2.jar
- # commons-io-2.0.1.jar
- # freemarker-2.3.18.jar
- # ognl-3.0.4.jar
- # commons-collections-3.1.jar -> 3.2
- # commons-lang-2.5.jar -> 2.6
- # javassist-3.11.0.GA.jar
- # struts2-core-2.3.1.2.jar
- # commons-configuration-1.6.jar
- # commons-logging-1.1.1.jar
- # xwork-core-2.3.1.2.jar
- # commons-digester-2.0.jar
- # commons-logging-api-1.1.jar
- # log4j-1.2.16.jar
- # Xerces2 Java 2.11.0 ( xml-apis.jar , xercesImpl.jar )
+#### Struts 2.3.1.2
+ * commons-beanutils-1.7.0.jar
+ * commons-fileupload-1.2.2.jar
+ * commons-validator-1.3.1.jar
+ * commons-chain-1.2.jar
+ * commons-io-2.0.1.jar
+ * freemarker-2.3.18.jar
+ * ognl-3.0.4.jar
+ * commons-collections-3.1.jar -> 3.2
+ * commons-lang-2.5.jar -> 2.6
+ * javassist-3.11.0.GA.jar
+ * struts2-core-2.3.1.2.jar
+ * commons-configuration-1.6.jar
+ * commons-logging-1.1.1.jar
+ * xwork-core-2.3.1.2.jar
+ * commons-digester-2.0.jar
+ * commons-logging-api-1.1.jar
+ * log4j-1.2.16.jar
+ * Xerces2 Java 2.11.0 ( xml-apis.jar , xercesImpl.jar )
 <br/>
 
- * mybatis 3.0.6
- # mybatis-3.0.6.jar
- # mysql-connector-java-5.1.18-bin.jar
+#### mybatis 3.0.6
+ * mybatis-3.0.6.jar
+ * mysql-connector-java-5.1.18-bin.jar
 <br/>
 
 
-== Javascript ==
-
+#### Javascript
  * xml2json
  * jQuery
  * jQuery Action
