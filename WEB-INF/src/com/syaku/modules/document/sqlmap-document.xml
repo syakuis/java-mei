@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.document">
+  <typeAlias alias="DocumentBean" type="com.syaku.modules.document.DocumentBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-document" class="DocumentBean">
+
+    <result property="document_orl" column="document_orl" nullValue="" />
+    <result property="category_orl" column="category_orl" nullValue="" />
+    <result property="module_orl" column="module_orl" nullValue="" />
+    <result property="member_orl" column="member_orl" nullValue="" />
+    <result property="user_id" column="user_id" nullValue="" />
+    <result property="user_name" column="user_name" nullValue="" />
+    <result property="password" column="password" nullValue="" />
+    <result property="nickname" column="nickname" nullValue="" />
+    <result property="email" column="email" nullValue="" />
+    <result property="homepage" column="homepage" nullValue="" />
+    <result property="title" column="title" nullValue="" />
+    <result property="content" column="content" nullValue="" />
+    <result property="content_text" column="content_text" nullValue="" />
+    <result property="extra_vars" column="extra_vars" nullValue="" />
+    <result property="readed_count" column="readed_count" nullValue="" />
+    <result property="vote_count" column="vote_count" nullValue="" />
+    <result property="ipaddress" column="ipaddress" nullValue="" />
+    <result property="regdate" column="regdate" nullValue="" />
+    <result property="last_update" column="last_update" nullValue="" />
+    <result property="last_updater" column="last_updater" nullValue="" />
+    <result property="parent_orl" column="parent_orl" nullValue="" />
+    <result property="reply_member_orl" column="reply_member_orl" nullValue="" />
+    <result property="reply_group" column="reply_group" nullValue="" />
+    <result property="reply_depth" column="reply_depth" nullValue="" />
+    <result property="reply_num" column="reply_num" nullValue="" />
+    <result property="grouporder" column="grouporder" nullValue="" />
+    <result property="listorder" column="listorder" nullValue="" />
+    <result property="is_notice" column="is_notice" nullValue="" />
+    <result property="title_bold" column="title_bold" nullValue="" />
+    <result property="title_color" column="title_color" nullValue="" />
+
+    <!-- left join -->
+    <result property="category_title" column="category_title" nullValue="" />
+    <result property="comment_count" column="comment_count" nullValue="" />
+    <result property="file_count" column="file_count" nullValue="" />
+    <!-- left join -->
+
+  </resultMap>
+
+
+  <sql id="sql-document-join">
+    SELECT 
+      A.*,
+      B.title AS category_title,
+      IFNULL(C.count,0) AS comment_count,
+      IFNULL(F.count,0) AS file_count
+    FROM DOCUMENT A
+    LEFT JOIN SK_CATEGORY B ON B.category_orl = A.category_orl
+    LEFT JOIN SK_COMMENT_COUNTER C ON C.module_orl = A.module_orl AND C.target_orl = A.document_orl
+    LEFT JOIN SK_FILE_COUNTER F ON F.module_orl = A.module_orl AND F.target_orl = A.document_orl
+    <isNotEmpty prepend="AND" property="seq" >
+      F.seq = #seq#
+    </isNotEmpty>
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="module_orl" >
+        A.module_orl = #module_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="reply_member_orl" >
+        A.reply_member_orl = #reply_member_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="category_orl" >
+        A.category_orl = #category_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="parent_orl" >
+        A.parent_orl = #parent_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="is_notice" >
+        A.is_notice = #is_notice#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="sch_value">
+
+        <isEmpty property="sch_type">
+          (A.title LIKE CONCAT('%', #sch_value#, '%') OR A.content_text LIKE CONCAT('%', #sch_value#, '%'))
+        </isEmpty>
+
+        <isNotEmpty property="sch_type">
+          A.$sch_type$ LIKE CONCAT('%', #sch_value#, '%')
+        </isNotEmpty>
+      </isNotEmpty>
+
+    </dynamic>
+  </sql>
+
+  <select id="select-document-join-page-list" parameterClass="hashMap" resultMap="result-document">
+    <include refid="sql-document-join" />
+    <isNotEmpty property="listorder" >
+    ORDER BY $listorder$
+    </isNotEmpty>
+    <isEmpty property="listorder" >
+    ORDER BY is_notice DESC, listorder
+    </isEmpty>
+    <isNotEmpty prepend="LIMIT" property="page_start" >
+     $page_start$,$page_row$
+    </isNotEmpty>
+  </select>
+
+  <select id="select-document-reply-join-page-list" parameterClass="hashMap" resultMap="result-document">
+    <include refid="sql-document-join" />
+    ORDER BY grouporder, reply_num
+
+    <isNotEmpty prepend="LIMIT" property="page_start" >
+     $page_start$,$page_row$
+    </isNotEmpty>
+  </select>
+
+  <select id="select-document-file-list" parameterClass="hashMap" resultClass="hashMap">
+    SELECT F.* FROM SK_FILE F LEFT JOIN DOCUMENT D ON D.module_orl = F.module_orl
+    AND D.document_orl = F.target_orl
+    <isNotEmpty prepend="AND" property="seq" >
+      F.seq = #seq#
+    </isNotEmpty>
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="module_orl" >
+        D.module_orl = #module_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="type" >
+        F.type = #type#
+      </isNotEmpty>
+
+      <isNotEmpty property="document_orl" >
+        <isEqual prepend="AND" property="document_orl" compareValue="notnull" >
+          F.target_orl &gt; 0
+        </isEqual>
+        <isNotEqual prepend="AND" property="document_orl" compareValue="notnull" >
+          F.target_orl = #document_orl#
+        </isNotEqual>
+      </isNotEmpty>
+
+    </dynamic>
+
+    <isNotEmpty prepend="ORDER BY" property="order" >
+       $order$
+    </isNotEmpty>
+
+    <isNotEmpty prepend="LIMIT" property="limit" >
+       $limit$
+    </isNotEmpty>
+
+  </select>
+
+
+  <sql id="sql-document-pervnext-field">
+      P.document_orl AS perv_document_orl,
+      P.category_orl AS perv_category_orl,
+      P.title AS perv_title,
+      P.readed_count AS perv_readed_count,
+      P.regdate AS perv_regdate,
+
+      N.document_orl AS next_document_orl,
+      N.category_orl AS next_category_orl,
+      N.title AS next_title,
+      N.readed_count AS next_readed_count,
+      N.regdate AS next_regdate
+  </sql>
+  <select id="select-document-pervnext" parameterClass="hashMap" resultClass="hashMap">
+    SELECT <include refid="sql-document-pervnext-field" /> FROM
+    (SELECT * FROM DOCUMENT WHERE module_orl = #module_orl# AND document_orl = #document_orl# LIMIT 1) C
+    LEFT JOIN (
+    SELECT * FROM DOCUMENT WHERE module_orl = #module_orl# AND parent_orl = 0 AND document_orl &lt; #document_orl# 
+    <isNotEmpty prepend="AND" property="category_orl" > category_orl = #category_orl#</isNotEmpty>
+    ORDER BY listorder LIMIT 1
+    ) P
+    ON P.document_orl &lt; C.document_orl
+    LEFT JOIN (
+    SELECT * FROM DOCUMENT WHERE module_orl = #module_orl# AND parent_orl = 0 AND document_orl &gt; #document_orl# 
+    <isNotEmpty prepend="AND" property="category_orl" > category_orl = #category_orl#</isNotEmpty>
+    ORDER BY document_orl LIMIT 1
+    ) N
+    ON N.document_orl &gt; C.document_orl
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="category_orl" >
+        C.category_orl = #category_orl#
+      </isNotEmpty>
+
+    </dynamic>
+
+  </select>
+
+  <select id="select-document-one" parameterClass="hashMap" resultMap="result-document">
+    SELECT 
+      A.*,
+      B.title AS category_title,
+      IFNULL(C.count,0) AS comment_count,
+      IFNULL(F.count,0) AS file_count
+    FROM DOCUMENT A
+    LEFT JOIN SK_CATEGORY B ON B.category_orl = A.category_orl
+    LEFT JOIN SK_COMMENT_COUNTER C ON C.module_orl = A.module_orl AND C.target_orl = A.document_orl
+    LEFT JOIN SK_FILE_COUNTER F ON F.module_orl = A.module_orl AND F.target_orl = A.document_orl
+    <isNotEmpty prepend="AND" property="seq" >
+      F.seq = #seq#
+    </isNotEmpty>
+    WHERE A.document_orl = #document_orl# LIMIT 1
+  </select>
+
+  <select id="select-document-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(document_orl),0) FROM DOCUMENT
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="module_orl" >
+        module_orl = #module_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="reply_member_orl" >
+        reply_member_orl = #reply_member_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="password" >
+        password = #password#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="category_orl" >
+        category_orl = #category_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="parent_orl" >
+        parent_orl = #parent_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="is_notice" >
+        is_notice = #is_notice#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="sch_value">
+
+        <isEmpty property="sch_type">
+          (title LIKE CONCAT('%', #sch_value#, '%') OR content_text LIKE CONCAT('%', #sch_value#, '%'))
+        </isEmpty>
+
+        <isNotEmpty property="sch_type">
+          $sch_type$ LIKE CONCAT('%', #sch_value#, '%')
+        </isNotEmpty>
+      </isNotEmpty>
+
+    </dynamic>
+
+  </select>
+
+  <insert id="insert-document" parameterClass="DocumentBean">
+    <selectKey resultClass="String" keyProperty="document_orl">
+      SELECT (IFNULL(MAX(document_orl),0) + 1) AS document_orl FROM DOCUMENT
+    </selectKey>
+
+    INSERT INTO DOCUMENT
+    (
+      document_orl,
+      category_orl,
+      module_orl,
+      member_orl,
+      user_id,
+      user_name,
+      password,
+      nickname,
+      email,
+      homepage,
+      title,
+      content,
+      content_text,
+      extra_vars,
+      readed_count,
+      vote_count,
+      ipaddress,
+      regdate,
+      last_update,
+      last_updater,
+      parent_orl,
+      reply_member_orl,
+      grouporder,
+      reply_group,
+      reply_depth,
+      reply_num,
+      listorder,
+      is_notice,
+      title_bold,
+      title_color
+
+    ) VALUES (
+
+      #document_orl#,
+      #category_orl#,
+      #module_orl#,
+      #member_orl#,
+      #user_id#,
+      #user_name#,
+      #password#,
+      #nickname#,
+      #email#,
+      #homepage#,
+      #title#,
+      #content#,
+      #content_text#,
+      #extra_vars#,
+      #readed_count#,
+      #vote_count#,
+      #ipaddress#,
+      #regdate#,
+      #last_update#,
+      #last_updater#,
+      #parent_orl#,
+      <isNotEmpty property="reply_group" >
+      #reply_member_orl#,
+      #reply_group# * -1,
+      #reply_group#,
+      </isNotEmpty>
+      <isEmpty property="reply_group" >
+      #member_orl#,
+      #document_orl# * -1,
+      #document_orl#,
+      </isEmpty>
+      #reply_depth#,
+      #reply_num#,
+      #document_orl# * -1,
+      #is_notice#,
+      #title_bold#,
+      #title_color#
+
+    )
+  </insert>
+
+  <update id="update-document" parameterClass="DocumentBean">
+    UPDATE DOCUMENT SET
+
+      <isNotEmpty property="regdate" >
+      regdate = #regdate#,
+      </isNotEmpty>
+
+      category_orl = #category_orl#,
+      email = #email#,
+      homepage = #homepage#,
+      title = #title#,
+      content = #content#,
+      content_text = #content_text#,
+      extra_vars = #extra_vars#,
+      last_update = #last_update#,
+      last_updater = #last_updater#
+
+      <isNotNull property="is_notice" >
+      ,is_notice = #is_notice#
+      </isNotNull>
+      <isNotNull property="title_bold" >
+      ,title_bold = #title_bold#
+      </isNotNull>
+      <isNotNull property="title_color" >
+      ,title_color = #title_color#
+      </isNotNull>
+
+    WHERE document_orl = #document_orl#
+  </update>
+
+  <update id="update-document-reply-seq" parameterClass="hashMap">
+    UPDATE DOCUMENT SET
+    reply_num = reply_num + 1
+    WHERE reply_group = #reply_group#
+    AND reply_num > #reply_num#
+  </update>
+
+  <update id="update-document-readed-count" parameterClass="hashMap">
+    UPDATE DOCUMENT SET
+    readed_count = $readed_count$
+    WHERE document_orl = #document_orl#
+  </update>
+
+  <update id="update-document-vote-count" parameterClass="hashMap">
+    UPDATE DOCUMENT SET
+    vote_count = $vote_count$
+    WHERE document_orl = #document_orl#
+  </update>
+
+  <delete id="delete-document" parameterClass="hashMap">
+    DELETE FROM DOCUMENT WHERE document_orl = #document_orl#
+  </delete>
+
+  <delete id="delete-document-module" parameterClass="hashMap">
+    DELETE FROM DOCUMENT WHERE module_orl = #module_orl#
+  </delete>
+
+</sqlMap>

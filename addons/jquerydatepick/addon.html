@@ -1,0 +1,24 @@
+<link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="${MEI_PATH_RELATIVE}/addons/jquerydatepick/redmond.datepick.css" />
+<script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/addons/jquerydatepick/jquery.datepick.js"></script>
+<script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/addons/jquerydatepick/jquery.datepick-ko.js"></script>
+
+<script type="text/javascript">
+  jQuery.datepick.setDefaults({
+      dateFormat: 'yy-mm-dd',
+      showAnim : '',
+      showOn: 'both',
+      buttonImageOnly: true,
+      buttonImage: '${MEI_PATH_RELATIVE}/addons/jquerydatepick/calendar.gif',
+      buttonText: '달력'
+  });
+</script>
+
+<#macro jquerydatepick target>
+  jQuery(function() {
+    jQuery("${target}").datepick();
+  });
+</#macro>
+
+<#macro addon_datepicker target>
+<@jquerydatepick target=target />
+</#macro>

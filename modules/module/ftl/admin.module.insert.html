@@ -1,0 +1,53 @@
+<div id="sub_column_content">
+
+<form id="form" method="post" action="./procDocumentInsert.me">
+
+<h4 class="document-sub-title"><span class="iconset title"></span> 모듈</h4>
+<div class="document-write">
+
+<table class="table-write" summary="document write" border="1" cellspacing="0">
+<colgroup>
+<col width="100"><col>
+</colgroup>
+<tbody>
+
+  <tr>
+  <th scope="row">모듈명 (MID)</th>
+  <td>
+    <div class="item">
+      <input type="text" class="i_text w250" id="module_id" name="module_id" value="${O.objModule.mid?html}" />
+      <p class="i_dsc">알파벳 소문자와 숫자 _ 를 사용하여 모듈명을 완성하세요.</p>
+    </div>
+  </td>
+  </tr>
+
+  <tr>
+  <th scope="row">브라우저 제목</th>
+  <td>
+    <div class="item">
+      <input type="text" class="i_text w250" id="browser_title" name="browser_title" value="${O.objModule.browser_title?html}" />
+    </div>
+  </td>
+  </tr>
+
+  <tr>
+  <th scope="row">스킨</th>
+  <td>
+    <div class="item">
+      <select name="skin" id="skin" class="i_select">
+        <option value="" selected="selected">선택</option>
+        <#list O.listSkin as skin>
+        <option value="${skin?if_exists?html}">${skin}</option>
+        </#list>
+      </select>
+    </div>
+  </td>
+  </tr>
+
+</tbody>
+</table>
+</div>
+
+</form>
+
+</div>

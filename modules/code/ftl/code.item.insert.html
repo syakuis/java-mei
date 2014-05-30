@@ -1,0 +1,70 @@
+<script type="text/javascript">
+  
+  <#if O.code_item_orl == "">
+    var mod = "insert";
+  <#else>
+    var mod = "update";
+  </#if>
+
+function save_item() {
+
+  jQuery('#form_code').jaAction({ 
+    filter : [
+      { target : "#name", params : "&filter=notnull&title=코드명" }
+    ],
+    param : _mei_gb_params,
+    ask : mod,
+    setAjax : {
+      success : function(xml) {
+        reload(xml);
+      }
+    }
+  });
+
+}
+
+</script>
+
+<div id="sub_column_content">
+
+  <form id="form_code" method="post" action="./procCodeItemInsert.me">
+    <input type="hidden" id="code_orl" name="code_orl" value="${O.code_orl?if_exists?html}" />
+    <input type="hidden" id="code_item_orl" name="code_item_orl" value="${O.code_item_orl?if_exists?html}" />
+    <input type="hidden" id="parent_orl" name="parent_orl" value="${O.parent_orl?if_exists?html}" />
+    <input type="hidden" id="num" name="num" value="${O.num?if_exists?html}" />
+
+  <div class="document-write">
+    <table class="table-write" summary="document write" border="1" cellspacing="0">
+      <colgroup>
+       <col width="100"><col>
+      </colgroup>
+    <tbody>
+
+    <tr>
+      <th scope="row">코드명</th>
+      <td>
+        <div class="item">
+         <input type="text" class="i_text w250" id="name" name="name" value="${O.objCodeItem.name?if_exists?html}" />
+        </div>
+    </td>
+  </tr>
+
+    <tr>
+      <th>code_item_orl</th>
+        <div class="item">
+         <td>${O.code_item_orl?if_exists}</td> 
+        </div>
+    </tr>
+
+      </table>
+  </div>
+    <div class="document-foot-menu">
+    <span class="button medium icon"><button type="button" onclick="save_item();"><span class="iconset accept"></span>저장</button></span>
+    </div>
+    </form>
+  </div>
+
+ 
+
+ 
+ 

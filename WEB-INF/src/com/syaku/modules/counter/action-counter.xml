@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+  <package name="counter" extends="globals">
+
+   <action name="dispCounterAdminInsert" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.counter.insert.html</param>
+    </action>
+
+    <action name="procCounterAdminInsert" class="com.syaku.modules.module.ModuleAdminController" method="procModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+   <action name="dispCounterAdminItemList" class="com.syaku.modules.counter.CounterAdminView" method="dispCounterAdminItemList">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.counter.item.list.html</param>
+    </action>
+
+   <action name="dispCounterAdminItemView" class="com.syaku.modules.counter.CounterAdminView" method="dispCounterAdminItemView">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.counter.item.view.html</param>
+    </action>
+
+  </package>
+
+</struts>

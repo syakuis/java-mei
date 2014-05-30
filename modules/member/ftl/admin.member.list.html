@@ -1,0 +1,76 @@
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+  <form id="form" method="get" action="?">
+  <div class="document-list">
+  <table cellspacing="0" border="1" summary="" class="table-list">
+  <colgroup>
+  <col width="60"><col width="60"><col><col width="140"><col width="140"><col width="150"><col width="100">
+  </colgroup>
+  <caption>Total ${paging.total_count?string(",###")} Page ${paging.page?string(",###")}/${paging.total_page?string(",###")}</caption>
+  <thead>
+    <tr>
+      <th scope="col">번호</th>
+      <th scope="col">모듈</th>
+      <th scope="col">아이디</th>
+      <th scope="col">이름</th>
+      <th scope="col">닉네임</th>
+      <th scope="col">최근 접속일</th>
+      <th scope="col">가입일</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <#assign i = 0>
+    <#list O.listMember as obj>
+    <tr>
+      <td>${paging.virtual_idx - i}</td>
+      <td>${obj.module_orl}</td>
+      <td><a href="./dispMemberAdminView.me${param.get('?member_orl=${obj.member_orl}')?html}">${obj.user_id}</a></td>
+      <td>${obj.user_name}</td>
+      <td>${obj.nickname}</td>
+      <td><#if obj.last_login != ""><#assign last_login = obj.last_login?datetime("yyyyMMddHHmmss")>${last_login}</#if></td>
+      <td><#if obj.rdate != ""><#assign rdate = obj.rdate?datetime("yyyyMMddHHmmss")>${rdate?string("yyyy/MM/dd")}</#if></td>
+    </tr>
+    <#assign i = i + 1>
+    </#list>
+    <#if paging.total_count == 0>
+    <tr><td colspan="7" class="zero">등록된 자료가 없습니다.</td></tr>
+    </#if>
+
+  </tbody>
+  </table>
+  </div>
+
+  <div class="document-foot-menu">
+    <span class="button medium icon"><a href="./dispMemberAdminInsert.me${param.get('?')?html}"><span class="iconset add"></span>추가</a>
+  </div>
+
+  <@pagenavigator url = param.get('?page=')?j_string form="#form" params = paging />
+
+  </form>
+
+
+  <div class="document-search tc">
+  <form id="form_search" method="get" action="?">
+    <fieldset>
+        <select id="sch_type" name="sch_type">
+          <option value="">검색</option>
+          <option value="user_id">아이디</option>
+          <option value="user_name">이름</option>
+          <option value="nickname">닉네임</option>
+        </select>
+       <input type="text" class="i_search w200" id="sch_value" name="sch_value" value="${param.value('sch_value')?if_exists?html}" />
+       <span class="button medium"><input type="submit" value="검색" /></span>
+    </fieldset>
+  </form>
+  </div>
+
+
+</div>
+
+<script type="text/javascript">
+  jQuery.jaAction.paramCreateInput('#form_search','${param.get('?')?js_string}');
+  jQuery.ja.setValue("#form_search #sch_type","${param.value('sch_type')?if_exists?js_string}");
+</script>

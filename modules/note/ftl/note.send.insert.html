@@ -1,0 +1,86 @@
+<script type="text/javascript">//<![CDATA[
+
+function save() {
+
+  jQuery('#form').jaAction({
+    formAttr : 'action=./procNoteSendInsert.me' ,
+    filter : [
+      { target : "#title", params : "&filter=notnull&title=제목" },
+      { target : "#content", params : "&filter=notnull&title=내용" }
+      ],
+    param : _mei_gb_params , 
+    ask_msg : '전송 하시겠습니까?',
+   <#if MID="admin">
+    redirect : "./dispNoteAdminItemList.me${param.pick('?mid=&module_orl=')?js_string}"
+  <#else>
+    redirect : "./dispNoteList.me${param.get('?')?js_string}"
+  </#if>
+
+  });
+
+}
+
+
+//]]></script>
+
+<div id="sub_column_content">
+
+  <#include "admin.sub.html">
+
+  <form id="form" method="post" >
+
+  <div class="document-write">
+    <table summary="입력" border="1" cellspacing="0" class="table-write">
+    <colgroup>
+    <col width="100"><col>
+    </colgroup>
+    <tbody>
+
+      <tr>
+      <th scope="row">정보</th>
+      <td>
+        <div class="item">
+         rec_member_orl <input type="text" id="rec_member_orl" name="rec_member_orl" />
+         rec_user_id <input type="text" id="rec_user_id" name="rec_user_id" />
+         rec_user_name<input type="text" id="rec_user_name" name="rec_user_name" />
+         rec_nickname<input type="text" id="rec_nickname" name="rec_nickname" />
+        </div>
+      </td>
+      </tr>
+
+
+      <tr>
+      <th scope="row">제목</th>
+      <td>
+        <div class="item">
+          <input type="text" title="제목" class="i_text w500" id="title" name="title" />
+        </div>
+      </td>
+      </tr>
+
+
+      <tr>
+      <th scope="row">내용</th>
+      <td>
+        <div class="item">
+          <textarea title="내용" cols="80" rows="10" class="i_text w" id="content" name="content"></textarea>
+          <p> 500 자 이내로 입력하세요.</p>
+        </div>
+      </td>
+      </tr>
+
+    </tbody>
+    </table>
+  </div>
+
+  <div class="document-foot-menu">
+    <span class="button medium icon"><a href="javascript:save()"><span class="iconset accept"></span>완료</a></span>
+    <#if  MID="admin">
+      <span class="button medium icon"><a href="dispNoteAdminItemList.me${param.get('?')?html}"><span class="iconset list"></span>목록</a></span>
+    <#else>
+      <span class="button medium icon"><a href="dispNoteList.me${param.get('?')?html}"><span class="iconset list"></span>목록</a></span>
+    </#if>
+  </div>
+  </form>
+
+</div>

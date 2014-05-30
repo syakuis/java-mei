@@ -1,0 +1,128 @@
+<#assign var_idx = param.value('var_idx')?if_exists>
+
+<script type="text/javascript">
+<#if var_idx == "">
+  var mod = "insert";
+<#else>
+  var mod = "update";
+</#if>
+
+jQuery(function() {
+
+  if (mod == "update") {
+    jQuery.ja.setValue("#form #var_type","${O.objExtra.var_type?if_exists}");
+    jQuery.ja.setValue("#form #var_is_required","${O.objExtra.var_is_required?if_exists}");
+    jQuery.ja.setValue("#form #var_search","${O.objExtra.var_search?if_exists}");
+  }
+
+});
+
+function save() {
+
+  jQuery('#form').jaAction({ 
+    filter : [
+      { target : "#eid", params : "&filter=notnull&title=확장변수이름" },
+      { target : "#var_name", params : "&filter=notnull&title=입력항목이름" }
+    ],
+    param : _mei_gb_params,
+    ask : 'save',
+    redirect : "./dispDocumentAdminExtraKeysView.me${param.get('?var_idx=')?js_string}"
+  });
+
+}
+
+</script>
+
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+  <form id="form" method="post" action="./procDocumentAdminExtraKeysInsert.me">
+  <input type="hidden" id="var_idx" name="var_idx" value="${var_idx}" />
+
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="150"><col>
+  </colgroup>
+  <tbody>
+    <tr>
+    <th scope="row">확장변수 이름</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w250" id="eid" name="eid" value="${O.objExtra.eid?if_exists?html}" />
+        <p>확장 변수의 이름을 적어주세요. (영문+[영문+숫자+_] 만 가능)</p>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">입력항목 이름</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w150" id="var_name" name="var_name" value="${O.objExtra.var_name?if_exists?html}" />
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">형식</th>
+    <td>
+      <div class="item">
+        <select name="var_type" id="var_type">
+        <option value="text">한줄 입력칸 (text)</option>
+        <option value="homepage">URL 형식</option>
+        <option value="email">이메일 형식 (email)</option>
+        <option value="tel">전화번호 형식 (phone)</option>
+        <option value="textarea">여러 줄 입력칸 (textarea)</option>
+        <option value="checkbox">다중 선택 (checkbox)</option>
+        <option value="select">단일 선택 (select)</option>
+        <option value="radio">라디오 버튼 (radio)</option>
+        <option value="kr_zip">한국주소 (zip)</option>
+        <option value="date">일자 (연월일)</option>
+        </select>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">필수항목</th>
+    <td>
+      <div class="item">
+        <input type="checkbox" class="i_check" name="var_is_required" id="var_is_required" value="Y" />
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">기본값</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w500" id="var_default" name="var_default" value="${O.objExtra.var_default?if_exists?html}" />
+        <p>다중/단일 선택 등 기본 값이 여러 개가 필요한 경우 , (콤마)로 연결하시면 됩니다.</p>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">설명</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w500" id="var_desc" name="var_desc" value="${O.objExtra.var_desc?if_exists?html}" />
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">검색</th>
+    <td>
+      <div class="item">
+        <input type="checkbox" class="i_check" name="var_search" id="var_search" value="Y" />
+      </div>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+
+  <div class="document-foot-menu">
+    <span class="button medium icon"><a href="./dispDocumentAdminExtraKeysView.me${param.get('?var_idx=')?html}"><span class="iconset list"></span>목록</a></span>
+    <span class="button medium icon"><button type="button" onclick="save();"><span class="iconset accept"></span>저장</button></span>
+  </div>
+
+</form>
+</div>

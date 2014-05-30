@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+  <package name="outsidepage" extends="globals">
+
+   <action name="dispOutsidepageAdminList" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminList">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.outsidepage.list.html</param>
+    </action>
+
+   <action name="dispOutsidepageAdminInsert" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.outsidepage.insert.html</param>
+    </action>
+
+    <action name="procOutsidepageAdminInsert" class="com.syaku.modules.module.ModuleAdminController" method="procModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procOutsidepageAdminDelete" class="com.syaku.modules.outsidepage.OutsidepageAdminController" method="procOutsidepageAdminDelete">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+
+   <action name="dispOutsidepageAdminGrantInsert" class="com.syaku.modules.outsidepage.OutsidepageAdminView" method="dispOutsidepageAdminGrantInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.outsidepage.grant.insert.html</param>
+    </action>
+
+    <action name="procOutsidepageAdminGrantInsert" class="com.syaku.modules.outsidepage.OutsidepageAdminController" method="procOutsidepageAdminGrantInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+    
+    <action name="dispOutsidepageView" class="com.syaku.modules.outsidepage.OutsidepageView" method="dispOutsidepageView">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">view</param>
+      <param name="act_template"></param>
+    </action>
+
+    <action name="getSkinFileList" class="com.syaku.modules.outsidepage.OutsidepageModel" method="getSkinFileList">
+      <param name="act_permission">member</param>
+      <param name="act_type">model</param>
+    </action>
+
+  </package>
+
+</struts>

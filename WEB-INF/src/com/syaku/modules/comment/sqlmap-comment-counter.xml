@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.comment">
+  <typeAlias alias="CommentCounterBean" type="com.syaku.modules.comment.CommentCounterBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-comment-counter" class="CommentCounterBean">
+
+    <result property="module_orl" column="module_orl" nullValue="" />
+    <result property="target_orl" column="target_orl" nullValue="" />
+    <result property="count" column="count" nullValue="" />
+    <result property="reg_date" column="reg_date" nullValue="" />
+    <result property="last_update" column="last_update" nullValue="" />
+
+  </resultMap>
+
+
+  <select id="select-comment-counter-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(module_orl),0) FROM SK_COMMENT_COUNTER
+    WHERE module_orl = #module_orl#
+    AND target_orl = #target_orl#
+  </select>
+
+  <select id="select-comment-counter-count-one" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(MAX(count),0) FROM SK_COMMENT_COUNTER
+    WHERE module_orl = #module_orl#
+    AND target_orl = #target_orl#
+    LIMIT 1
+  </select>
+
+  <insert id="insert-comment-counter" parameterClass="CommentCounterBean">
+    INSERT INTO SK_COMMENT_COUNTER
+    (
+      module_orl,
+      target_orl,
+      count,
+      reg_date
+    ) VALUES (
+      #module_orl#,
+      #target_orl#,
+      #count#,
+      #reg_date#
+    )
+  </insert>
+
+  <update id="update-comment-counter" parameterClass="CommentCounterBean">
+    UPDATE SK_COMMENT_COUNTER SET
+    count = #count#,
+    last_update = #last_update#
+    WHERE module_orl = #module_orl#
+    AND target_orl = #target_orl#
+  </update>
+
+  <delete id="delete-comment-counter" parameterClass="hashMap">
+    DELETE FROM SK_COMMENT_COUNTER
+    WHERE module_orl = #module_orl#
+    AND target_orl = #target_orl#
+  </delete>
+
+  <delete id="delete-comment-counter-module" parameterClass="hashMap">
+    DELETE FROM SK_COMMENT_COUNTER
+    WHERE module_orl = #module_orl#
+  </delete>
+
+</sqlMap>

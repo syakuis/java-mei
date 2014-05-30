@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="modules.schedule">
+  <typeAlias alias="ScheduleHistoryBean" type="com.syaku.modules.schedule.ScheduleHistoryBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <!--@brief  -->
+  <resultMap id="result-schedule-history" class="ScheduleHistoryBean">
+    <result property="history_orl" column="history_orl" />
+    <result property="schedule_orl" column="schedule_orl" />
+    <result property="begin_date" column="begin_date" />
+    <result property="process_date" column="process_date" />
+    <result property="error_msg" column="error_msg" />
+    <result property="isresult" column="isresult" />
+  </resultMap>
+
+  <select id="select-schedule-history-list" parameterClass="hashMap" resultMap="result-schedule-history">
+    SELECT
+      history_orl,
+      schedule_orl,
+      begin_date,
+      process_date,
+      error_msg,
+      isresult
+    FROM SK_SCHEDULE_HISTORY
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="schedule_orl" >
+        schedule_orl = #schedule_orl#
+      </isNotEmpty>
+
+    </dynamic>
+
+    <isNotEmpty prepend="LIMIT" property="page_start" >
+     $page_start$,$page_row$
+    </isNotEmpty>
+
+  </select>
+
+  <select id="select-schedule-history-count" parameterClass="hashMap" resultClass="long">
+    SELECT COUNT(history_orl) FROM SK_SCHEDULE_HISTORY
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="schedule_orl" >
+        schedule_orl = #schedule_orl#
+      </isNotEmpty>
+    </dynamic>
+  </select>
+
+  <insert id="insert-schedule-history" parameterClass="ScheduleHistoryBean">
+    <selectKey resultClass="String" keyProperty="history_orl">
+      SELECT (IFNULL(MAX(history_orl),0) + 1) AS history_orl FROM SK_SCHEDULE_HISTORY
+    </selectKey>
+
+    INSERT INTO SK_SCHEDULE_HISTORY
+    (
+      history_orl,
+      schedule_orl,
+      begin_date,
+      process_date,
+      error_msg,
+      isresult
+    ) VALUES (
+      #history_orl#,
+      #schedule_orl#,
+      #begin_date#,
+      #process_date#,
+      #error_msg#,
+      #isresult#
+    )
+  </insert>
+
+  <delete id="delete-schedule-history" parameterClass="hashMap">
+    DELETE FROM SK_SCHEDULE_HISTORY WHERE schedule_orl = #schedule_orl#
+  </delete>
+
+</sqlMap>

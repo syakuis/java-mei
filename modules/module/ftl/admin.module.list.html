@@ -1,0 +1,57 @@
+<div id="sub_column_content">
+
+<script>
+  function prop(m_orl) {
+    jQuery('#form').jaAction({ 
+      formAttr : 'action=./procModuleAdminPropInsert.me&method=post', 
+      param : 'mid=${MID}&m_orl=' + m_orl , 
+      ask : 'execute' ,
+      afterSend : function() { location.reload(); }
+    });
+  }
+</script>
+
+<form id="form" method="get" action="?">
+
+<div class="document-list">
+  <table cellspacing="0" border="1" summary="document list" class="table-list">
+  <caption>Total ${paging.total_count?string(",###")} Page ${paging.page?string(",###")}/${paging.total_page?string(",###")}</caption>
+  <colgroup>
+  <col width="40"><col width="200"><col width="70"><col width="120"><col width="120"><col><col width="90">
+  </colgroup>
+  <thead>
+    <tr>
+      <th scope="col"><input type="checkbox" id="" /></th>
+      <th scope="col">생성</th>
+      <th scope="col">MODULE_ORL</th>
+      <th scope="col">모듈</th>
+      <th scope="col">MID</th>
+      <th scope="col">브라우져 제목</th>
+      <th scope="col">생성일</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <#list O.listModule as obj>
+      <tr>
+        <td><input type="checkbox" id="module_check" name="module_check" value="${obj.module_orl}" /></td>
+        <td>
+        <span class="button medium"><a href="javascript:prop(${obj.module_orl});">프로퍼티</a></span>
+        <span class="button medium"><a href="./dispBonganmemberAdminList.me${param.get('?member_orl=')?html}">캐쉬</a></span>
+        </td>
+        <td class="num">${obj.module_orl}</td>
+        <td>${obj.module}</td>
+        <td>${obj.mid}</td>
+        <td class="title">${obj.browser_title}</td>
+        <td class="date"><#if obj.rdate?if_exists != ""><#assign rdate = obj.rdate?datetime("yyyyMMddHHmmss")>${rdate?string("yyyy/MM/dd")}</#if></td>
+      </tr>
+    </#list>
+
+  </tbody>
+  </table>
+</div>
+
+<@pagenavigator url = param.get('?page=')?j_string form="#form" params = paging />
+</form>
+
+</div>

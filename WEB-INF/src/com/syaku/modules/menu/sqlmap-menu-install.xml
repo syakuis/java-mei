@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.menu">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-menu" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_MENU (
+      menu_orl BIGINT(11) NOT NULL COMMENT '메뉴 ORL' ,
+      title VARCHAR(250) NULL DEFAULT NULL COMMENT '메뉴 제목' ,
+      listorder BIGINT(11) NOT NULL DEFAULT 0 COMMENT '역정렬' ,
+      rdate VARCHAR(14) NULL DEFAULT NULL COMMENT '등록일' ,
+      PRIMARY KEY (menu_orl) ,
+      INDEX idx_listorder (listorder ASC) ,
+      INDEX idx_rdate (rdate ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '메뉴' 
+  </insert>
+
+  <insert id="create-menu-item" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_MENU_ITEM (
+      menu_item_orl BIGINT(11) NOT NULL COMMENT '메뉴 아이템 ORL' ,
+      parent_orl BIGINT(11) NOT NULL DEFAULT 0 COMMENT '부모 ORL' ,
+      num BIGINT(11) NOT NULL DEFAULT 0 COMMENT '순번' ,
+      menu_orl BIGINT(11) NOT NULL COMMENT '메뉴 ORL' ,
+      url VARCHAR(250) NULL COMMENT '메뉴링크' ,
+      name VARCHAR(100) NULL DEFAULT NULL COMMENT '메뉴명' ,
+      open_window TINYINT(1) NULL DEFAULT 0 COMMENT '새창열기' ,
+      expand TINYINT(1) NULL DEFAULT 0 COMMENT '하위메뉴 항상 확장' ,
+      is_mobile TINYINT(1) NULL DEFAULT 0 COMMENT '모바일 노출여부' ,
+      rdate VARCHAR(14) NULL DEFAULT NULL COMMENT '등록일' ,
+      group_orls TEXT NULL DEFAULT NULL COMMENT '그룹권한' ,
+      select_query VARCHAR(250) NULL DEFAULT NULL COMMENT '선택 효과주는 조건문' ,
+      btn_normal VARCHAR(250) NULL DEFAULT NULL COMMENT '버튼 이미지' ,
+      btn_hover VARCHAR(250) NULL DEFAULT NULL COMMENT '버튼 이미지 오버' ,
+      btn_active VARCHAR(250) NULL DEFAULT NULL COMMENT '버튼 이미지 선택' ,
+      PRIMARY KEY (menu_item_orl) ,
+      INDEX idx_menu_orl (menu_orl ASC) ,
+      INDEX idx_rdate (rdate ASC) ,
+      INDEX idx_parent_orl (parent_orl ASC) ,
+      INDEX idx_num (num ASC) )
+    ENGINE = InnoDB
+    COMMENT = '메뉴 항목' 
+  </insert>
+
+</sqlMap>

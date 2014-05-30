@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.member">
+  <typeAlias alias="GroupBean" type="com.syaku.modules.member.GroupBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-group" class="GroupBean">
+
+    <result property="group_orl" column="group_orl" nullValue="" />
+    <result property="title" column="title" nullValue="" />
+    <result property="regdate" column="regdate" nullValue="" />
+    <result property="is_default" column="is_default" nullValue="" />
+    <result property="is_admin" column="is_admin" nullValue="" />
+    <result property="description" column="description" nullValue="" />
+
+  </resultMap>
+
+  <sql id="sql-field-group">
+    group_orl,
+    title,
+    regdate,
+    is_default,
+    is_admin,
+    description
+  </sql>
+
+  <select id="select-group-list" parameterClass="hashMap" resultMap="result-group">
+    SELECT 
+    <include refid="modules.member.sql-field-group" />
+    FROM SK_GROUP
+  </select>
+
+  <select id="select-group-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(group_orl),0) FROM SK_GROUP
+  </select>
+
+  <select id="select-group-one" parameterClass="hashMap" resultMap="result-group">
+    SELECT 
+    <include refid="modules.member.sql-field-group" />
+    FROM SK_GROUP
+    WHERE group_orl = #group_orl#
+    LIMIT 1
+  </select>
+
+  <select id="select-group-default-one" parameterClass="hashMap" resultMap="result-group">
+    SELECT 
+    <include refid="modules.member.sql-field-group" />
+    FROM SK_GROUP
+    WHERE is_default = 'Y'
+    LIMIT 1
+  </select>
+
+  <insert id="insert-group" parameterClass="GroupBean">
+    <selectKey resultClass="String" keyProperty="group_orl">
+      SELECT (IFNULL(MAX(group_orl),0) + 1) AS group_orl FROM SK_GROUP
+    </selectKey>
+
+    INSERT INTO SK_GROUP
+    (
+      group_orl,
+      title,
+      regdate,
+      is_default,
+      is_admin,
+      description
+
+    ) VALUES (
+
+      #group_orl#,
+      #title#,
+      #regdate#,
+      #is_default#,
+      #is_admin#,
+      #description#
+
+    )
+  </insert>
+
+  <update id="update-group" parameterClass="GroupBean">
+    UPDATE SK_GROUP SET
+
+    title = #title#,
+    is_default = #is_default#,
+    description = #description#
+
+    WHERE group_orl = #group_orl#
+  </update>
+
+  <update id="update-group-default-reset">
+    UPDATE SK_GROUP SET is_default = 'N'
+  </update>
+
+  <delete id="delete-group" parameterClass="hashMap">
+    DELETE FROM SK_GROUP WHERE group_orl = #group_orl#
+  </delete>
+
+</sqlMap>

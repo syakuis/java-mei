@@ -1,0 +1,39 @@
+<div id="sub_column_content">
+<#include "./admin.sub.html">
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 모듈</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="200"><col>
+  </colgroup>
+  <tbody>
+
+  <tr>
+  <th scope="row">파일 경로</th>
+  <td>
+    <div class="item">${MEI_PATH_ABSOLUTE_RELATIVE}${meiConfig.getString('mei.path.attach')}</div>
+  </td>
+  </tr>
+
+  <tr>
+  <th scope="row">총 파일 용량</th>
+  <td><div class="item">${fnCls.getFileSizeUnit('${O.objFileSize.total_item_size}',0,true)} / ${O.objFileSize.total_item_count?string(",###")} 개</div></td>
+  </tr>
+
+  <tr>
+  <th scope="row">유효한 파일 용량</th>
+  <td><div class="item">${fnCls.getFileSizeUnit('${O.objFileSize.true_item_size}',0,true)} / ${O.objFileSize.true_item_count?string(",###")} 개</div></td>
+  </tr>
+
+  <tr>
+  <th scope="row">유효하지 않은 파일 용량</th>
+  <td><div class="item">${fnCls.getFileSizeUnit('${O.objFileSize.false_item_size}',0,true)} / ${O.objFileSize.false_item_count?string(",###")} 개</div></td>
+  </tr>
+
+
+  </tbody>
+  </table>
+  </div>
+
+</div>

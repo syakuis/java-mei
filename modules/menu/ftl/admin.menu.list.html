@@ -1,0 +1,78 @@
+<script type="text/javascript">
+
+function del(menu_orl) {
+
+  jQuery('#form').jaAction({
+    formAttr : 'action=./procMenuAdminDelete.me&method=post' ,
+    param : _mei_gb_params + '&menu_orl=' + menu_orl, 
+    ask : 'del',
+    afterSend : function() {
+      location.reload();
+    }
+
+  });
+}
+
+function cache() {
+  jQuery('#form').jaAction({
+    formAttr : 'action=./procMenuAdminCache.me&method=post' ,
+    param : _mei_gb_params, 
+    ask : 'execute'
+  });
+}
+
+</script>
+
+<div id="sub_column_content">
+
+<#include "admin.sub.html">
+
+<form id="form" method="get" action="?">
+
+<div class="document-head-menu">
+  <span class="button medium icon"><a href="javascript:cache();"><span class="iconset cache"></span>모든 메뉴 캐쉬생성</a></span>
+</div>
+
+<div class="document-list">
+  <table cellspacing="0" border="1" summary="document list" class="table-list">
+  <caption>Total ${paging.total_count?string(",###")} Page ${paging.page?string(",###")}/${paging.total_page?string(",###")}</caption>
+  <colgroup>
+  <col width="100"><col><col width="100">
+  </colgroup>
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">메뉴명</th>
+      <th scope="col">생성일</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <#list O.listMenu as menu>
+    <tr>
+      <td>
+        <a href="./dispMenuAdminInsert.me${param.get('?menu_orl=${menu.menu_orl}')?html}" title="설정"><span class="iconset setting"></span></a>
+        <#if menu.menu_orl != "1">
+        <a href="javascript:del('${menu.menu_orl}');" title="삭제"><span class="iconset delete"></span></a>
+        </#if>
+      </td>
+      <td class="title">${menu.title}</td>
+      <td><#if menu.rdate != ""><#assign rdate = menu.rdate?datetime("yyyyMMddHHmmss")>${rdate?string("yyyy/MM/dd")}</#if></td>
+    </tr>
+    </#list>
+    <#if paging.total_count == 0>
+    <tr><td colspan="3" class="zero">등록된 자료가 없습니다.</td></tr>
+    </#if>
+
+  </tbody>
+  </table>
+</div>
+
+<div class="document-foot-menu">
+  <span class="button medium icon"><a href="./dispMenuAdminInsert.me${param.get('?')?html}"><span class="iconset add"></span>추가</a></span>
+</div>
+
+<@pagenavigator url = param.get('?page=')?j_string form="#form" params = paging />
+</form>
+
+</div>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+  <package name="document" extends="globals">
+
+    <!-- 문서 모듈은 자체적인 관리 프로세서를 이용한다. -->
+   <action name="dispDocumentAdminList" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminList">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.document.list.html</param>
+    </action>
+
+   <action name="dispDocumentAdminInsert" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.document.insert.html</param>
+    </action>
+
+    <action name="procDocumentAdminInsert" class="com.syaku.modules.module.ModuleAdminController" method="procModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procDocumentAdminDelete" class="com.syaku.modules.document.DocumentAdminController" method="procDocumentAdminDelete">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="dispDocumentList" class="com.syaku.modules.document.DocumentView" method="dispDocumentList">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">view</param>
+      <param name="act_template">document.list.html</param>
+    </action>
+
+    <action name="dispDocumentView" class="com.syaku.modules.document.DocumentView" method="dispDocumentView">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">view</param>
+      <param name="act_template">document.view.html</param>
+    </action>
+
+    <action name="dispDocumentInsert" class="com.syaku.modules.document.DocumentView" method="dispDocumentInsert">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">view</param>
+      <param name="act_template">document.insert.html</param>
+    </action>
+
+    <action name="procDocumentInsert" class="com.syaku.modules.document.DocumentController" method="procDocumentInsert">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="dispDocumentDeletePassword" class="com.syaku.modules.document.DocumentView" method="dispDocumentDeletePassword">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">view</param>
+      <param name="act_template">document.delete.password.html</param>
+    </action>
+    <action name="procDocumentDelete" class="com.syaku.modules.document.DocumentController" method="procDocumentDelete">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <!-- 권한 -->
+   <action name="dispDocumentAdminGrantInsert" class="com.syaku.modules.document.DocumentAdminView" method="dispDocumentAdminGrantInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.document.grant.insert.html</param>
+    </action>
+
+    <action name="procDocumentAdminGrantInsert" class="com.syaku.modules.document.DocumentAdminController" method="procDocumentAdminGrantInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+    <!-- 권한 -->
+
+    <!-- 확장변수 -->
+   <action name="dispDocumentAdminExtraKeysView" class="com.syaku.modules.document.DocumentAdminView" method="dispDocumentAdminExtraKeysView">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.document.extrakeys.view.html</param>
+    </action>
+
+   <action name="dispDocumentAdminExtraKeysInsert" class="com.syaku.modules.document.DocumentAdminView" method="dispDocumentAdminExtraKeysInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.document.extrakeys.insert.html</param>
+    </action>
+
+    <action name="procDocumentAdminExtraKeysInsert" class="com.syaku.modules.document.DocumentAdminController" method="procDocumentAdminExtraKeysInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+    <!-- 확장변수 -->
+
+    <!-- 분류 -->
+   <action name="dispDocumentCategoryAdminView" class="com.syaku.modules.category.CategoryView" method="dispCategoryView">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.document.category.view.html</param>
+    </action>
+
+   <action name="dispDocumentCategoryAdminInsert" class="com.syaku.modules.category.CategoryView" method="dispCategoryInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.document.category.insert.html</param>
+    </action>
+
+    <action name="procDocumentCategoryAdminInsert" class="com.syaku.modules.category.CategoryController" method="procCategoryInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procDocumentCategoryAdminMove" class="com.syaku.modules.category.CategoryController" method="procCategoryMove">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procDocumentCategoryAdminDelete" class="com.syaku.modules.category.CategoryController" method="procCategoryDelete">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+   <action name="getDocumentCategoryXml" class="com.syaku.modules.category.CategoryModel" method="getCategoryXml">
+      <param name="act_permission">member</param>
+      <param name="act_type">model</param>
+    </action>
+
+   <action name="getDocumentCategoryCache" class="com.syaku.modules.category.CategoryModel" method="getCategoryCache">
+      <param name="act_permission">member</param>
+      <param name="act_type">model</param>
+    </action>
+    <!-- 분류 -->
+
+  </package>
+
+</struts>

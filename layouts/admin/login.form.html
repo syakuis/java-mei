@@ -1,0 +1,115 @@
+<link rel="stylesheet" type="text/css" href="${LAYOUT_PATH_RELATIVE}/css/login.form.css" />
+
+<script type="text/javascript">
+//<![CDATA[
+
+// 계정 쿠키에 저장
+function setUserId() {
+  var check = jQuery("#login_form #id_save");
+  var tid = jQuery("#login_form #user_id").val();
+  tid = tid.replace("아이디","");
+
+  if (check.attr("checked") == true && tid != "") {
+    // json 을 문자열로 저장한다.
+    var value = "({" +
+      "user_id : '" + tid + "' " +
+    "})";
+
+    jQuery.ja.setCookie("_id_save_",value,30,"/");
+  } else {
+    jQuery.ja.setCookie("_id_save_","");
+  }
+}
+
+function login_submit() {
+  jQuery('#login_form').jaAction({ 
+    filter : [
+        { target : "#user_id", params : "&filter=notnull&title=아이디" }
+      , { target : "#password", params : "&filter=notnull&title=비밀번호" }
+    ],
+    param : _mei_gb_params,
+    loading : false
+  });
+
+  return false;
+}
+
+// init
+jQuery(function() {
+  
+  jQuery('#login_form').keydown(function(evt) {
+    if (evt.keyCode == 13) { login_submit(); }
+  });
+
+  jQuery('#referer').val( document.URL );
+
+  // 계정 저장 쿠키 처리
+  var data = eval(jQuery.ja.getCookie("_id_save_"));
+  if (!jQuery.ja.isEmpty(data)) {
+    var tid = data.user_id;
+
+    if (tid != "" && tid != null) {
+      jQuery("#login_form #user_id").val(tid);
+      jQuery.ja.setValue("#login_form #id_save",'Y');
+    }
+  }
+
+  // Input Clear
+  var i_text = jQuery('.item>.i_label').next('.i_text');
+  jQuery('.item>.i_label').css('position','absolute');
+  i_text
+    .focus(function(){
+      jQuery(this).prev('.i_label').css('visibility','hidden');
+    })
+    .blur(function(){
+      if(jQuery(this).val() == ''){
+        jQuery(this).prev('.i_label').css('visibility','visible');
+      } else {
+        jQuery(this).prev('.i_label').css('visibility','hidden');
+      }
+    })
+    .change(function(){
+      if(jQuery(this).val() == ''){
+        jQuery(this).prev('.i_label').css('visibility','visible');
+      } else {
+        jQuery(this).prev('.i_label').css('visibility','hidden');
+      }
+    })
+    .blur();
+
+});
+
+//]]>
+</script>
+
+<div id="login">
+  <h1>관리자만이 접속할 수 있습니다.</h1>
+
+  <div class="login-input">
+  <form id="login_form" method="post" action="./procMemberLogin.me">
+      <input type="hidden" name="referer" id="referer" />
+      <input type="hidden" name="ret_url" id="ret_url" value="${param.value('ret_url')?if_exists?html}">
+
+    <ul class="idpw">
+      <li class="item"><label for="user_id" class="i_label">아이디</label><input type="text" class="i_text w95p" id="user_id" name="user_id" tabindex="1" onblur="setUserId()" value="" /></li>
+      <li class="item"><label for="password" class="i_label">비밀번호</label><input type="password" class="i_text w95p" id="password" name="password" tabindex="2" value="" /></li>
+    </ul>
+
+    <div class="button-area">
+      <div class="left"><input type="checkbox" id="id_save" onclick="setUserId('#input_form')" value="Y"class="vt" /> <label for="id_save">아이디 기억</label></div>
+      <div class="right">
+        <span class="button medium blue xlarge strong icon"><button type="button" onclick="login_submit();"><span class="iconset login"></span>로그인</button></span>
+      </div>
+      <div class="clear"></div>
+    </div>
+
+    <div class="foot">
+      <address>
+        <a href="http://code.google.com/p/java-mei/" target="_blank">${meiConfig.getString("mei.log.message.text").replace('\r\n','<br />')}</a>
+      </address>
+    </div>
+
+  </form>
+  </div>
+
+</div>

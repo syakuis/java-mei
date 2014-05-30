@@ -1,0 +1,109 @@
+<script type="text/javascript">//<![CDATA[
+
+function save() {
+
+  jQuery('#form').jaAction({
+    formAttr : 'action=./procCounterAdminInsert.me' ,
+    param : _mei_gb_params , 
+    ask : 'save',
+    afterSend : function() { location.reload(); }
+  });
+}
+
+//]]></script>
+
+<div id="sub_column_content">
+  <#include "./admin.sub.html">
+
+<form id="form" method="post">
+<input type="hidden" id="module_orl" name="module_orl" value="${O.objModule.module_orl?html}" />
+<input type="hidden" id="module_id" name="module_id" value="${O.objModule.mid?html}" />
+
+  <div class="document-head-menu">
+  </div>
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 모듈</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+
+
+    <tr>
+      <th scope="row">모듈명</th>
+      <td>
+        <div class="item">${O.objModule.mid}</div>
+      </td>
+    </tr>
+
+    <tr>
+    <th scope="row">브라우저 제목</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w250" id="browser_title" name="browser_title" value="${O.objModule.browser_title?html}" />
+      </div>
+    </td>
+    </tr>
+
+
+    <tr>
+      <th scope="row">필터할 키워드</th>
+      <td>
+        <div class="item">
+        <textarea class="i_text" id="options_filter_keyword" name="options_filter_keyword" cols="80" rows="10">${O.objModule.options_filter_keyword?if_exists}</textarea>
+        <p>등록된 키워드를 제외(User-Agent)하여 카운터 수치를 보다 정확하게 구할 수 있습니다. ; 구분하여 여러개 등록할 수 있습니다.</p>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">필터할 IP주소</th>
+      <td>
+        <div class="item">
+        <textarea class="i_text" id="options_filter_ip" name="options_filter_ip" cols="80" rows="10">${O.objModule.options_filter_ip?if_exists}</textarea>
+        <p>; 구분하여 여러개 등록할 수 있습니다.</p>
+        </div>
+      </td>
+    </tr>
+
+  </tbody>
+  </table>
+  </div>
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 기타</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+    <tr>
+    <th scope="row">상단내용</th>
+    <td>
+      <div class="item">
+        <textarea class="i_text" id="header_content" name="header_content" cols="80" rows="10">${O.objModule.header_content?if_exists}</textarea>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">하단내용</th>
+    <td>
+      <div class="item">
+        <textarea class="i_text" id="footer_content" name="footer_content" cols="80" rows="10">${O.objModule.footer_content?if_exists}</textarea>
+        <p>해당 게시판 모듈의 상, 하단에 출력될 내용을 지정할 수 있습니다.</p>
+      </div>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+
+  <div class="document-foot-menu">
+    <span class="button medium icon"><button type="button" onclick="save();"><span class="iconset accept"></span>저장</button></span>
+  </div>
+
+
+</form>
+</div>

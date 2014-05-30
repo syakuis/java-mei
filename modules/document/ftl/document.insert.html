@@ -1,0 +1,317 @@
+<script type="text/javascript">//<![CDATA[
+<#if P.document_orl?if_exists == "">
+var mod = "insert";
+var re_url = "./dispDocumentList.me${param.pick('?mid=&module_orl=')?js_string}";
+<#else>
+var mod = "update";
+var re_url = "./dispDocumentList.me${param.get('?document_orl=')?js_string}";
+</#if>
+
+jQuery(function() {
+
+  <#if MM.options_is_category?if_exists == 'Y'>
+  jQuery.category.select_box('#category_orl','${MODULE_ORL}');
+  </#if>
+
+  if (mod == "update") {
+    jQuery.ja.setValue('#form #category_orl','${O.objDocument.category_orl?if_exists}');
+
+    jQuery.ja.setValue('#form #title_color','${O.objDocument.title_color?if_exists}');
+    jQuery.ja.setValue('#form #title_bold','${O.objDocument.title_bold?if_exists}');
+    jQuery.ja.setValue('#form #is_notice','${O.objDocument.is_notice?if_exists}');
+
+    <#if MM.options_is_extravars == 'Y'>
+    <#list O.listExtra?if_exists as obj>
+      <#switch obj.var_type>
+      <#case "select">
+      jQuery.ja.setValue('#form #extra_vars${obj.var_idx}','${obj.value?if_exists}');
+      <#break>
+      <#case "checkbox">
+      jQuery.ja.setValue('#form input:checkbox:[name=extra_vars${obj.var_idx}]','${obj.value?if_exists}');
+      <#break>
+      <#case "radio">
+      jQuery.ja.setValue('#form input:radio:[name=extra_vars${obj.var_idx}]','${obj.value?if_exists}');
+      <#break>
+      </#switch>
+    </#list>
+    </#if>
+  }
+
+  if (mod == "insert" && parseInt(jQuery("#form #parent_orl").val()) > 0) {
+    jQuery.ja.setValue('#form #category_orl','${O.objDocumentReply.category_orl?if_exists}');
+    jQuery.ja.setValue('#form #title','[RE] ${O.objDocumentReply.title?if_exists}');
+    jQuery.ja.setValue('#form #content','${O.objDocumentReply.content?if_exists?js_string}');
+  }
+
+  <@addon_editor target="content" />
+
+});
+
+<@addon_datepicker target=".extra_date"/>
+
+//]]></script>
+
+
+<script type="text/javascript">//<![CDATA[
+
+  function save() {
+
+    jQuery('#form').jaAction({
+      filter : [
+        { target : "#regdate", params : "&filter=number&length=14&title=등록일" },
+        <#if !MEI_GRANT_LOGIN>
+        { target : "#user_name", params : "&filter=notnull&title=이름" },
+        { target : "#password", params : "&filter=notnull&title=비밀번호" },
+        { target : "#email", params : "&filter=notnull&filter=email&title=이메일" },
+        </#if>
+
+        <#if MM.options_is_extravars == 'Y'>
+        <#assign val="">
+        <#list O.listExtra?if_exists as obj>
+          <#switch obj.var_type>
+          <#case "text"><#case "textarea"><#case "select"><#case "kr_zip"><#case "date">
+          <#if obj.var_is_required == 'Y'>{ target : "#extra_vars${obj.var_idx}", params : "&filter=notnull&title=${obj.var_name}" },</#if>
+          <#break>
+          <#case "homepage">
+          { target : "#extra_vars${obj.var_idx}", params : "<#if obj.var_is_required == 'Y'>&filter=notnull</#if>&filter=http_url&title=${obj.var_name}" },
+          <#break>
+          <#case "email">
+          { target : "#extra_vars${obj.var_idx}", params : "<#if obj.var_is_required == 'Y'>&filter=notnull</#if>&filter=email&title=${obj.var_name}" },
+          <#break>
+          <#case "tel">
+          { target : "#extra_vars${obj.var_idx}", params : "<#if obj.var_is_required == 'Y'>&filter=notnull</#if>&filter=hyphen_contact&title=${obj.var_name}" },
+          <#break>
+          <#case "checkbox">
+          <#case "radio">
+          <#if obj.var_is_required == 'Y'>{ target : "input:checkbox:[name=extra_vars${obj.var_idx}]", params : "&selected=1&title=${obj.var_name}" },</#if>
+          <#break>
+          </#switch>
+        </#list>
+        </#if>
+
+        <#if MM.options_is_category == 'Y'>
+        { target : "#category_orl", params : "&filter=notnull&title=분류" },
+        </#if>
+        { target : "#title", params : "&filter=notnull&title=제목" },
+        { target : "#content", params : "&filter=notnull&title=내용" }
+      ],
+
+      param : _mei_gb_params,
+      ask : mod , 
+      redirect : re_url
+    });
+
+  }
+
+//]]></script>
+
+<div id="sub_column_content">
+
+  <#include "admin.sub.html">
+  <#include "_head.html">
+
+  <form id="form" method="post" action="procDocumentInsert.me">
+  <input type="hidden" id="document_orl" name="document_orl" value="${P.document_orl?if_exists}" />
+  <input type="hidden" id="parent_orl" name="parent_orl" value="${P.parent_orl?if_exists}" />
+  <input type="hidden" id="reply_member_orl" name="reply_member_orl" value="${P.reply_member_orl?if_exists}" />
+  <input type="hidden" id="reply_group" name="reply_group" value="${P.reply_group?if_exists}" />
+  <input type="hidden" id="reply_depth" name="reply_depth" value="${P.reply_depth?if_exists}" />
+  <input type="hidden" id="reply_num" name="reply_num" value="${P.reply_num?if_exists}" />
+  <input type="hidden" id="sid" name="sid" value="${MEI_SID?if_exists}" />
+
+  <div class="document-write">
+    <table summary="입력" border="1" cellspacing="0" class="table-write">
+    <colgroup>
+    <col width="100"><col>
+    </colgroup>
+    <tbody>
+      <tr>
+      <th scope="row">등록일</th>
+      <td>
+        <div class="item">
+          <input type="text" title="등록일" class="i_text w150" id="regdate" name="regdate" value="${O.objDocument.regdate?if_exists?html}" maxlength="14" />
+          <p>숫자로 14자로 입력하세요. 년월일시분초 모두 입력하세요.</p>
+        </div>
+      </td>
+      </tr>
+      <#if !MEI_GRANT_LOGIN>
+      <tr>
+      <th scope="row">이름</th>
+      <td>
+        <div class="item">
+          <input type="text" title="이름" class="i_text w150" id="user_name" name="user_name" value="${O.objDocument.user_name?if_exists?html}" />
+        </div>
+      </td>
+      </tr>
+      <tr>
+      <th scope="row">비밀번호</th>
+      <td>
+        <div class="item">
+          <input type="password" title="비밀번호" class="i_text w150" id="password" name="password" value="" />
+        </div>
+      </td>
+      </tr>
+      <tr>
+      <th scope="row">이메일</th>
+      <td>
+        <div class="item">
+          <input type="text" title="이메일" class="i_text w250" id="email" name="email" value="${O.objDocument.email?if_exists?html}" />
+        </div>
+      </td>
+      </tr>
+      <tr>
+      <th scope="row">홈페이지</th>
+      <td>
+        <div class="item">
+          <input type="text" title="홈페이지" class="i_text w250" id="homepage" name="homepage" value="${O.objDocument.homepage?if_exists?html}" />
+        </div>
+      </td>
+      </tr>
+      </#if>
+
+      <#if MM.options_is_extravars == 'Y'>
+      <#list O.listExtra?if_exists as obj>
+      <tr>
+      <th scope="row">${obj.var_name}</th>
+      <td>
+        <div class="item">
+          <#switch obj.var_type>
+          <#case "text">
+          <#case "homepage">
+          <#case "email">
+          <#case "kr_zip">
+          <input type="text" title="${obj.var_name}" class="i_text w500" id="extra_vars${obj.var_idx}" name="extra_vars${obj.var_idx}" value="${obj.value?if_exists?html}" />
+          <#break>
+          <#case "tel">
+          <input type="text" title="${obj.var_name}" class="i_text w500 extra_tel" id="extra_vars${obj.var_idx}" name="extra_vars${obj.var_idx}" value="${obj.value?if_exists?html}" />
+          <#break>
+          <#case "textarea">
+          <textarea title="${obj.var_name}" cols="80" rows="5" class="i_text w500" id="extra_vars${obj.var_idx}" name="extra_vars${obj.var_idx?html}">${obj.value}</textarea>
+          <#break>
+          <#case "date">
+          <input type="text" title="${obj.var_name}" class="i_text w150 extra_date" id="extra_vars${obj.var_idx}" name="extra_vars${obj.var_idx}" value="${obj.value?if_exists?html}" />
+          <#break>
+
+          <#case "select">
+            <select id="extra_vars${obj.var_idx}" name="extra_vars${obj.var_idx}">
+            <#list obj.var_default?split(",") as x>
+            <option value="${x?if_exists?html}">${x}</option>
+            </#list>
+            </select>
+          <#break>
+
+          <#case "checkbox">
+            <#list obj.var_default?split(",") as x>
+            <input type="checkbox" name="extra_vars${obj.var_idx}" value="${x?html}" />${x}
+            </#list>
+          <#break>
+          <#case "radio">
+            <#list obj.var_default?split(",") as x>
+            <input type="radio" name="extra_vars${obj.var_idx}" value="${x?html}" />${x}
+            </#list>
+          <#break>
+          </#switch>
+          <#if !obj.var_desc?exists>
+          <p>${obj.var_desc}</p>
+          </#if>
+
+        </div>
+      </td>
+      </tr>
+      </#list>
+      </#if>
+
+      <#if MM.options_is_category == 'Y'>
+      <tr>
+      <th scope="row">분류</th>
+      <td>
+        <div class="item">
+          <select id="category_orl" name="category_orl">
+            <option value="">선택</option>
+          </select>
+        </div>
+      </td>
+      </tr>
+      </#if>
+
+      <tr>
+      <th scope="row">제목</th>
+      <td>
+        <div class="item">
+          <input type="text" title="제목" class="i_text w500" id="title" name="title" value="${O.objDocument.title?if_exists?html}" />
+        </div>
+      </td>
+      </tr>
+
+      <tr>
+      <th scope="row">부가기능</th>
+      <td>
+        <div class="item">
+
+          <select class="i_select" onchange="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;" style="background-color:#N;" id="title_color" name="title_color">
+          <option style="background-color:#FFFFFF;" value="">제목 색깔</option>
+          <option style="background-color:#555555" value="555555">제목 색깔</option>
+          <option style="background-color:#222288" value="222288">제목 색깔</option>
+          <option style="background-color:#226622" value="226622">제목 색깔</option>
+          <option style="background-color:#2266EE" value="2266EE">제목 색깔</option>
+          <option style="background-color:#8866CC" value="8866CC">제목 색깔</option>
+          <option style="background-color:#88AA66" value="88AA66">제목 색깔</option>
+          <option style="background-color:#EE2222" value="EE2222">제목 색깔</option>
+          <option style="background-color:#EE6622" value="EE6622">제목 색깔</option>
+          <option style="background-color:#EEAA22" value="EEAA22">제목 색깔</option>
+          <option style="background-color:#EEEE22" value="EEEE22">제목 색깔</option>
+          </select>
+
+          <input type="checkbox" value="Y" id="title_bold" name="title_bold" class="i_check" />
+          <label for="title_bold" class="i_label">제목 굵게</label>
+          <input type="checkbox" id="is_notice" value="Y" name="is_notice" class="i_check" />
+          <label for="is_notice" class="i_label">공지</label>
+
+        </div>
+      </td>
+      </tr>
+
+
+      <tr>
+      <th scope="row">내용</th>
+      <td>
+        <div class="item">
+          <textarea title="내용" cols="80" rows="10" style="display:none;width:100%;" id="content" name="content">${O.objDocument.content?if_exists}</textarea>
+        </div>
+      </td>
+      </tr>
+      <tr>
+        <th>첨부파일</th>
+        <td>
+        <div class="item">
+        <@s.action name="dispFileUploadInsert" executeResult="true">
+        <@s.param name="interlock">true</@s.param>
+        <@s.param name="mid">${MID}</@s.param>
+        <@s.param name="module_orl">${MODULE_ORL}</@s.param>
+        <@s.param name="seq">1</@s.param>
+        <@s.param name="target_orl">${O.objDocument.document_orl?if_exists}</@s.param>
+        <@s.param name="editor">objEditor[0]</@s.param>
+        <@s.param name="file_once_size">${MM.options_file_size?if_exists}</@s.param>
+        <@s.param name="file_size">${MM.options_file_size?if_exists}</@s.param>
+        <@s.param name="file_limit">${MM.options_file_limit?if_exists}</@s.param>
+        <@s.param name="file_type">${MM.options_file_type?if_exists}</@s.param>
+        <@s.param name="file_multi">true</@s.param>
+        </@s.action>
+        </div>
+        </td>
+      </tr>
+    </tbody>
+    </table>
+  </div>
+
+  <div class="document-foot-menu">
+    <span class="button medium"><a href="dispDocumentList.me${param.get('?document_orl=')?html}">목록</a></span>
+    <#if MEI_GRANT_WRITE>
+    <span class="button medium"><input type="button" onclick="save();" value="저장" /></span>
+    </#if>
+  </div>
+  </form>
+
+  <#include "_foot.html">
+
+</div>

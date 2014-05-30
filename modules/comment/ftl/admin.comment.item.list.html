@@ -1,0 +1,61 @@
+<script type="text/javascript">//<![CDATA[
+
+  // 삭제
+  function del(comment_orl) {
+    jQuery('#form').jaAction({ 
+      formAttr : 'action=./procCommentDelete.me&method=post', 
+      param : _mei_gb_params + '&comment_orl=' + comment_orl , 
+      ask : 'del' ,
+      afterSend : function() { location.reload(); }
+    });
+  }
+
+//]]></script>
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+  <form id="form" method="get" action="?">
+  <div class="document-list">
+  <table cellspacing="0" border="1" summary="" class="table-list">
+  <colgroup>
+  <col width="40"><col width="40"><col><col width="140"><col width="120">
+  </colgroup>
+  <caption>Total ${paging.total_count?string(",###")} Page ${paging.page?string(",###")}/${paging.total_page?string(",###")}</caption>
+  <thead>
+    <tr>
+      <th scope="col"><input type="checkbox" onclick="jQuery.ja.checked('#form input:checkbox:[name=comment_orl]',true);" /></th>
+      <th scope="col"></th>
+      <th scope="col">내용</th>
+      <th scope="col">작성자</th>
+      <th scope="col">등록일</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <#list O.listComment as obj>
+    <tr>
+      <td>
+        <input type="checkbox" id="comment_orl_${obj.comment_orl}" name="comment_orl" value="${obj.comment_orl}" />
+      </td>
+      <td>
+        <a href="javascript:del('${obj.comment_orl}');" title="삭제"><span class="iconset delete"></span></a>
+      </td>
+      <td class="title"><a href="./dispDocumentView.me?mid=${obj.mid}&document_orl=${obj.target_orl}#cmmt_here_${obj.comment_orl}" target="_blank">${obj.content}</a></td>
+      <td>${obj.nickname} (${obj.user_id})</td>
+      <td><#assign rdate = obj.rdate?datetime("yyyyMMddHHmmss")>${rdate?string("yyyy/MM/dd")}<br />${rdate?string("HH:mm:ss")}</td>
+    </tr>
+    </#list>
+    <#if paging.total_count == 0>
+    <tr><td colspan="5" class="zero">등록된 자료가 없습니다.</td></tr>
+    </#if>
+
+  </tbody>
+  </table>
+  </div>
+
+  <@pagenavigator url = param.get('?page=')?j_string form="#form" params = paging />
+
+  </form>
+
+</div>

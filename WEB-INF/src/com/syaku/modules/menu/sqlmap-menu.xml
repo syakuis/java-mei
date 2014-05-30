@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.menu">
+  <typeAlias alias="MenuBean" type="com.syaku.modules.menu.MenuBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-menu" class="MenuBean">
+    <result property="menu_orl" column="menu_orl" nullValue="" />
+    <result property="title" column="title" nullValue="" />
+    <result property="listorder" column="listorder" nullValue="" />
+    <result property="rdate" column="rdate" nullValue="" />
+  </resultMap>
+
+  <select id="select-menu-list" parameterClass="hashMap" resultMap="result-menu">
+    SELECT
+      menu_orl,
+      title,
+      listorder,
+      rdate
+    FROM SK_MENU
+
+    ORDER BY listorder
+
+    <isNotEmpty prepend="LIMIT" property="page_start" >
+     $page_start$,$page_row$
+    </isNotEmpty>
+
+  </select>
+
+  <select id="select-menu-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(menu_orl),0) FROM SK_MENU
+  </select>
+
+  <select id="select-menu-one" parameterClass="hashMap" resultMap="result-menu">
+    SELECT
+      menu_orl,
+      title,
+      listorder,
+      rdate
+    FROM SK_MENU
+    WHERE menu_orl = #menu_orl#
+  </select>
+
+  <select id="select-menu-one-search" parameterClass="hashMap" resultMap="result-menu">
+    SELECT
+      menu_orl,
+      title,
+      listorder,
+      rdate
+    FROM SK_MENU
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="title" >
+        title = #title#
+      </isNotEmpty>
+    </dynamic>
+
+    LIMIT 1
+
+  </select>
+
+  <select id="select-menu-xml" parameterClass="hashMap" resultClass="xml" xmlResultName="data">
+    SELECT
+      menu_orl,
+      title,
+      listorder,
+      rdate
+    FROM SK_MENU
+
+    ORDER BY menu_orl
+  </select>
+
+  <insert id="insert-menu" parameterClass="MenuBean">
+    <selectKey resultClass="String" keyProperty="menu_orl">
+      SELECT (IFNULL(MAX(menu_orl),0) + 1) AS menu_orl FROM SK_MENU
+    </selectKey>
+
+    INSERT INTO SK_MENU
+    (
+      menu_orl,
+      title,
+      listorder,
+      rdate
+    ) VALUES (
+      #menu_orl#,
+      #title#,
+      #menu_orl# * -1,
+      #rdate#
+    )
+  </insert>
+
+  <update id="update-menu" parameterClass="MenuBean">
+    UPDATE SK_MENU SET
+      title = #title#
+    WHERE menu_orl = #menu_orl#
+  </update>
+
+  <delete id="delete-menu" parameterClass="hashMap">
+    DELETE FROM SK_MENU WHERE menu_orl = #menu_orl#
+  </delete>
+
+</sqlMap>

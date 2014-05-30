@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.issue">
+  <typeAlias alias="IssueBean" type="com.syaku.modules.issue.IssueBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-issue" class="IssueBean">
+
+<result property="issue_orl" column="issue_orl" nullValue="" />
+<result property="group_orl" column="group_orl" nullValue="" />
+<result property="module_orl" column="module_orl" nullValue="" />
+<result property="category_orl" column="category_orl" nullValue="" />
+<result property="member_orl" column="member_orl" nullValue="" />
+<result property="user_id" column="user_id" nullValue="" />
+<result property="user_name" column="user_name" nullValue="" />
+<result property="nickname" column="nickname" nullValue="" />
+<result property="title" column="title" nullValue="" />
+<result property="content" column="content" nullValue="" />
+<result property="state_code_orl" column="state_code_orl" nullValue="" />
+<result property="issue_root" column="issue_root" nullValue="" />
+<result property="ipaddress" column="ipaddress" nullValue="" />
+<result property="success_date" column="success_date" nullValue="" />
+<result property="last_update" column="last_update" nullValue="" />
+<result property="reg_date" column="reg_date" nullValue="" />
+<result property="listorder" column="listorder" nullValue="" />
+
+  </resultMap>
+
+
+  <sql id="sql-issue">
+      SELECT 
+      issue_orl,
+      group_orl,
+      module_orl,
+      category_orl,
+      member_orl,
+      user_id,
+      user_name,
+      nickname,
+      title,
+      content,
+      state_code_orl,
+      issue_root,
+      ipaddress,
+      success_date,
+      last_update,
+      reg_date,
+      listorder
+
+      FROM ISSUE
+
+  </sql>
+
+  <sql id="sql-issue-where">
+
+    <dynamic prepend="WHERE">
+    <isNotEmpty prepend="AND" property="module_orl" >
+    module_orl = #module_orl#
+    </isNotEmpty>
+    <isNotEmpty prepend="AND" property="group_orl" >
+    group_orl = #group_orl#
+    </isNotEmpty>
+    <isNotEmpty prepend="AND" property="issue_root" >
+    issue_root = #issue_root#
+    </isNotEmpty>
+    <isNotEmpty prepend="AND" property="category_orl" >
+    category_orl = #category_orl#
+    </isNotEmpty>
+    <isNotEmpty prepend="AND" property="state_code_orl" >
+    state_code_orl = #state_code_orl#
+    </isNotEmpty>
+    </dynamic>
+
+  </sql>
+
+  <select id="select-issue-list" parameterClass="hashMap" resultMap="result-issue">
+    <include refid="sql-issue" />
+    <include refid="sql-issue-where" />
+    ORDER BY listorder 
+    <isNotEmpty prepend="LIMIT" property="page_start" >
+    $page_start$,$page_row$
+    </isNotEmpty>
+  </select>
+
+
+  <select id="select-issue-one" parameterClass="hashMap" resultMap="result-issue">
+    SELECT 
+
+    issue_orl,
+    group_orl,
+    module_orl,
+    category_orl,
+    member_orl,
+    user_id,
+    user_name,
+    nickname,
+    title,
+    content,
+    state_code_orl,
+    issue_root,
+    ipaddress,
+    success_date,
+    last_update,
+    reg_date,
+    listorder
+
+    FROM ISSUE
+
+  <dynamic prepend="WHERE">
+
+  <isNotEmpty prepend="AND" property="group_orl" >
+  group_orl = #group_orl#
+  </isNotEmpty>
+  <isNotEmpty prepend="AND" property="issue_orl" >
+  issue_orl = #issue_orl#
+  </isNotEmpty>
+
+  </dynamic>
+
+     LIMIT 1
+  </select>
+
+  <select id="select-issue-count" parameterClass="hashMap" resultClass="long">
+  SELECT IFNULL(COUNT(issue_orl),0) FROM ISSUE
+  <include refid="sql-issue-where" />
+  </select>
+
+  <select id="select-issue-max" parameterClass="hashMap" resultClass="long" >
+  SELECT IFNULL(MAX(issue_orl),0) FROM ISSUE WHERE group_orl = #group_orl#
+  </select>
+
+
+  <insert id="insert-issue" parameterClass="IssueBean">
+    <selectKey resultClass="String" keyProperty="issue_orl">
+      SELECT (IFNULL(MAX(issue_orl),0) + 1) AS issue_orl FROM ISSUE
+    </selectKey>
+
+      INSERT INTO ISSUE
+      (
+      issue_orl,
+      group_orl,
+      module_orl,
+      category_orl,
+      member_orl,
+      user_id,
+      user_name,
+      nickname,
+      title,
+      content,
+      state_code_orl,
+      issue_root,
+      ipaddress,
+      success_date,
+      last_update,
+      reg_date,
+      listorder
+
+      ) VALUES (
+
+      #issue_orl#,
+      <isNotEmpty property="group_orl">
+      #group_orl#,
+      </isNotEmpty>
+      <isEmpty property="group_orl">
+      #issue_orl#,
+      </isEmpty>
+      #module_orl#,
+      #category_orl#,
+      #member_orl#,
+      #user_id#,
+      #user_name#,
+      #nickname#,
+      #title#,
+      #content#,
+      #state_code_orl#,
+      #issue_root#,
+      #ipaddress#,
+      #success_date#,
+      #last_update#,
+      #reg_date#,
+      #issue_orl# * -1
+    )
+  </insert>
+   <update id="update-issue-issue-root-n" parameterClass="hashMap">
+    UPDATE ISSUE SET
+    issue_root = 'N'
+    WHERE group_orl = #group_orl#
+   </update>
+
+   <update id="update-issue-issue-root-y" parameterClass="hashMap">
+    UPDATE ISSUE SET
+    issue_root = 'Y'
+    WHERE issue_orl = #issue_orl#
+   </update>
+
+  <delete id="delete-issue" parameterClass="hashMap">
+    DELETE FROM ISSUE  WHERE issue_orl = #issue_orl#
+   </delete>
+
+  <delete id="delete-issue-module" parameterClass="hashMap">
+    DELETE FROM ISSUE WHERE module_orl = #module_orl#
+  </delete>
+
+</sqlMap>

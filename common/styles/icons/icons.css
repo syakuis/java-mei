@@ -1,0 +1,38 @@
+@charset "utf-8";
+
+.button.icon *{padding-left:0px;}
+.button.small.icon *{padding-left:0px;}
+
+.button.icon .iconset{ width:16px; height:16px; margin: 0px 7px 2px 0px;vertical-align:middle; }
+
+/* //UI Object */
+
+/* button icon */
+.iconset{ width:16px; height:16px; background-image:url(./iconset.gif) !important; background-repeat:no-repeat; border:0; background-color:transparent; vertical-align:bottom; display:inline-block; text-decoration:none; padding:0 !important; }
+.iconset span{z-index:-1; width:16px; height:16px; padding:0 !important;}
+
+.iconset.setting{ background-position:0px 0px;}
+.iconset.date{ background-position:-16px 0px;}
+.iconset.category{ background-position:-32px 0px;}
+.iconset.comment{ background-position:-48px 0px;}
+.iconset.search{ background-position:-64px 0px;}
+.iconset.login{ background-position:-80px 0px;}
+.iconset.homepage{ background-position:-96px 0px;}
+
+.iconset.title{ background-position:0px -16px;}
+.iconset.opener{ background-position:-16px -16px;}
+.iconset.style_list{ background-position:-32px -16px;}
+.iconset.style_gallery{ background-position:-48px -16px;}
+.iconset.style_image{ background-position:-64px -16px;}
+
+.iconset.accept{ background-position:0px -32px;}
+.iconset.add{ background-position:-16px -32px;}
+.iconset.delete{ background-position:-32px -32px;}
+.iconset.exclamation{ background-position:-48px -32px;}
+.iconset.help{ background-position:-64px -32px;}
+.iconset.refresh{ background-position:-80px -32px;}
+.iconset.cache{ background-position:-96px -32px;}
+
+.iconset.modify{ background-position:-112px -32px;}
+.iconset.list{ background-position:-128px -32px;}
+.iconset.success{ background-position:-144px -32px;}

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.layout">
+  <typeAlias alias="LayoutBean" type="com.syaku.modules.layout.LayoutBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-layout" class="LayoutBean">
+    <result property="layout_orl" column="layout_orl" nullValue="" />
+    <result property="menu_orl" column="menu_orl" nullValue="" />
+    <result property="layout" column="layout" nullValue="" />
+    <result property="title" column="title" nullValue="" />
+    <result property="head_script" column="head_script" nullValue="" />
+    <result property="extra_vars" column="extra_vars" nullValue="" />
+    <result property="mobile" column="mobile" nullValue="" />
+    <result property="rdate" column="rdate" nullValue="" />
+  </resultMap>
+
+  <select id="select-layout-list" parameterClass="hashMap" resultMap="result-layout">
+    SELECT
+      layout_orl,
+      menu_orl,
+      layout,
+      title,
+      head_script,
+      extra_vars,
+      mobile,
+      rdate
+
+    FROM SK_LAYOUT
+    <isNotEmpty prepend="WHERE" property="mobile" >
+      mobile = #mobile#
+    </isNotEmpty>
+
+    <isNotEmpty prepend="LIMIT" property="page_start" >
+     $page_start$,$page_row$
+    </isNotEmpty>
+
+  </select>
+
+  <select id="select-layout-count" parameterClass="hashMap" resultClass="Long">
+    SELECT IFNULL(COUNT(layout_orl),0) FROM SK_LAYOUT
+    <isNotEmpty prepend="WHERE" property="mobile" >
+      mobile = #mobile#
+    </isNotEmpty>
+    <isNotEmpty prepend="WHERE" property="layout_orl" >
+      layout_orl = #layout_orl#
+    </isNotEmpty>
+  </select>
+
+  <select id="select-layout-one" parameterClass="hashMap" resultMap="result-layout">
+    SELECT
+      layout_orl,
+      menu_orl,
+      layout,
+      title,
+      head_script,
+      extra_vars,
+      mobile,
+      rdate
+    FROM SK_LAYOUT
+    WHERE layout_orl = #layout_orl#
+
+  </select>
+
+  <insert id="insert-layout" parameterClass="LayoutBean">
+    <selectKey resultClass="String" keyProperty="layout_orl">
+      SELECT (IFNULL(MAX(layout_orl),0) + 1) AS layout_orl FROM SK_LAYOUT
+    </selectKey>
+
+    INSERT INTO SK_LAYOUT
+    (
+      layout_orl,
+      menu_orl,
+      layout,
+      title,
+      head_script,
+      extra_vars,
+      mobile,
+      rdate
+    ) VALUES (
+    #layout_orl#,
+    #menu_orl#,
+    #layout#,
+    #title#,
+    #head_script#,
+    #extra_vars#,
+    #mobile#,
+    #rdate#
+    )
+  </insert>
+
+  <update id="update-layout" parameterClass="LayoutBean">
+    UPDATE SK_LAYOUT SET
+
+      menu_orl = #menu_orl#,
+      layout = #layout#,
+      title = #title#,
+      head_script = #head_script#,
+      extra_vars = #extra_vars#,
+      mobile = #mobile#
+
+    WHERE layout_orl = #layout_orl#
+  </update>
+
+  <delete id="delete-layout" parameterClass="hashMap">
+    DELETE FROM SK_LAYOUT WHERE layout_orl = #layout_orl#
+  </delete>
+
+</sqlMap>

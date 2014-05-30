@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.file">
+  <typeAlias alias="FileCounterBean" type="com.syaku.modules.file.FileCounterBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-file-counter" class="FileCounterBean">
+    <result property="module_orl" column="module_orl" nullValue="" />
+    <result property="target_orl" column="target_orl" nullValue="" />
+    <result property="seq" column="seq" nullValue="" />
+    <result property="count" column="count" nullValue="" />
+    <result property="reg_date" column="reg_date" nullValue="" />
+    <result property="last_update" column="last_update" nullValue="" />
+  </resultMap>
+
+  <select id="select-file-counter-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(module_orl),0) FROM SK_FILE_COUNTER
+    WHERE module_orl = #module_orl#
+    AND target_orl = #target_orl#
+    AND seq = #seq#
+  </select>
+
+  <select id="select-file-counter-count-one" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(MAX(count),0) FROM SK_FILE_COUNTER
+    WHERE module_orl = #module_orl#
+    AND target_orl = #target_orl#
+    AND seq = #seq#
+    LIMIT 1
+  </select>
+
+  <insert id="insert-file-counter" parameterClass="FileCounterBean">
+    INSERT INTO SK_FILE_COUNTER
+    (
+      module_orl,
+      target_orl,
+      seq,
+      count,
+      reg_date
+    ) VALUES (
+      #module_orl#,
+      #target_orl#,
+      #seq#,
+      #count#,
+      #reg_date#
+    )
+  </insert>
+
+  <update id="update-file-counter" parameterClass="FileCounterBean">
+    UPDATE SK_FILE_COUNTER SET
+    count = #count#,
+    last_update = #last_update#
+    WHERE module_orl = #module_orl#
+    AND target_orl = #target_orl#
+    AND seq = #seq#
+  </update>
+
+  <delete id="delete-file-counter" parameterClass="hashMap">
+    DELETE FROM SK_FILE_COUNTER
+    WHERE module_orl = #module_orl#
+    AND target_orl = #target_orl#
+    AND seq = #seq#
+  </delete>
+
+  <delete id="delete-file-counter-module" parameterClass="hashMap">
+    DELETE FROM SK_FILE_COUNTER
+    WHERE module_orl = #module_orl#
+  </delete>
+
+</sqlMap>

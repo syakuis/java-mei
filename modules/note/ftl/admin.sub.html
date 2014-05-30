@@ -1,0 +1,29 @@
+<#if MID?if_exists == 'admin'>
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  // Tab on class
+  targetOnClass('#admin-document-tab li','on','single', { target : [
+    { search : ['dispNoteAdminInsert'] , def : false },
+    { search : ['dispNoteAdminItemList','dispNoteSendInsert','dispNoteView.me'] , def : false , condition : 'or' }
+
+    ]} );
+
+});
+
+//]]></script>
+
+
+<div class="document-title">
+  <div class="document-title-name">쪽지</div>
+</div>
+
+<div class="document-tab">
+<ul id="admin-document-tab">
+   <li><a href="./dispNoteAdminInsert.me${param.pick('?mid=&module_orl=')?html}">모듈관리</a></li> 
+   <li><a href="./dispNoteAdminItemList.me${param.get('?module_orl=')?html}">쪽지관리</a></li> 
+</ul>
+</div>
+
+</#if>

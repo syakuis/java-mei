@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.file">
+  <typeAlias alias="FileBean" type="com.syaku.modules.file.FileBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-file" class="FileBean">
+    <result property="file_orl" column="file_orl" nullValue="" />
+    <result property="target_orl" column="target_orl" nullValue="" />
+    <result property="sid" column="sid" nullValue="" />
+    <result property="seq" column="seq" nullValue="" />
+    <result property="module_orl" column="module_orl" nullValue="" />
+    <result property="member_orl" column="member_orl" nullValue="" />
+    <result property="filename" column="filename" nullValue="" />
+    <result property="re_filename" column="re_filename" nullValue="" />
+    <result property="folder" column="folder" nullValue="" />
+    <result property="folder_date" column="folder_date" nullValue="" />
+    <result property="size" column="size" nullValue="" />
+    <result property="checksum" column="checksum" nullValue="" />
+    <result property="extension" column="extension" nullValue="" />
+    <result property="type" column="type" nullValue="" />
+    <result property="rdate" column="rdate" nullValue="" />
+    <result property="ip" column="ip" nullValue="" />
+    <result property="num" column="num" nullValue="" />
+    <result property="listorder" column="listorder" nullValue="" />
+  </resultMap>
+
+  <select id="select-file-list" parameterClass="hashMap" resultMap="result-file">
+    SELECT
+      file_orl,
+      target_orl,
+      sid,
+      seq,
+      module_orl,
+      member_orl,
+      filename,
+      re_filename,
+      folder,
+      folder_date,
+      size,
+      checksum,
+      extension,
+      type,
+      rdate,
+      ip,
+      num,
+      listorder
+    FROM SK_FILE
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="module_orl" >
+        module_orl = #module_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="seq" >
+        seq = #seq#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="target_orl" >
+        target_orl = #target_orl#
+      </isNotEmpty>
+    </dynamic>
+
+    <isEmpty prepend="ORDER BY" property="order" >
+       file_orl
+    </isEmpty>
+
+    <isNotEmpty prepend="LIMIT" property="page_start" >
+     $page_start$,$page_row$
+    </isNotEmpty>
+
+  </select>
+
+  <select id="select-file-count" parameterClass="hashMap" resultClass="Long">
+    SELECT IFNULL(COUNT(file_orl),0) FROM SK_FILE
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="module_orl" >
+        module_orl = #module_orl#
+      </isNotEmpty>
+      <isNotEmpty prepend="AND" property="seq" >
+        seq = #seq#
+      </isNotEmpty>
+      <isNotEmpty prepend="AND" property="sid" >
+        sid = #sid#
+      </isNotEmpty>
+      <isNotEmpty prepend="AND" property="target_orl" >
+        target_orl = #target_orl#
+      </isNotEmpty>
+
+    </dynamic>
+
+  </select>
+
+  <select id="select-file-size-sum-count" parameterClass="hashMap" resultClass="hashMap">
+    SELECT IFNULL(SUM(size),0) AS file_size , IFNULL(COUNT(size),0) AS file_count FROM SK_FILE
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="module_orl" >
+        module_orl = #module_orl#
+      </isNotEmpty>
+      <isNotEmpty prepend="AND" property="seq" >
+        seq = #seq#
+      </isNotEmpty>
+      <isNotEmpty prepend="AND" property="sid" >
+        sid = #sid#
+      </isNotEmpty>
+      <isNotEmpty prepend="AND" property="target_orl" >
+        target_orl = #target_orl#
+      </isNotEmpty>
+
+    </dynamic>
+  </select>
+
+  <select id="select-file-one" parameterClass="hashMap" resultMap="result-file">
+    SELECT
+      file_orl,
+      target_orl,
+      sid,
+      seq,
+      module_orl,
+      member_orl,
+      filename,
+      re_filename,
+      folder,
+      folder_date,
+      size,
+      checksum,
+      extension,
+      type,
+      rdate,
+      ip,
+      num,
+      listorder
+    FROM SK_FILE
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="file_orl" >
+        file_orl = #file_orl#
+      </isNotEmpty>
+      <isNotEmpty prepend="AND" property="module_orl" >
+        module_orl = #module_orl#
+      </isNotEmpty>
+      <isNotEmpty prepend="AND" property="seq" >
+        seq = #seq#
+      </isNotEmpty>
+      <isNotEmpty prepend="AND" property="sid" >
+        sid = #sid#
+      </isNotEmpty>
+      <isNotEmpty prepend="AND" property="target_orl" >
+        target_orl = #target_orl#
+      </isNotEmpty>
+
+    </dynamic>
+
+    LIMIT 1
+
+  </select>
+
+  <select id="select-file-item" parameterClass="hashMap" resultMap="result-file">
+    SELECT
+      file_orl,
+      target_orl,
+      sid,
+      seq,
+      module_orl,
+      member_orl,
+      filename,
+      re_filename,
+      folder,
+      folder_date,
+      size,
+      checksum,
+      extension,
+      type,
+      rdate,
+      ip,
+      num,
+      listorder
+    FROM SK_FILE
+
+    WHERE module_orl = #module_orl#
+    AND seq = #seq#
+
+    <isNotEmpty prepend="AND" property="file_orl" >
+      file_orl = #file_orl#
+    </isNotEmpty>
+    <isNotEmpty prepend="AND" property="sid" >
+      sid = #sid#
+    </isNotEmpty>
+    <isNotEmpty property="target_orl" >
+      <isEqual prepend="AND" property="target_orl" compareValue="notnull" >
+        target_orl &gt; 0
+      </isEqual>
+      <isNotEqual prepend="AND" property="target_orl" compareValue="notnull" >
+        target_orl = #target_orl#
+      </isNotEqual>
+    </isNotEmpty>
+    <isNotEmpty prepend="AND" property="type" >
+      type = #type#
+    </isNotEmpty>
+
+    <isNotEmpty prepend="ORDER BY" property="order" >
+       $order$
+    </isNotEmpty>
+
+    <isEmpty prepend="ORDER BY" property="order" >
+       file_orl
+    </isEmpty>
+
+    <isNotEmpty prepend="LIMIT" property="limit" >
+       $limit$
+    </isNotEmpty>
+
+  </select>
+
+
+  <select id="select-file-item-once" parameterClass="hashMap" resultMap="result-file">
+    SELECT
+      file_orl,
+      target_orl,
+      sid,
+      seq,
+      module_orl,
+      member_orl,
+      filename,
+      re_filename,
+      folder,
+      folder_date,
+      size,
+      checksum,
+      extension,
+      type,
+      rdate,
+      ip,
+      num,
+      listorder
+    FROM SK_FILE
+
+    WHERE module_orl = #module_orl#
+    AND seq = #seq#
+
+    <isNotEmpty prepend="AND" property="file_orl" >
+      file_orl = #file_orl#
+    </isNotEmpty>
+    <isNotEmpty prepend="AND" property="sid" >
+      sid = #sid#
+    </isNotEmpty>
+    <isNotEmpty prepend="AND" property="target_orl" >
+      target_orl = #target_orl#
+    </isNotEmpty>
+    <isNotEmpty prepend="AND" property="type" >
+      type = #type#
+    </isNotEmpty>
+
+    LIMIT 1
+  </select>
+
+
+  <insert id="insert-file" parameterClass="FileBean">
+    <selectKey resultClass="String" keyProperty="file_orl">
+      SELECT (IFNULL(MAX(file_orl),0) + 1) AS file_orl FROM SK_FILE
+    </selectKey>
+
+    INSERT INTO SK_FILE
+    (
+      file_orl,
+      target_orl,
+      sid,
+      seq,
+      module_orl,
+      member_orl,
+      filename,
+      re_filename,
+      folder,
+      folder_date,
+      size,
+      checksum,
+      extension,
+      type,
+      rdate,
+      ip,
+      num,
+      listorder
+    ) VALUES (
+      #file_orl#,
+      #target_orl#,
+      #sid#,
+      #seq#,
+      #module_orl#,
+      #member_orl#,
+      #filename#,
+      #re_filename#,
+      #folder#,
+      #folder_date#,
+      #size#,
+      #checksum#,
+      #extension#,
+      #type#,
+      #rdate#,
+      #ip#,
+      0,
+      #file_orl# * -1
+    )
+  </insert>
+
+  <update id="update-file-target" parameterClass="hashMap">
+    UPDATE SK_FILE SET target_orl = #target_orl#
+    WHERE module_orl = #module_orl#
+    AND target_orl = 0
+    AND sid = #sid#
+    AND seq = #seq#
+  </update>
+
+  <delete id="delete-file" parameterClass="hashMap">
+    DELETE FROM SK_FILE WHERE file_orl = #file_orl#
+  </delete>
+
+  <delete id="delete-file-module" parameterClass="hashMap">
+    DELETE FROM SK_FILE WHERE module_orl = #module_orl#
+  </delete>
+
+  <delete id="delete-file-target" parameterClass="hashMap">
+    DELETE FROM SK_FILE
+    WHERE module_orl = #module_orl#
+    AND target_orl = #target_orl#
+    AND seq = #seq#
+  </delete>
+
+  <delete id="delete-file-array" parameterClass="hashMap">
+    DELETE FROM SK_FILE WHERE
+    <iterate prepend="file_orl IN " property="file_orl_array" open="(" close=")" conjunction=",">
+      #file_orl_array[]#
+    </iterate>
+
+  </delete>
+
+  <delete id="delete-file-sid" parameterClass="hashMap">
+    DELETE FROM SK_FILE WHERE module_orl = #module_orl#
+    AND sid = #sid#
+    AND target_orl = 0
+    AND seq = #seq#
+  </delete>
+
+</sqlMap>

@@ -1,0 +1,38 @@
+<#assign module_orl = MODULE_ORL?if_exists>
+<#if MID?if_exists == 'admin'>
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  // Tab on class
+  targetOnClass('#admin-document-tab li','on','single', { target : [
+    { search : ['dispDocumentAdminList'] , def : true },
+    { search : ['dispDocumentAdminInsert'] , def : false },
+    { search : ['dispDocumentCategoryAdmin'] , def : false },
+    { search : ['dispDocumentAdminGrant'] , def : false },
+    { search : ['dispDocumentAdminExtraKeys'] , def : false },
+    { search : ['dispDocumentList','dispDocumentView','dispDocumentInsert'] , def : false , condition : 'or' }
+  ]} );
+
+});
+
+//]]></script>
+
+<div class="document-title">
+  <div class="document-title-name">문서</div>
+</div>
+
+<div class="document-tab">
+<ul id="admin-document-tab">
+  <li><a href="./dispDocumentAdminList.me${param.pick('?mid=')?html}">목록</a></li>
+  <li><a href="./dispDocumentAdminInsert.me${param.pick('?mid=&module_orl=')?html}">모듈관리</a></li>
+  <#if module_orl?if_exists != ''>
+  <li><a href="./dispDocumentCategoryAdminView.me${param.pick('?mid=&module_orl=')?html}">분류관리</a></li>
+  <li><a href="./dispDocumentAdminGrantInsert.me${param.pick('?mid=&module_orl=')?html}">권한관리</a></li>
+  <li><a href="./dispDocumentAdminExtraKeysView.me${param.pick('?mid=&module_orl=')?html}">확장변수 관리</a></li>
+  <li><a href="./dispDocumentList.me${param.pick('?mid=&module_orl=')?html}">게시물 관리</a></li>
+  </#if>
+</ul>
+</div>
+
+</#if>

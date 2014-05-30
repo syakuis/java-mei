@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+<package name="layout" extends="globals">
+
+<action name="dispLayoutAdminList" class="com.syaku.modules.layout.LayoutAdminView" method="dispLayoutAdminList">
+<param name="act_permission">member</param>
+<param name="act_type">view</param>
+<param name="act_template">admin.layout.list.html</param>
+</action>
+
+<action name="dispLayoutAdminInsert" class="com.syaku.modules.layout.LayoutAdminView" method="dispLayoutAdminInsert">
+<param name="act_permission">member</param>
+<param name="act_type">view</param>
+<param name="act_template">admin.layout.insert.html</param>
+</action>
+
+<action name="procLayoutAdminInsert" class="com.syaku.modules.layout.LayoutAdminController" method="procLayoutAdminInsert">
+<param name="act_permission">member</param>
+<param name="act_type">controller</param>
+</action>
+
+<action name="procLayoutAdminDelete" class="com.syaku.modules.layout.LayoutAdminController" method="procLayoutAdminDelete">
+<param name="act_permission">member</param>
+<param name="act_type">controller</param>
+</action>
+
+
+</package>
+
+</struts>

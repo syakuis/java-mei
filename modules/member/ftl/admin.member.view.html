@@ -1,0 +1,103 @@
+<script type="text/javascript">
+
+jQuery(function() {
+<#list O.listGroupMember?if_exists as obj>
+jQuery('#form #group_${obj.group_orl}').show();
+</#list>
+});
+
+  // 삭제
+  function del() {
+    jQuery('#form').jaAction({ 
+      formAttr : 'action=./procMemberAdminDelete.me', 
+      param : _mei_gb_params , 
+      ask : 'del' ,
+      redirect : "./dispMemberAdminList.me?" + _mei_gb_params
+    });
+  }
+</script>
+
+<div id="sub_column_content">
+
+<#include "./admin.sub.html">
+
+<div class="document-view">
+<form id="form" method="post">
+<input type="hidden" id="member_orl" name="member_orl" value="${O.objMember.member_orl}" />
+
+<table cellspacing="0" border="1" summary="" class="table-view">
+<colgroup>
+<col width="150"><col>
+</colgroup>
+<tbody>
+
+  <tr>
+    <th scope="row">아이디</th>
+    <td>${O.objMember.user_id}</td>
+  </tr>
+
+  <tr>
+    <th scope="row">이름</th>
+    <td>${O.objMember.user_name}</td>
+  </tr>
+
+  <tr>
+    <th scope="row">닉네임</th>
+    <td>${O.objMember.nickname}</td>
+  </tr>
+  <tr>
+    <th scope="row">가입일</th>
+    <td><#if O.objMember.rdate != ""><#assign rdate = O.objMember.rdate?datetime("yyyyMMddHHmmss")>${rdate}</#if></td>
+  </tr>
+
+  <#if MM.options_auth_field?if_exists != ''>
+  <tr>
+    <th scope="row">회원 인증</th>
+    <td><#if O.is_auth>인증함<#else>인증안함</#if></td>
+  </tr>
+  </#if>
+
+  <tr>
+    <th scope="row">최근 접속일</th>
+    <td><#if O.objMember.last_login != ""><#assign last_login = O.objMember.last_login?datetime("yyyyMMddHHmmss")>${last_login}</#if></td>
+  </tr>
+
+  <tr>
+    <th scope="row">최고관리자 여부</th>
+    <td>
+    <#if O.objMember.is_admin == '1'>예<#else>아니오</#if>
+    </td>
+  </tr>
+
+  <tr>
+  <th scope="row">소속 그룹</th>
+  <td>
+    <div class="item">
+    <#list O.listGroup as obj>
+    <span id="group_${obj.group_orl}" class="hide">&nbsp;<b>${obj.title}</b></span>
+    </#list>
+    </div>
+  </td>
+  </tr>
+
+  <tr>
+    <th scope="row">이메일</th>
+    <td>${O.objMember.email}</td>
+  </tr>
+
+</tbody>
+</table>
+
+</form>
+</div>
+
+  <div class="document-foot-menu">
+    <span class="button medium icon"><a href="./dispMemberAdminList.me${param.get('?member_orl=')?html}"><span class="iconset list"></span>목록</a></span>
+    <span class="button medium icon"><a href="./dispMemberAdminInsert.me${param.get('?')?html}"><span class="iconset modify"></span>수정</a></span>
+    <#if O.objMember.member_orl != '1'>
+    <span class="button medium icon"><button type="button" onclick="del();"><span class="iconset delete"></span>삭제</button></span>
+    </#if>
+  </div>
+
+
+</div>

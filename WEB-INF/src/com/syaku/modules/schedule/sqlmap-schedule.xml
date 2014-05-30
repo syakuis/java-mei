@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="modules.schedule">
+  <typeAlias alias="ScheduleBean" type="com.syaku.modules.schedule.ScheduleBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <!--@brief  -->
+  <resultMap id="result-schedule" class="ScheduleBean">
+    <result property="schedule_orl" column="schedule_orl" />
+    <result property="title" column="title" />
+    <result property="classes" column="classes" />
+    <result property="repeat_time" column="repeat_time" />
+    <result property="last_date" column="last_date" />
+    <result property="isused" column="isused" />
+    <result property="listorder" column="listorder" />
+  </resultMap>
+
+  <select id="select-schedule-list" parameterClass="hashMap" resultMap="result-schedule">
+    SELECT
+      schedule_orl,
+      title,
+      classes,
+      repeat_time,
+      last_date,
+      isused,
+      listorder
+    FROM SK_SCHEDULE
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="isused" >
+        isused = #isused#
+      </isNotEmpty>
+
+    </dynamic>
+
+    <isNotEmpty prepend="LIMIT" property="page_start" >
+     $page_start$,$page_row$
+    </isNotEmpty>
+
+  </select>
+
+  <select id="select-schedule-count" parameterClass="hashMap" resultClass="long">
+    SELECT COUNT(schedule_orl) FROM SK_SCHEDULE
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="isused" >
+        isused = #isused#
+      </isNotEmpty>
+    </dynamic>
+  </select>
+
+
+  <select id="select-schedule-one" parameterClass="hashMap" resultMap="result-schedule">
+    SELECT
+      schedule_orl,
+      title,
+      classes,
+      repeat_time,
+      last_date,
+      isused,
+      listorder
+    FROM SK_SCHEDULE
+    WHERE schedule_orl = #schedule_orl#
+    LIMIT 1
+  </select>
+
+  <insert id="insert-schedule" parameterClass="ScheduleBean">
+    <selectKey resultClass="String" keyProperty="schedule_orl">
+      SELECT (IFNULL(MAX(schedule_orl),0) + 1) AS schedule_orl FROM SK_SCHEDULE
+    </selectKey>
+
+    INSERT INTO SK_SCHEDULE
+    (
+      schedule_orl,
+      title,
+      classes,
+      repeat_time,
+      last_date,
+      isused,
+      listorder
+    ) VALUES (
+      #schedule_orl#,
+      #title#,
+      #classes#,
+      #repeat_time#,
+      #last_date#,
+      #isused#,
+      #schedule_orl# * -1
+    )
+  </insert>
+
+  <update id="update-schedule" parameterClass="ScheduleBean">
+    UPDATE SK_SCHEDULE SET
+    title = #title#,
+    classes = #classes#,
+    repeat_time = #repeat_time#,
+    isused = #isused#
+    WHERE schedule_orl = #schedule_orl#
+  </update>
+
+  <update id="update-schedule-lastdate" parameterClass="hashMap">
+    UPDATE SK_SCHEDULE SET
+    last_date = #last_date#
+    WHERE schedule_orl = #schedule_orl#
+  </update>
+
+  <delete id="delete-schedule" parameterClass="hashMap">
+    DELETE FROM SK_SCHEDULE WHERE schedule_orl = #schedule_orl#
+  </delete>
+
+</sqlMap>

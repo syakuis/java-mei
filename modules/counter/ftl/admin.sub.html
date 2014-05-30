@@ -1,0 +1,26 @@
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  // Tab on class
+  targetOnClass('#admin-tab li','on','single', { target : [
+    { search : ['dispCounterAdminInsert'] , def : true },
+    { search : ['dispCounterAdminItemView'] , def : false },
+    { search : ['dispCounterAdminItemList'] , def : false }
+  ]} );
+
+});
+
+//]]></script>
+
+<div class="document-title">
+  <div class="document-title-name">접속통계</div>
+</div>
+
+<div class="document-tab">
+<ul id="admin-tab">
+  <li><a href="./dispCounterAdminInsert.me${param.pick('?mid=&module_orl=')?html}">모듈</a></li>
+  <li><a href="./dispCounterAdminItemView.me${param.pick('?mid=&module_orl=${M.module_orl}')?html}">카운터</a></li>
+  <li><a href="./dispCounterAdminItemList.me${param.pick('?mid=&module_orl=${M.module_orl}')?html}">카운터 목록</a></li>
+</ul>
+</div>

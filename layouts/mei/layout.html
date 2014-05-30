@@ -1,0 +1,52 @@
+<link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="${LAYOUT_PATH_RELATIVE}/css/style.css" />
+<link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="${MEI_PATH_RELATIVE}/common/styles/document/document.css" />
+
+<#if MOD_FTL_MODULE_LAYOUT_HIDE == true>
+<#include MOD_FTL_MODULE>
+<#else>
+
+<!-- UI Object -->
+<div id="xe" class="fixed">
+	<div id="wrap" class="c">
+		<div id="header"> <a href="#content" class="skip_to_content">Skip to content</a>
+			<h1>MEI</h1>
+			<hr class="hr">
+			<div class="gnb">
+
+        <ul>
+        <#assign parent_orl = "">
+        <#list MENU.list?if_exists as obj>
+        <#if obj.depth?if_exists == "0">
+        <li<#if MID == obj.url> class="on" <#assign parent_orl = obj.menu_item_orl> </#if>><a href="${obj.href}" <#if obj.open_window == '1'>target="_blank"</#if> >${obj.name}</a></li>
+        </#if>
+        </#list>
+        <#if MEI_GRANT_LOGIN>
+        <li><a href="dispMemberInsert.me?mid=${MID}">회원정보</a></li>
+        <li><a href="javascript:jQuery.member.logout();">로그아웃</a></li>
+        <#else>
+        <#if MM.options_is_join?if_exists == 'Y'><li><a href="dispMemberInsert.me?mid=${MID}">회원가입</a></li></#if>
+        <li><a href="javascript:jQuery.member.login();">로그인</a></li>
+        </#if>
+        </ul>
+
+			</div>
+		</div>
+		<hr class="hr">
+		<div id="container">
+			<div id="sub-content">
+        <#include MOD_FTL_MODULE>				
+  		</div>
+		</div>
+		<hr class="hr">
+		<div id="footer">
+			<hr class="hr">
+			<address>
+      <a href="http://code.google.com/p/java-mei/" target="_blank">${meiConfig.getString("mei.log.message.short_text").replace('\r\n','<br />')}</a>
+      / <a href="http://xpressengine.com/">Design by XE</a>.
+			</address>
+		</div>
+	</div>
+</div>
+<!-- //UI Object -->
+
+</#if>

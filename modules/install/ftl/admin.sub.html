@@ -1,0 +1,24 @@
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  // Tab on class
+  targetOnClass('#admin-menu-tab li','on','single', { target : [
+    { search : ['dispInstallAdminInsert'] , def : true },
+    { search : ['dispInstallAdminView'] , def : false }
+  ]} );
+
+});
+
+//]]></script>
+
+<div class="document-title">
+  <div class="document-title-name">설치</div>
+</div>
+
+<div class="document-tab">
+<ul id="admin-menu-tab">
+  <li><a href="./dispInstallAdminInsert.me${param.get('?')?html}">모듈관리</a></li>
+  <li><a href="./dispInstallAdminView.me${param.get('?')?html}">설치</a></li>
+</ul>
+</div>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+  <package name="file" extends="globals">
+
+
+   <action name="dispFileAdminView" class="com.syaku.modules.file.FileAdminView" method="dispFileAdminView">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.file.view.html</param>
+    </action>
+
+   <action name="dispFileAdminClearView" class="com.syaku.modules.file.FileAdminView" method="dispFileAdminClearView">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.file.clear.view.html</param>
+    </action>
+
+   <action name="dispFileAdminItemList" class="com.syaku.modules.file.FileAdminView" method="dispFileAdminItemList">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.file.item.list.html</param>
+    </action>
+
+   <action name="dispFileAdminInsert" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.file.insert.html</param>
+    </action>
+
+    <action name="procFileAdminInsert" class="com.syaku.modules.module.ModuleAdminController" method="procModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+   <action name="dispFileUploadInsert" class="com.syaku.modules.file.FileView" method="dispFileUploadInsert">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">view</param>
+      <param name="act_template">file.upload.insert.html</param>
+    </action>
+
+    <action name="getFileDownload" class="com.syaku.modules.file.FileController" method="getFileDownload">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procFileUpload" class="com.syaku.modules.file.FileUpload">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">controller</param>
+      <interceptor-ref name="meiDefaultStack"/>
+    </action>
+
+    <action name="procFileDelete" class="com.syaku.modules.file.FileController" method="procFileDelete">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+  </package>
+
+</struts>

@@ -1,0 +1,99 @@
+ <script type="text/javascript">//<![CDATA[
+
+<#if O.objSchedule.schedule_orl?if_exists =="">
+var mod ="insert";
+<#else>
+var mod = "update";
+</#if>
+
+jQuery(function() {
+
+   jQuery.ja.setValue("#form input:radio[name=isused]","${O.objSchedule.isused?if_exists}");
+
+});
+
+ function del(schedule_orl) {
+  jQuery('#form').jaAction({
+  formAttr :'action=./procScheduleItemAdminDelete.me',
+  param : _mei_gb_params + '&schedule_orl=' + schedule_orl,
+  ask : 'del',
+  redirect : "./dispScheduleItemAdminList.me?"+_mei_gb_params 
+  });
+}
+
+function save() {
+
+  jQuery('#form').jaAction({
+    filter:[ 
+    { target :"#title",params: "&filter=notnull&title=제목"},
+    ],
+    formAttr : 'action=./procScheduleItemAdminInsert.me' ,
+    param : _mei_gb_params,
+    ask : mod,
+    redirect : "./dispScheduleItemAdminList.me${param.pick('?mid=')?js_string}"
+  });
+}
+
+</script>
+<div id="sub_column_content">
+
+<#include "./admin.sub.html">
+
+  <form id="form" method="post">
+  <input type="hidden" id="schedule_orl" name="schedule_orl" value="${O.objSchedule.schedule_orl?if_exists?html}"/>
+ 
+  <div class="document-write">
+    <table class="table-write">
+      <colgroup>
+      <col width="150"><col>
+      </colgroup>
+      <tr>
+        <th>제목</th>
+        <td>
+        <div class="item">
+          <input type="text" class="i_text w300" id="title" name="title" value="${O.objSchedule.title?if_exists?html}" />
+        </div>
+        </td>
+      </tr>
+
+      <tr>
+        <th>클래스</th>
+        <td>
+        <div class="item">
+          <input type="text" class="i_text w450" id="classes" name="classes" value="${O.objSchedule.classes?if_exists?html}" />
+        </div>
+        </td>
+      </tr>
+
+      <tr>
+        <th>반복시간(초)</th>
+        <td>
+        <div class="item">
+          <input type="text" class="i_text w100" id="repeat_time" name="repeat_time" value="${O.objSchedule.repeat_time?if_exists?html}" />
+        </div>
+        </td>
+      </tr>
+
+      
+      <tr>
+        <th>사용여부</th>
+        <td>
+        <div class="item">
+          <input type ="radio" id="isused1" name="isused" value="Y" class="i_radio" checked="checked" /> <label for="isused1" class="i_label">사용</label>
+          <input type ="radio" id="isused2" name="isused" value="N" class="i_radio" /> <label for="isused2" class="i_label">미사용</label>
+        </div>
+        </td>
+      </tr>
+
+
+  </table>
+  </div>
+
+  </form>
+
+  <div class="document-foot-menu">
+    <span class="button medium"><button type="button" onclick="save();">저장</button></span>
+    <span class="button medium"><a href="./dispScheduleItemAdminList.me${param.pick('?mid=')?html}">목록</a></span>
+  </div>
+
+</div>

@@ -1,0 +1,109 @@
+@charset "utf-8";
+
+/* NHN Web Standardization Team (http://html.nhndesign.com/) wystan & pearl 090118 */
+
+* {margin:0; padding:0; font-size:12px;}
+body {color:#7b7b7b; background:#fff;}
+body {margin:0 !important;}
+ul,ol{list-style:none}
+a {text-decoration:none;}
+a:hover {text-decoration:underline;}
+img, fieldset {border:0;}
+h1, h2, h3 {font-size:100%;}
+#wrap {position:relative; min-width:1024px;background:#fff url(../images/bg_container.gif) repeat-y right 115px;}
+#header{position:relative;height:115px;margin:0 auto !important;padding:0 !important;text-align:left;background:url(../images/bg_header.gif) repeat-x 0 0;border:none !important}
+
+#wrap, #container, #footer {zoom:1;}
+
+/* header */
+
+#header a {
+  text-decoration: none !important;
+}
+
+#header h1 {
+  padding:28px 0 18px 28px;
+  height:27px;
+}
+
+#header h1 a {
+  color: #FFFFFF;
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+
+#header .gnb-top {
+  clear: right;
+  float: right;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  white-space: nowrap;
+}
+
+#header .gnb-top li {
+  float: left;
+  list-style: none outside none;
+  margin: 0px 15px 0 0;
+  padding: 0;
+  position: relative;
+}
+
+#header .gnb-top li a {
+  color: #A5AFBA;
+  font-family: Tahoma;
+  font-size: 11px;
+}
+
+
+#header .gnb {margin-left:28px}
+#header .gnb:after{display:block;clear:both;content:''}
+#header .gnb li{ float:left;margin-right:15px; }
+#header .gnb li a{ display:block; width:88px; height:26px;padding:11px 0 0;text-align:center;font-weight:bold;color:#fff;letter-spacing:-1px;font-size:13px}
+#header .gnb li.on{background:url(../images/bg_lnb2.gif) no-repeat 0 0}
+
+#container {position:relative; overflow:hidden; padding-left:170px; padding-right:215px; border-top:2px solid #ccc; border-bottom:1px solid #ccc; background:url(../images/bg_container_lt.gif) repeat-y left 0}
+
+.column_lnb {display:inline; position:relative; left:-170px; float:left; width:170px; margin-right:-170px;}
+
+#lnb {padding:21px 0 0 21px; background:url(../images/bg_lnb.gif) no-repeat 0 0;}
+#lnb li {margin-right:0px; margin-top:7px; padding-bottom:7px; padding-left:5px; border-bottom:1px solid #e9e9e9; }
+#lnb li li {margin:0 0 0 0; padding:0 0 2px 0; border-bottom:0; background:url(../images/bu_minus.gif) no-repeat 0 3px; list-style:none; font-weight:bold; color:#333; zoom:1;}
+#lnb li li.collapsed {background-image:url(../images/bu_plus.gif);}
+#lnb li li.collapsed ul {display:none;}
+#lnb li li.no_child {background-image:url(../images/bu_no_child.gif);}
+#lnb li li li {margin:0 0 1px 0; padding-left:14px; background:url(../images/bg_lnb_item.gif) no-repeat 4px center;}
+#lnb li li li.last_child {background:url(../images/bg_lnb_item_last.gif) no-repeat 4px center;}
+#lnb ul {padding-top:6px;}
+#lnb ul ul {padding-top:2px;}
+#lnb li img {position:relative; top:2px; vertical-align:top;}
+
+#lnb li.on a { color:#3d9700;}
+#lnb li.on li a {color:#666;}
+#lnb li.on li.on a {color:#3d9700;}
+#lnb li.on li.on li a {color:#666;}
+#lnb li.on li.on li.on a {text-decoration:underline; color:#3d9700;}
+#lnb li span {cursor:pointer;}
+#lnb li a {display:inline-block; font-weight:bold; color:#333;}
+#lnb li li a {font-weight:normal; color:#666;}
+#lnb li li span {padding-left:14px; color:#333;}
+#lnb li li li a {margin-left:0; color:#666;}
+
+
+.column_side {display:inline; position:relative; right:-215px; float:right; width:215px; margin-left:-215px; padding-bottom:35px; font-size:11px;}
+
+.column_content {overflow:hidden; float:left; width:100%; min-height:730px; margin-right:-215px; margin-left:0;background:url(../images/bg_column_content.gif) repeat-y left top;}
+
+#footer {overflow:hidden; padding:0 0 12px 0 !important; border:0 !important; background:#fff; zoom:1; }
+#footer address {float:left; padding-left:23px; padding-top:10px; font-family:Verdana, sans-serif !important; font-size:11px !important; font-style:normal;}
+#footer address a {font-weight:bold; color:#0098d7; text-decoration:none;}
+
+@media print {
+.column_lnb {display:none !important;}
+#container,
+.column_content {position:relative; margin:0 !important; padding:0 !important; float:none; background:none;}
+* {overflow:visible !important;}
+}
+

@@ -1,0 +1,62 @@
+<div id="sub_column_content">
+
+  <#include "admin.sub.html">
+
+  <div class="document-head-menu tr">
+    <span class="button medium icon"><a href="dispIssueInsert.me${param.get('?issue_orl=')?html}"><span class="iconset accept"></span>등록</a></span>
+  </div>
+
+  <form id="form" method="get" action="?">
+  <#assign i = 0>
+  <#list O.listIssue as obj>
+  <div class="document-list">
+  <table cellspacing="0" border="1" summary="" class="tbl_type">
+  <caption>Total ${paging.total_count?string(",###")} Page ${paging.page?string(",###")}/${paging.total_page?string(",###")}</caption>
+  <colgroup>
+  <col width="120"><col><col width="120"><col>
+  </colgroup>
+   <tbody>
+  <tr>
+  <th scope="row">기능</th>
+  <td colspan="3">
+  <span class="button medium"><a href="dispIssueView.me${param.get('?group_orl=${obj.group_orl}')?html}">상세보기</a></span>
+  </td>
+  </tr>
+
+  <tr>
+  <th scope="row">분류</th>
+  <td>${obj.category_orl?if_exists}</td>
+  <th scope="row">상태</th>
+  <td>${obj.stat_code_orl?if_exists}</td>
+  </tr>
+
+  <tr>
+  <th scope="row">작성자</th>
+  <td>${obj.user_name?if_exists}</td>
+  <th scope="row">작성일</th> 
+  <td><#if obj.reg_date?if_exists != ""><#assign reg_date = obj.reg_date?datetime("yyyyMMddHHmmss")>${reg_date?string("yyyy/MM/dd HH:mm:ss")}</#if></td>
+  </tr>
+
+  <tr>
+  <th scope="row">제목</th>
+  <td colspan="3">${obj.title?if_exists}</td>
+  </tr>
+
+  <tr>
+  <th scope="row">내용</th>
+  <td colspan="3">${obj.content}</td>
+  </tr>
+
+  </tbody>
+  </table>
+
+  </div>
+
+  <#assign i = i + 1>
+  </#list>
+  </form>
+
+  <@pagenavigator url = param.get('?page=')?j_string form="#form" params = paging />
+
+</div>
+

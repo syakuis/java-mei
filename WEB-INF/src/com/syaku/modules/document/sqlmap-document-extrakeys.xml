@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.document">
+  <typeAlias alias="DocumentExtraKeysBean" type="com.syaku.modules.document.DocumentExtraKeysBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-document-extrakeys" class="DocumentExtraKeysBean">
+    <result property="module_orl" column="module_orl" nullValue="" />
+    <result property="var_idx" column="var_idx" nullValue="" />
+    <result property="var_name" column="var_name" nullValue="" />
+    <result property="var_type" column="var_type" nullValue="" />
+    <result property="var_is_required" column="var_is_required" nullValue="" />
+    <result property="var_search" column="var_search" nullValue="" />
+    <result property="var_default" column="var_default" nullValue="" />
+    <result property="var_desc" column="var_desc" nullValue="" />
+    <result property="eid" column="eid" nullValue="" />
+  </resultMap>
+
+  <select id="select-document-extrakeys-join-view" parameterClass="hashMap" resultClass="hashMap">
+    SELECT K.*,
+    V.document_orl,
+    V.value
+    FROM DOCUMENT_EXTRA_KEYS K
+    LEFT JOIN DOCUMENT_EXTRA_VARS V ON V.module_orl = K.module_orl
+    AND V.var_idx = K.var_idx
+   <isNotEmpty prepend="AND" property="document_orl">
+    V.document_orl = #document_orl#
+    </isNotEmpty>
+   <isEmpty prepend="AND" property="document_orl">
+   V.document_orl IS NULL
+   </isEmpty>
+    WHERE K.module_orl = #module_orl#
+  </select>
+  <select id="select-document-extrakeys-join-list" parameterClass="hashMap" resultClass="hashMap">
+    SELECT K.*,
+    V.document_orl,
+    V.value
+    FROM DOCUMENT_EXTRA_VARS V
+    LEFT JOIN DOCUMENT_EXTRA_KEYS K ON K.module_orl = V.module_orl
+    AND K.var_idx = V.var_idx
+    WHERE K.module_orl = #module_orl#
+  </select>
+
+  <select id="select-document-extrakeys-list" parameterClass="hashMap" resultMap="result-document-extrakeys">
+    SELECT 
+      module_orl,
+      var_idx,
+      var_name,
+      var_type,
+      var_is_required,
+      var_search,
+      var_default,
+      var_desc,
+      eid
+    FROM DOCUMENT_EXTRA_KEYS
+    WHERE module_orl = #module_orl#
+
+    ORDER BY var_idx
+
+  </select>
+
+  <select id="select-document-extrakeys-one" parameterClass="hashMap" resultMap="result-document-extrakeys">
+    SELECT 
+      module_orl,
+      var_idx,
+      var_name,
+      var_type,
+      var_is_required,
+      var_search,
+      var_default,
+      var_desc,
+      eid
+    FROM DOCUMENT_EXTRA_KEYS
+    WHERE module_orl = #module_orl#
+    AND var_idx = #var_idx#
+    LIMIT 1
+  </select>
+
+  <select id="select-document-extrakeys-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(module_orl),0) FROM DOCUMENT_EXTRA_KEYS
+    WHERE module_orl = #module_orl#
+  </select>
+
+  <insert id="insert-document-extrakeys" parameterClass="DocumentExtraKeysBean">
+    <selectKey resultClass="String" keyProperty="var_idx">
+      SELECT (IFNULL(MAX(var_idx),0) + 1) AS var_idx FROM DOCUMENT_EXTRA_KEYS
+      WHERE module_orl = #module_orl#
+    </selectKey>
+
+    INSERT INTO DOCUMENT_EXTRA_KEYS
+    (
+      module_orl,
+      var_idx,
+      var_name,
+      var_type,
+      var_is_required,
+      var_search,
+      var_default,
+      var_desc,
+      eid
+
+    ) VALUES (
+      #module_orl#,
+      #var_idx#,
+      #var_name#,
+      #var_type#,
+      #var_is_required#,
+      #var_search#,
+      #var_default#,
+      #var_desc#,
+      #eid#
+    )
+  </insert>
+
+  <update id="update-document-extrakeys" parameterClass="DocumentExtraKeysBean">
+    UPDATE DOCUMENT_EXTRA_KEYS SET
+
+      var_name = #var_name#,
+      var_type = #var_type#,
+      var_is_required = #var_is_required#,
+      var_search = #var_search#,
+      var_default = #var_default#,
+      var_desc = #var_desc#,
+      eid = #eid#
+
+    WHERE module_orl = #module_orl#
+    AND var_idx = #var_idx#
+  </update>
+
+  <update id="update-document-extrakeys-idx" parameterClass="hashMap">
+    UPDATE DOCUMENT_EXTRA_KEYS SET
+    var_idx = var_idx + 1
+    WHERE module_orl = #module_orl#
+    AND var_idx > #var_idx#
+  </update>
+
+  <delete id="delete-document-extrakeys" parameterClass="hashMap">
+    DELETE FROM DOCUMENT_EXTRA_KEYS WHERE module_orl = #module_orl# AND var_idx = #var_idx#
+  </delete>
+
+  <delete id="delete-document-extrakeys-module" parameterClass="hashMap">
+    DELETE FROM DOCUMENT_EXTRA_KEYS WHERE module_orl = #module_orl#
+  </delete>
+
+
+</sqlMap>

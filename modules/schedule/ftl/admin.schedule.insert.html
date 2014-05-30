@@ -1,0 +1,67 @@
+<script type="text/javascript">//<![CDATA[
+
+function save() {
+
+  jQuery('#form').jaAction({
+    formAttr : 'action=./procScheduleAdminInsert.me' ,
+    filter : [
+      { target : "#module_id", params : "&filter=notnull&title=모듈명" },
+      { target : "#browser_title", params : "&filter=notnull&title=브라우저 제목" }
+    ],
+    param : _mei_gb_params , 
+    ask : 'save',
+    afterSend : function() { location.reload(); }
+  });
+
+}
+
+//]]></script>
+
+
+<div id="sub_column_content">
+
+<#include "admin.sub.html">
+
+<form id="form" method="post">
+<input type="hidden" id="module_orl" name="module_orl" value="${O.objModule.module_orl?html}" />
+<input type="hidden" id="module_id" name="module_id" value="${O.objModule.mid?html}" />
+
+  <div class="document-head-menu">
+  </div>
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 모듈</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+
+
+    <tr>
+      <th scope="row">모듈명</th>
+      <td>
+        <div class="item">${O.objModule.mid}</div>
+      </td>
+    </tr>
+
+    <tr>
+    <th scope="row">브라우저 제목</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w250" id="browser_title" name="browser_title" value="${O.objModule.browser_title?html}" />
+      </div>
+    </td>
+    </tr>
+
+</tbody>
+</table>
+</div>
+
+<div class="document-foot-menu">
+  <span class="button medium icon"><button type="button" onclick="save();"><span class="iconset accept"></span>저장</button></span>
+</div>
+
+</form>
+
+</div>

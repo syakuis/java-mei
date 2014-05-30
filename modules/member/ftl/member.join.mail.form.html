@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>${subject}</title>
+
+<style>
+
+.box_type{display:table;position:relative;width:99%;height:150px;margin-bottom:10px;border:3px solid #efefef}
+.cell{display:table-cell;vertical-align:middle}
+.inner{*position:absolute;*top:50%;*height:70px;*margin-top:-35px}
+.point { font-size:15px; color:red; }
+
+</style>
+</head>
+<body>
+
+<div class="box_type">
+  <div class="cell">
+    <div class="inner" style="margin-left:30px;">
+      <h1>회원 가입이 완료되려면 아래의 인증절차를 진행하셔야 합니다.</h1>
+      <p>가입하신 아이디 : <span class="point">${user_id}</span></p>
+      <p>아래의 인증받기를 눌러주시기 바랍니다.</p>
+      <p><a href="${url}" target="_blank">인증받기</a></p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

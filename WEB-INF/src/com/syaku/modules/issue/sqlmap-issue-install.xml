@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.issue">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-issue" parameterClass="hashMap">
+
+    CREATE  TABLE IF NOT EXISTS ISSUE  (
+      issue_orl  BIGINT(11) NOT NULL COMMENT '이슈 ORL' ,
+      group_orl  BIGINT(11) NOT NULL COMMENT '이슈 그룹 ORL' ,
+      module_orl  BIGINT(11) NOT NULL COMMENT '모듈 ORL' ,
+      category_orl  BIGINT(11) NULL COMMENT '분류 ORL' ,
+      member_orl  BIGINT(11) NOT NULL COMMENT '회원 ORL' ,
+      user_id  VARCHAR(100) NOT NULL COMMENT '아이디' ,
+      user_name  VARCHAR(100) NOT NULL COMMENT '이름' ,
+      nickname  VARCHAR(100) NOT NULL COMMENT '닉네임' ,
+      title  VARCHAR(250) NOT NULL COMMENT '제목' ,
+      content  LONGTEXT NOT NULL COMMENT '내용' ,
+      state_code_orl  BIGINT(11) NOT NULL COMMENT '상태 코드 ORL' ,
+      issue_root  CHAR(1) NOT NULL DEFAULT 'N' COMMENT '최상위 이슈 여부' ,
+      success_date  CHAR(14) NULL COMMENT '이슈 완료일' ,
+      last_update  CHAR(14) NULL COMMENT '수정일' ,
+      reg_date  CHAR(14) NULL COMMENT '등록일' ,
+      ipaddress  VARCHAR(128) NULL ,
+      listorder  BIGINT(11) NULL COMMENT '역정렬' ,
+    PRIMARY KEY ( issue_orl ,  group_orl ) ,
+    INDEX  idx_issue_root  ( issue_root  ASC) ,
+    INDEX  idx_listorder  ( listorder  ASC) ,
+    INDEX  idx_state_code_orl  ( state_code_orl  ASC) ,
+    INDEX  idx_group_orl  ( group_orl  ASC) ,
+    INDEX  idx_category_orl  ( category_orl  ASC,  module_orl  ASC) ,
+    INDEX  idx_module_orl  ( module_orl  ASC) )
+    ENGINE = InnoDB
+    COMMENT = '이슈'
+
+  </insert>
+
+ 
+
+</sqlMap>

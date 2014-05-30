@@ -1,0 +1,24 @@
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  // Tab on class
+  targetOnClass('#admin-tab li','on','single', { target : [
+    { search : ['dispCommentAdminInsert'] , def : true } , 
+    { search : ['dispCommentAdminItemList'] , def : false }
+  ]} );
+
+});
+
+//]]></script>
+
+<div class="document-title">
+  <div class="document-title-name">댓글</div>
+</div>
+
+<div class="document-tab">
+<ul id="admin-tab">
+  <li><a href="./dispCommentAdminInsert.me${param.pick('?mid=&module_orl=${MODULE_ORL}')?html}">모듈</a></li>
+  <li><a href="./dispCommentAdminItemList.me${param.pick('?mid=&module_orl=${MODULE_ORL}')?html}">댓글</a></li>
+</ul>
+</div>

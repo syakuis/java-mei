@@ -1,0 +1,22 @@
+
+body {
+  font:14px Dotum, µ¸¿ò, Tahoma;
+}
+
+.snsauth {
+  font:14px Dotum, µ¸¿ò, Tahoma;
+  margin-left: 20px;
+}
+
+.snsauth {
+  line-height:2.0em;
+}
+
+.snsauth p {
+  font-weight : bold;
+  font-size: 20px;
+  color:#178C8C;
+}
+
+.snsauth .wait { color: #757575; }
+.snsauth .replace { color:#F68B00; }

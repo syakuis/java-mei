@@ -1,0 +1,113 @@
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+  // 삭제 버튼
+  jQuery('#form #btn-del').click(function() { 
+  <#if MEI_GRANT_LOGIN>
+    jQuery('#form').jaAction({ 
+      formAttr : 'action=./procDocumentDelete.me', 
+      param : _mei_gb_params , 
+      ask : 'del' ,
+      redirect : "./dispDocumentList.me?" + _mei_gb_params
+    });
+  <#else>
+    location.href="dispDocumentDeletePassword.me${param.get('?')?js_string}";
+  </#if>
+  
+  }).removeAttr('id');
+
+});
+
+//]]></script>
+
+<div id="sub_column_content">
+
+  <#include "admin.sub.html">
+  <#include "_head.html">
+
+  <form id="form" method="post">
+  <input type="hidden" id="document_orl" name="document_orl" value="${P.document_orl}" />
+
+  <div class="document-view">
+
+    <#assign title_style = "">
+    <#if O.objDocument.title_bold == 'Y'><#assign title_style = "font-weight :bold;"></#if>
+    <#if O.objDocument.title_color?exists><#assign title_style = "${title_style} color :#${O.objDocument.title_color};"></#if>
+
+    <table summary="보기" class="table-view" border="1" cellspacing="0">
+      <colgroup>
+        <col width="80"><col>
+        <col width="80"><col><col width="80"><col>
+      </colgroup>
+      <thead>
+      <tr>
+        <th scope="row">제목</th>
+        <td colspan="5"><#if O.objDocument.is_notice == 'Y'><b>[공지]</b> </#if><span style="${title_style}">${O.objDocument.title}</span></td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th scope="row">작성자</th>
+        <td>${O.objDocument.nickname}</td>
+        <th scope="row">작성일</th>
+        <td><#if O.objDocument.regdate != ""><#assign regdate = O.objDocument.regdate?datetime("yyyyMMddHHmmss")>${regdate}</#if></td>
+        <th scope="row">조회수</th>
+        <td>${O.objDocument.readed_count}</td>
+      </tr>
+      <tr>
+        <td colspan="6" class="cont">${O.objDocument.content}</td>
+      </tr>
+      <tr>
+        <td colspan="6">
+        <div>
+          <#list daoFile.getFileDownload('${MODULE_ORL}','1','${O.objDocument.document_orl}') as objFile>
+          <a href="${objFile.url}${param.get('?file_orl=${objFile.file_orl}')?html}">${objFile.filename}</a> (${objFile.size_unit}) <#if objFile_has_next>,</#if>
+          </#list>
+        </div>
+        <p>IP : ${O.objDocument.ipaddress}</p>
+        </td>
+      </tr>
+      
+      <#if MM.options_is_extravars?if_exists == 'Y'>
+      <#list O.listExtra?if_exists as obj>
+      <tr>
+        <th scope="row">${obj.var_name?if_exists}</th>
+        <td colspan="5">${obj.value?if_exists}</td>
+      </tr>
+      </#list>
+      </#if>
+
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="document-foot-menu">
+    <span class="button medium"><a href="./dispDocumentList.me${param.get('?document_orl=')?html}">목록</a></span>
+    <#if MEI_GRANT_WRITE>
+    <#if MM.options_is_reply?if_exists == 'Y'>
+    <span class="button medium"><a class="button white" href="./dispDocumentInsert.me${param.get('?document_orl=&parent_orl=${O.objDocument.document_orl?if_exists}&reply_member_orl=${O.objDocument.reply_member_orl?if_exists}&reply_group=${O.objDocument.reply_group?if_exists}&reply_depth=${O.objDocument.reply_depth?if_exists}&reply_num=${O.objDocument.reply_num?if_exists}')?html}">답글</a></span>
+    </#if>
+    <span class="button medium"><a href="./dispDocumentInsert.me${param.get('?')?html}">수정</a></span>
+    <span class="button medium"><button type="button" id="btn-del">삭제</button></span>
+    </#if>
+  </div>
+
+  </form>
+
+  <#if MM.options_is_comment?if_exists == 'Y'>
+  <div id="comment_document">
+    <@s.action name="dispCommentList" executeResult="true">
+    <@s.param name="interlock">true</@s.param>
+    <@s.param name="mid">${MID}</@s.param>
+    <@s.param name="module_orl">${MODULE_ORL}</@s.param>
+    <@s.param name="target_orl">${O.objDocument.document_orl}</@s.param>
+    </@s.action>
+  </div>
+  <script type="text/javascript">//<![CDATA[
+//    jQuery.comment.form("#comment_document","${param.get('?target_orl=${O.objDocument.document_orl}')}");
+  //]]></script>
+  </#if>
+
+  <#include "_foot.html">
+</div>

@@ -1,0 +1,334 @@
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  jQuery.ja.setValue("#form #options_is_sns","${O.objModule.options_is_sns?if_exists}");
+  jQuery.ja.setValue("#form #options_is_facebook","${O.objModule.options_is_facebook?if_exists}");
+  jQuery.ja.setValue("#form #options_is_twitter","${O.objModule.options_is_twitter?if_exists}");
+  jQuery.ja.setValue("#form #options_is_me2day","${O.objModule.options_is_me2day?if_exists}");
+  jQuery.ja.setValue("#form #options_is_yozm","${O.objModule.options_is_yozm?if_exists}");
+
+});
+
+//]]></script>
+
+<script type="text/javascript">//<![CDATA[
+
+function save() {
+
+  jQuery('#form').jaAction({
+    formAttr : 'action=./procSnsAuthAdminInsert.me' ,
+    param : _mei_gb_params , 
+    ask : 'save',
+    afterSend : function() { location.reload(); }
+  });
+}
+
+
+//]]></script>
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+<form id="form" method="post">
+<input type="hidden" id="module_orl" name="module_orl" value="${O.objModule.module_orl?html}" />
+<input type="hidden" id="module_id" name="module_id" value="${O.objModule.mid?html}" />
+
+  <div class="document-head-menu">
+  </div>
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 모듈</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+
+  <tr>
+    <th scope="row">모듈명</th>
+    <td>
+      <div class="item">${O.objModule.mid}</div>
+    </td>
+  </tr>
+
+  <tr>
+  <th scope="row">브라우저 제목</th>
+  <td>
+    <div class="item">
+      <input type="text" class="i_text w250" id="browser_title" name="browser_title" value="${O.objModule.browser_title?html}" />
+    </div>
+  </td>
+  </tr>
+
+  </tbody>
+  </table>
+  </div>
+
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> facebook</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup><col width="150"><col></colgroup>
+  <tbody>
+
+    <tr>
+      <th scope="row">사용여부</th>
+      <td><div class="item">
+        <select name="options_is_facebook" id="options_is_facebook">
+          <option value="N" selected="selected">미사용</option>
+          <option value="Y">사용</option>
+        </select>
+      </div></td>
+    </tr>
+
+    <tr>
+      <th scope="row">App ID</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_facebook_appid" name="options_facebook_appid" value="${O.objModule.options_facebook_appid?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+
+    <tr>
+      <th scope="row">App Secret</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_facebook_appsecret" name="options_facebook_appsecret" value="${O.objModule.options_facebook_appsecret?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Scope</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_facebook_scope" name="options_facebook_scope" value="${O.objModule.options_facebook_scope?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Callback</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_facebook_callback" name="options_facebook_callback" value="${O.objModule.options_facebook_callback?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+  </tbody>
+  </table>
+  </div>
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> twitter</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup><col width="150"><col></colgroup>
+  <tbody>
+    <tr>
+      <th scope="row">사용여부</th>
+      <td>
+        <div class="item">
+        <select name="options_is_twitter" id="options_is_twitter">
+          <option value="N" selected="selected">미사용</option>
+          <option value="Y">사용</option>
+        </select>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Request token url</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_twitter_requesttokenurl" name="options_twitter_requesttokenurl" value="${O.objModule.options_twitter_requesttokenurl?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Authorize url</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_twitter_authorizeurl" name="options_twitter_authorizeurl" value="${O.objModule.options_twitter_authorizeurl?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Access token url</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_twitter_accesstokenurl" name="options_twitter_accesstokenurl" value="${O.objModule.options_twitter_accesstokenurl?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Consumer key</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_twitter_consumerkey" name="options_twitter_consumerkey" value="${O.objModule.options_twitter_consumerkey?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Consumer secret</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_twitter_consumersecret" name="options_twitter_consumersecret" value="${O.objModule.options_twitter_consumersecret?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Callback</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_twitter_callback" name="options_twitter_callback" value="${O.objModule.options_twitter_callback?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+  
+  </tbody>
+  </table>
+  </div>
+
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 네이버 미투데이</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup><col width="150"><col></colgroup>
+  <tbody>
+
+    <tr>
+      <th scope="row">사용여부</th>
+      <td>
+        <div class="item">
+        <select name="options_is_me2day" id="options_is_me2day">
+          <option value="N" selected="selected">미사용</option>
+          <option value="Y">사용</option>
+        </select>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">NONCE</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_me2day_nonce" name="options_me2day_nonce" value="${O.objModule.options_me2day_nonce?if_exists?html}" maxlength="8" />
+        <p>암호화 할때 포함할 임의의 문자열 8자리를 입력하세요.</p>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Apps key</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_me2day_akey" name="options_me2day_akey" value="${O.objModule.options_me2day_akey?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Callback</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_me2day_callback" name="options_me2day_callback" value="${O.objModule.options_me2day_callback?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+  </tbody>
+  </table>
+  </div>
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 다음 요즘</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup><col width="150"><col></colgroup>
+  <tbody>
+
+    <tr>
+      <th scope="row">사용여부</th>
+      <td>
+        <div class="item">
+        <select name="options_is_yozm" id="options_is_yozm">
+          <option value="N" selected="selected">미사용</option>
+          <option value="Y">사용</option>
+        </select>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Request token url</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_yozm_requesttokenurl" name="options_yozm_requesttokenurl" value="${O.objModule.options_yozm_requesttokenurl?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Authorize url</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_yozm_authorizeurl" name="options_yozm_authorizeurl" value="${O.objModule.options_yozm_authorizeurl?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Access token url</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_yozm_accesstokenurl" name="options_yozm_accesstokenurl" value="${O.objModule.options_yozm_accesstokenurl?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Consumer key</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_yozm_consumerkey" name="options_yozm_consumerkey" value="${O.objModule.options_yozm_consumerkey?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Consumer secret</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_yozm_consumersecret" name="options_yozm_consumersecret" value="${O.objModule.options_yozm_consumersecret?if_exists}" />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">Callback</th>
+      <td>
+        <div class="item">
+        <input type="text" class="i_text w400" id="options_yozm_callback" name="options_yozm_callback" value="${O.objModule.options_yozm_callback?if_exists?html}" />
+        </div>
+      </td>
+    </tr>
+
+  </tbody>
+  </table>
+  </div>
+
+  <div class="document-foot-menu tr">
+    <span class="button medium icon"><button type="button" onclick="save();"><span class="iconset accept"></span>저장</button></span>
+  </div>
+
+
+</form>
+</div>

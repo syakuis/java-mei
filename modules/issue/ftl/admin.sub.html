@@ -1,0 +1,37 @@
+<#assign module_orl = param.value('module_orl')?if_exists>
+<#if MID?if_exists == 'admin'>
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  // Tab on class
+  targetOnClass('#admin-document-tab li','on','single', { target : [
+    { search : ['dispIssueAdminList'] , def : true },
+    { search : ['dispIssueAdminInsert'] , def : false },
+    { search : ['dispIssueCategoryAdmin'] , def : false },
+    { search : ['dispIssueList','dispIssueView','dispIssueInsert'] , def : false , condition : 'or' }
+    
+   ]} );
+
+});
+
+//]]></script>
+
+
+<div class="document-title">
+  <div class="document-title-name">이슈</div>
+</div>
+
+<div class="document-tab">
+<ul id="admin-document-tab">
+  <li><a href="./dispIssueAdminList.me${param.pick('?mid=')?html}">목록</a></li>
+  <li><a href="./dispIssueAdminInsert.me${param.pick('?mid=&module_orl=')?html}">모듈관리</a></li>
+  <#if module_orl != "">
+  <li><a href="./dispIssueCategoryAdminView.me${param.pick('?mid=&module_orl=')?html}">분류관리</a></li>
+  <li><a href="./dispIssueList.me${param.pick('?mid=&module_orl=')?html}">이슈관리</a></li>
+  </#if>
+ 
+</ul>
+</div>
+
+</#if>

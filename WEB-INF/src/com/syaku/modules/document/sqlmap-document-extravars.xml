@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.document">
+  <typeAlias alias="DocumentExtraVarsBean" type="com.syaku.modules.document.DocumentExtraVarsBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-document-extravars" class="DocumentExtraVarsBean">
+    <result property="module_orl" column="module_orl" nullValue="" />
+    <result property="document_orl" column="document_orl" nullValue="" />
+    <result property="var_idx" column="var_idx" nullValue="" />
+    <result property="value" column="value" nullValue="" />
+    <result property="eid" column="eid" nullValue="" />
+  </resultMap>
+
+  <select id="select-document-extravars-list" parameterClass="hashMap" resultMap="result-document-extravars">
+    SELECT 
+    module_orl,
+    document_orl,
+    var_idx,
+    value,
+    eid
+    FROM DOCUMENT_EXTRA_VARS
+    WHERE module_orl = #module_orl#
+    <isNotEmpty prepend="AND" property="document_orl" >
+    document_orl = #document_orl#
+    </isNotEmpty>
+
+    ORDER BY var_idx
+
+  </select>
+
+  <select id="select-document-extravars-one" parameterClass="hashMap" resultMap="result-document-extravars">
+    SELECT 
+    module_orl,
+    document_orl,
+    var_idx,
+    value,
+    eid
+    FROM DOCUMENT_EXTRA_VARS
+    WHERE module_orl = #module_orl#
+    AND document_orl = #document_orl#
+    AND var_idx = #var_idx#
+    LIMIT 1
+  </select>
+
+  <select id="select-document-extravars-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(module_orl),0) FROM DOCUMENT_EXTRA_VARS
+    WHERE module_orl = #module_orl#
+    <isNotEmpty prepend="AND" property="document_orl" >
+    document_orl = #document_orl#
+    </isNotEmpty>
+  </select>
+
+  <insert id="insert-document-extravars" parameterClass="DocumentExtraVarsBean">
+    INSERT INTO DOCUMENT_EXTRA_VARS
+    (
+      module_orl,
+      document_orl,
+      var_idx,
+      value,
+      eid
+
+    ) VALUES (
+      #module_orl#,
+      #document_orl#,
+      #var_idx#,
+      #value#,
+      #eid#
+    )
+  </insert>
+
+  <insert id="insert-document-extravars-iterate" parameterClass="hashMap">
+    INSERT INTO DOCUMENT_EXTRA_VARS
+    (
+      module_orl,
+      document_orl,
+      var_idx,
+      value,
+      eid
+
+    ) VALUES 
+    
+    <iterate property="listExtra" open="" close="" conjunction=",">
+      (
+        #module_orl#,
+        #document_orl#,
+        #listExtra[].var_idx#,
+        #listExtra[].value#,
+        #listExtra[].eid#
+      )
+    </iterate>
+
+  </insert>
+
+  <delete id="delete-document-extravars" parameterClass="hashMap">
+    DELETE FROM DOCUMENT_EXTRA_VARS WHERE module_orl = #module_orl# AND var_idx = #var_idx#
+  </delete>
+
+  <delete id="delete-document-extravars-document" parameterClass="hashMap">
+    DELETE FROM DOCUMENT_EXTRA_VARS WHERE document_orl = #document_orl#
+  </delete>
+
+  <delete id="delete-document-extravars-module" parameterClass="hashMap">
+    DELETE FROM DOCUMENT_EXTRA_VARS WHERE module_orl = #module_orl#
+  </delete>
+
+</sqlMap>

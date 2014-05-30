@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.schedule">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-schedule" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_SCHEDULE (
+      schedule_orl BIGINT(11) NOT NULL COMMENT '스케줄ORL' ,
+      title VARCHAR(250) NOT NULL COMMENT '제목' ,
+      classes VARCHAR(250) NOT NULL COMMENT '실행클래스' ,
+      repeat_time INT(11) NOT NULL DEFAULT 0 COMMENT '반복시간 (초)' ,
+      last_date VARCHAR(14) NULL COMMENT '마지막 실행시간' ,
+      isused CHAR(1) NULL DEFAULT 'N' COMMENT '사용여부' ,
+      listorder BIGINT(11) NULL COMMENT '역정렬' ,
+      PRIMARY KEY (schedule_orl) ,
+      INDEX idx_module_orl (module_orl ASC) ,
+      INDEX idx_isused (isused ASC) ,
+      INDEX idx_listorder (listorder ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '스케줄' 
+  </insert>
+
+  <insert id="create-schedule-history" parameterClass="hashMap">
+     CREATE  TABLE IF NOT EXISTS SK_SCHEDULE_HISTORY (
+      history_orl BIGINT(11) NOT NULL COMMENT '기록ORL' ,
+      schedule_orl BIGINT(11) NOT NULL COMMENT '스케줄ORL' ,
+      begin_date VARCHAR(14) NULL COMMENT '시작시간' ,
+      process_date VARCHAR(14) NULL COMMENT '처리시간' ,
+      error_msg TEXT NULL COMMENT '오류 내용' ,
+      isresult CHAR(1) NOT NULL DEFAULT 'N' COMMENT '결과' ,
+      PRIMARY KEY (history_orl) ,
+      INDEX idx_schedule_orl (schedule_orl ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '스케줄 기록' 
+  </insert>
+
+</sqlMap>

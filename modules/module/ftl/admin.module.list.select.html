@@ -1,0 +1,50 @@
+
+<script type="text/javascript">//<![CDATA[
+
+function return_data(data) {
+  opener.jQuery.module._open_return(data);
+  close();
+}
+
+//]]></script>
+
+<div id="sub_column_content">
+
+<form id="form" method="get" action="?">
+  <input type="hidden" id="mid" name="mid" value="${MID}" />
+  <input type="hidden" id="sch_module" name="sch_module" value="${param.value('sch_module')?if_exists?html}" />
+
+  <div class="document-list">
+    <table cellspacing="0" border="1" summary="document list" class="table-list">
+    <caption>Total ${paging.total_count?string(",###")} Page ${paging.page?string(",###")}/${paging.total_page?string(",###")}</caption>
+    <colgroup>
+    <col width="70"><col width="120"><col><col width="120">
+    </colgroup>
+    <thead>
+      <tr>
+        <th scope="col">ORL</th>
+        <th scope="col">MID</th>
+        <th scope="col">브라우져 제목</th>
+        <th scope="col">모듈</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    <#list O.listModule as obj>
+      <tr>
+        <td class="num">${obj.module_orl}</td>
+        <td>${obj.mid}</td>
+        <td class="title"><a href="javascript:return_data({ mid : '${obj.mid}' , module_orl : '${obj.module_orl}' });">${obj.browser_title}</a></td>
+        <td>${obj.module}</td>
+      </tr>
+    </#list>
+    <#if paging.total_count == 0>
+    <tr><td colspan="4" class="zero">등록된 자료가 없습니다.</td></tr>
+    </#if>
+
+    </tbody>
+    </table>
+  </div>
+
+</form>
+</div>

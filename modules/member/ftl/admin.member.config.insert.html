@@ -1,0 +1,307 @@
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  jQuery.ja.setValue("#form #layout_orl","${O.objModule.layout_orl?if_exists}");
+  jQuery.ja.setValue("#form #skin","${O.objModule.skin?if_exists}");
+  jQuery.ja.setValue("#form #options_overlap_login","${O.objModule.options_overlap_login?if_exists}");
+
+  jQuery.ja.setValue("#form #options_is_join","${O.objModule.options_is_join?if_exists}");
+  jQuery.ja.setValue("#form input:radio[name=options_field_nickname]","${O.objModule.options_field_nickname?if_exists}");
+  
+  jQuery.ja.setValue("#form #options_overlap_login","${O.objModule.options_overlap_login?if_exists}");
+  
+  jQuery.ja.setValue("#form input:checkbox[name=options_auth_field]","${O.objModule.options_overlap_email?if_exists}");
+  var options_auth_field = "${O.objModule.options_auth_field?if_exists}";
+  jQuery('#form input:checkbox[name=options_auth_field]').each(function() {
+    var val = jQuery(this).val();
+    if (options_auth_field.indexOf(val) > -1 ){
+      jQuery(this).attr("checked","checked");
+    }
+  });
+
+  jQuery.ja.setValue("#form input:radio[name=options_overlap_email]","${O.objModule.options_overlap_email?if_exists}");
+  jQuery.ja.setValue("#form input:radio[name=options_overlap_nickname]","${O.objModule.options_overlap_nickname?if_exists}");
+
+  jQuery.ja.setValue("#form #options_is_email_auth","${O.objModule.options_is_email_auth?if_exists}");
+
+});
+
+
+function save() {
+
+  jQuery('#form').jaAction({
+    formAttr : 'action=./procMemberAdminConfigInsert.me' ,
+    filter : [
+    { target : "#browser_title", params : "&filter=notnull&title=브라우저 제목" },
+    { target : "#options_overlap_login", params : "&filter=notnull&title=중복 로그인" },
+    { target : "#options_is_join", params : "&filter=notnull&title=회원가입" }
+    ],
+    param : _mei_gb_params , 
+    ask : 'save',
+    afterSend : function() { location.reload(); }
+  });
+
+}
+
+//]]></script>
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+<form id="form" method="post">
+<input type="hidden" id="module_orl" name="module_orl" value="${O.objModule.module_orl}" />
+<input type="hidden" id="module_id" name="module_id" value="${O.objModule.mid?html}" />
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 모듈</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+    <tr>
+    <th scope="row">모듈명</th>
+    <td>${O.objModule.mid}</td>
+    </tr>
+    <tr>
+    <th scope="row">브라우저 제목</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w250" id="browser_title" name="browser_title" value="${O.objModule.browser_title?html}" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">레이아웃</th>
+    <td>
+      <div class="item">
+        <select name="layout_orl" id="layout_orl">
+          <option value="0" selected="selected">선택</option>
+          <#list O.listLayout as objLayout>
+          <option value="${objLayout.layout_orl?if_exists?html}">${objLayout.title}</option>
+          </#list>
+        </select>
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">스킨</th>
+    <td>
+      <div class="item">
+        <select name="skin" id="skin">
+          <option value="" selected="selected">선택</option>
+          <#list O.listSkins as objSkins>
+          <option value="${objSkins?if_exists?html}">${objSkins}</option>
+          </#list>
+        </select>
+        <p>선택하지 않으면 기본 스킨으로 적용됩니다.</p>
+      </div>
+    </td>
+    </tr>
+
+    </tbody>
+    </table>
+  </div>
+
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 로그인 및 출력</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+
+    <tr>
+      <th scope="row">중복 로그인</th>
+      <td>
+        <div class="item">
+        <select name="options_overlap_login" id="options_overlap_login">
+          <option value=""> 선택</option>
+          <option value="Y">허용</option>
+          <option value="N">허용안함</option>
+        </select>
+        </div>
+      </td>
+    </tr>
+
+    </table>
+  </div>
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 회원가입</h4>
+  <div class="document-write">
+
+    <table class="table-write" summary="document write" border="1" cellspacing="0">
+    <colgroup>
+    <col width="200"><col>
+    </colgroup>
+    <tbody>
+
+      <tr>
+        <th scope="row">회원가입</th>
+        <td>
+          <div class="item">
+          <select name="options_is_join" id="options_is_join">
+            <option value=""> 선택</option>
+            <option value="N">미사용</option>
+            <option value="Y">사용</option>
+          </select>
+          </div>
+        </td>
+      </tr>
+
+
+      <tr>
+        <th scope="row">회원가입 항목 사용여부</th>
+        <td>
+          <div class="item">
+          <p>
+          <input type="radio" id="options_field_nickname1" name="options_field_nickname" value="Y" class="i_radio" checked="checked" /> <label for="options_field_nickname1" class="i_label">닉네임 사용</label>
+          <input type="radio" id="options_field_nickname2" name="options_field_nickname" value="N" class="i_radio" /> <label for="options_field_nickname2" class="i_label">닉네임 사용안함</label>
+          </p>
+          <p>닉네임을 사용하지 않을 경우 이름과 동일하게 입력됩니다.</p>
+          </div>
+        </td>
+      </tr>
+
+
+      <tr>
+        <th scope="row">회원인증</th>
+        <td>
+          <div class="item">
+          <input type="checkbox" id="options_auth_field1" name="options_auth_field" value="email" class="i_check" /> <label for="options_auth_field1" class="i_label">이메일</label>
+          <input type="checkbox" id="options_auth_field2" name="options_auth_field" value="sns" class="i_check" /> <label for="options_auth_field2" class="i_label">SNS 인증</label>
+          <p>회원 신분을 정확하게 파악할 수 있는 인증방식을 선택합니다. 선택하지 않을 경우 회원인증을 거치지 않습니다.</p>
+          <p>이메일인 경우 메일서버 계정이 필요합니다.</p>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+      <th scope="row">회원인증 요청시 사용될 제목</th>
+      <td>
+        <div class="item">
+          <input type="text" class="i_text w450" id="options_auth_subject" name="options_auth_subject" value="${O.objModule.options_auth_subject?if_exists?html}" />
+          <p>이메일인 경우 메일 제목에 표시됩니다.</p>
+        </div>
+      </td>
+      </tr>
+
+      <tr>
+      <th scope="row">회원인증 요청시 사용될 이름</th>
+      <td>
+        <div class="item">
+          <input type="text" class="i_text w450" id="options_auth_username" name="options_auth_username" value="${O.objModule.options_auth_username?if_exists?html}" />
+          <p>이메일인 경우 보낸이에 이름이 표시됩니다.</p>
+        </div>
+      </td>
+      </tr>
+
+      <tr>
+      <th scope="row">회원인증 요청시 사용될 계정 </th>
+      <td>
+        <div class="item">
+          <input type="text" class="i_text w450" id="options_auth_userid" name="options_auth_userid" value="${O.objModule.options_auth_userid?if_exists?html}" />
+          <p>이메일인 경우 보낸이에 메일주소가 표시됩니다.</p>
+        </div>
+      </td>
+      </tr>
+
+      <tr>
+        <th scope="row">중복방지 항목</th>
+        <td>
+          <div class="item">
+          <p>
+          <input type="radio" id="options_overlap_email1" name="options_overlap_email" value="Y" class="i_radio" checked="checked" /> <label for="options_overlap_email1" class="i_label">이메일 사용</label>
+          <input type="radio" id="options_overlap_email2" name="options_overlap_email" value="N" class="i_radio" /> <label for="options_overlap_email2" class="i_label">이메일 사용안함</label>
+          </p>
+          <p>
+          <input type="radio" id="options_overlap_nickname1" name="options_overlap_nickname" value="Y" class="i_radio" checked="checked" /> <label for="options_overlap_nickname1" class="i_label">닉네임 사용</label>
+          <input type="radio" id="options_overlap_nickname2" name="options_overlap_nickname" value="N" class="i_radio" /> <label for="options_overlap_nickname2" class="i_label">닉네임 사용안함</label>
+          </p>
+          <p>중복값을 입력할 수 없게 막습니다. 회원인증에서 이메일을 선택하셨다면 중복방지 항목에 이메일을 체크하실 필요없습니다.</p>
+          </div>
+        </td>
+      </tr>
+
+    </table>
+  </div>
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 필터</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="170"><col>
+  </colgroup>
+  <tbody>
+
+    <tr>
+    <th scope="row">아이디 문자열 정규식</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w450" id="options_user_id_regx" name="options_user_id_regx" value="${O.objModule.options_user_id_regx?if_exists?html}" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">이름 문자열 정규식</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w450" id="options_user_name_regx" name="options_user_name_regx" value="${O.objModule.options_user_name_regx?if_exists?html}" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">닉네임 문자열 정규식</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w450" id="options_nickname_regx" name="options_nickname_regx" value="${O.objModule.options_nickname_regx?if_exists?html}" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">사용할 수 없는 아이디</th>
+    <td>
+      <div class="item">
+        <textarea class="i_text" id="options_not_user_id" name="options_not_user_id" cols="80" rows="10">${O.objModule.options_not_user_id?if_exists}</textarea>
+        <p>; 구분을 이용하여 여러개 입력할 수 있습니다. 줄바꿈하지마세요.</p>
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">사용할 수 없는 이름</th>
+    <td>
+      <div class="item">
+        <textarea class="i_text" id="options_not_user_name" name="options_not_user_name" cols="80" rows="10">${O.objModule.options_not_user_name?if_exists}</textarea>
+        <p>; 구분을 이용하여 여러개 입력할 수 있습니다. 줄바꿈하지마세요.</p>
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">사용할 수 없는 닉네임</th>
+    <td>
+      <div class="item">
+        <textarea class="i_text" id="options_not_nickname" name="options_not_nickname" cols="80" rows="10">${O.objModule.options_not_nickname?if_exists}</textarea>
+        <p>; 구분을 이용하여 여러개 입력할 수 있습니다. 줄바꿈하지마세요.</p>
+      </div>
+    </td>
+    </tr>
+
+    </table>
+  </div>
+
+
+  <div class="document-foot-menu">
+    <span class="button medium icon"><button type="button" onclick="save();"><span class="iconset accept"></span>저장</button></span>
+  </div>
+
+</form>
+</div>

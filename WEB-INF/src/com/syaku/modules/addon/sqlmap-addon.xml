@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="modules.addon">
+  <typeAlias alias="AddonBean" type="com.syaku.modules.addon.AddonBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-addon" class="AddonBean">
+  <result property="addon_orl" column="addon_orl" nullValue="" />
+  <result property="module_orl" column="module_orl" nullValue="" />
+  <result property="addon" column="addon" nullValue="" />
+  <result property="addon_type" column="addon_type" nullValue="" />
+  <result property="title" column="title" nullValue="" />
+  <result property="addon_path" column="addon_path" nullValue="" />
+  <result property="first_load" column="first_load" nullValue="" />
+  <result property="is_use" column="is_use" nullValue="" />
+  <result property="regdate" column="regdate" nullValue="" />
+  <result property="listorder" column="listorder" nullValue="" />
+  </resultMap>
+
+  <sql id="sql-addon">
+  SELECT
+
+  addon_orl,
+  module_orl,
+  addon,
+  addon_type,
+  title,
+  addon_path,
+  first_load,
+  is_use,
+  regdate,
+  listorder
+
+  FROM SK_ADDON
+  </sql>
+
+  <select id="select-addon-list" parameterClass="hashMap" resultMap="result-addon">
+  <include refid="sql-addon" />
+
+  <dynamic prepend="WHERE">
+
+  <isNotNull prepend="AND" property="module_orl" >
+  module_orl = #module_orl#
+  </isNotNull>
+  <isNotNull prepend="AND" property="is_use" >
+  is_use = #is_use#
+  </isNotNull>
+
+  </dynamic>
+
+  <isNull property="listorder" >
+  ORDER BY listorder
+  </isNull>
+  <isNotNull property="listorder" >
+  ORDER BY $listorder$
+  </isNotNull>
+
+  <isNotNull prepend="LIMIT" property="page_start" >
+  $page_start$,$page_row$
+  </isNotNull>
+
+  </select>
+
+  <select id="select-addon-count" parameterClass="hashMap" resultClass="long">
+  SELECT IFNULL(COUNT(addon_orl),0) FROM SK_ADDON
+
+  <dynamic prepend="WHERE">
+
+  <isNotNull prepend="AND" property="module_orl" >
+  module_orl = #module_orl#
+  </isNotNull>
+  <isNotNull prepend="AND" property="is_use" >
+  is_use = #is_use#
+  </isNotNull>
+
+
+  </dynamic>
+
+  </select>
+
+  <select id="select-addon-one" parameterClass="hashMap" resultMap="result-addon">
+  SELECT
+
+  addon_orl,
+  module_orl,
+  addon,
+  addon_type,
+  title,
+  addon_path,
+  first_load,
+  is_use,
+  regdate,
+  listorder
+
+  FROM SK_ADDON 
+  WHERE addon_orl = #addon_orl#
+  LIMIT 1
+
+  </select>
+
+  <insert id="insert-addon" parameterClass="AddonBean">
+  <selectKey resultClass="String" keyProperty="addon_orl">
+  SELECT (IFNULL(MAX(addon_orl),0) + 1) AS addon_orl FROM SK_ADDON
+  </selectKey>
+
+  INSERT INTO SK_ADDON
+  (
+
+  addon_orl,
+  module_orl,
+  addon,
+  addon_type,
+  title,
+  addon_path,
+  first_load,
+  is_use,
+  regdate,
+  listorder
+
+  ) VALUES (
+
+  #addon_orl#,
+  #module_orl#,
+  #addon#,
+  #addon_type#,
+  #title#,
+  #addon_path#,
+  #first_load#,
+  #is_use#,
+  #regdate#,
+  #addon_orl# * -1
+
+  )
+  </insert>
+
+  <update id="update-addon-isuse" parameterClass="hashMap">
+  UPDATE SK_ADDON SET
+  is_use = #is_use#
+  WHERE addon_orl = #addon_orl#
+  </update>
+
+  <update id="update-addon-firstload" parameterClass="hashMap">
+  UPDATE SK_ADDON SET
+  first_load = #first_load#
+  WHERE addon_type = #addon_type#
+
+  <isNotNull prepend="AND" property="addon_orl" >
+  addon_orl = #addon_orl#
+  </isNotNull>
+
+  </update>
+
+    <delete id="delete-addon" parameterClass="hashMap">
+    DELETE FROM SK_ADDON WHERE addon_orl = #addon_orl#
+    </delete>
+
+</sqlMap>

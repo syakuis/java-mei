@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<layout>
+  <name>mei</name>
+  <description>위지윅 에디터</description>
+  <login_layout_hide>false</login_layout_hide>
+  <login_ftl><!--login.form.html--></login_ftl>
+</layout>

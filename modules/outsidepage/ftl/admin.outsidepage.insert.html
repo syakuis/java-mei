@@ -1,0 +1,225 @@
+<#assign module_orl = MODULE_ORL?if_exists>
+
+<script type="text/javascript">//<![CDATA[
+jQuery(function() {
+
+jQuery('#form #skin').change(function() {
+  var val = jQuery(this).val();
+  if ( jQuery.ja.isEmpty(val) ) {
+    return;
+  }
+
+  jQuery('#form #sub_page').empty();
+
+  jQuery.ajax({
+    url : 'getSkinFileList.me',
+    data : _mei_gb_params + "&skin=" + val,
+    success : function(xml) {
+      var xml = jQuery(xml).find('item');
+      jQuery('#form #options_sub_count').val(xml.length);
+      jQuery(xml).each(function(i) {
+        var ftl = jQuery(this).text();
+        var ele = jQuery('#sub_page_temp').clone().removeAttr('id');
+
+        var tquery = 'options_sub_query';
+        var iquery = tquery + i;
+        var tpath = 'options_sub_path';
+        var ipath = tpath + i;
+        var tuse = 'options_sub_is_use';
+        var iuse = tuse + i;
+
+        jQuery('#temp_a',ele).attr('id',iquery).attr('name',tquery).val(i);
+        jQuery('#temp_b',ele).attr('id',ipath).attr('name',tpath).val(ftl);
+        jQuery('#temp_c',ele).attr('id',iuse).attr('name',tuse);
+
+        jQuery('#temp_btn',ele).removeAttr('id').click(function() {
+          var dir = _mei_path_relative + '/modules/outsidepage/skins/' + val + '/' + ftl;
+          jQuery('#form #options_outside_page').val( dir );
+        });
+        jQuery('#form #sub_page').append( ele.removeClass('hide') );
+
+      });
+
+    }
+  });
+});
+
+
+jQuery.ja.setValue("#form #layout_orl","${O.objModule.layout_orl?if_exists}");
+jQuery.ja.setValue("#form #skin","${O.objModule.skin?if_exists}");
+jQuery('#form #skin').change();
+var is_once = true;
+<#if module_orl?if_exists != ''>
+jQuery(document).ajaxSuccess(function() {
+  if (is_once) {
+    sub_select();
+    is_once = false;
+  }
+});
+</#if>
+
+});
+
+function sub_select() { 
+  var options_sub_count = '${O.objModule.options_sub_count?if_exists?js_string}';
+  var options_sub_is_use = '${O.objModule.options_sub_is_use?if_exists?js_string}';
+
+  if (options_sub_count > 0) {
+    var div = options_sub_is_use.split(',');
+    for (var i = 0; i < div.length; i++ ) {
+      jQuery.ja.setValue("#form #options_sub_is_use" + i,div[i]);
+    }
+  }
+}
+
+function save() {
+
+  jQuery('#form').jaAction({
+    formAttr : 'action=./procOutsidepageAdminInsert.me' ,
+    filter : [
+      { target : "#module_id", params : "&filter=notnull&title=모듈명" },
+      { target : "#options_outside_page", params : "&filter=notnull&title=외부페이지" }
+    ],
+    param : _mei_gb_params , 
+    ask : 'save',
+    afterSend : function() { location.href="dispOutsidepageAdminList.me${param.pick('?mid=')?js_string}"; }
+  });
+
+}
+
+//]]></script>
+
+<div id="sub_page_temp" class="hide">
+<ul>
+<li>
+<input type="text" class="i_text w50" id="temp_a" name="temp_a" value="" readonly="readonly" />
+<input type="text" class="i_text w250" id="temp_b" name="temp_b" value="" readonly="readonly" />
+<span class="button medium"><button type="button" id="temp_btn">대표사용</button></span>
+<select id="temp_c" name="temp_c">
+<option value="Y">사용함</option>
+<option value="N">사용안함</option>
+</select>
+</li>
+</ul>
+</div>
+
+<div id="sub_column_content">
+<#include "./admin.sub.html">
+
+<form id="form" method="post">
+<input type="hidden" id="options_sub_count" name="options_sub_count" value="${O.objModule.options_sub_count?if_exists}" />
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 모듈</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="120"><col>
+  </colgroup>
+  <tbody>
+
+  <tr>
+    <th scope="row">모듈명</th>
+    <td>
+      <div class="item">
+      <input type="text" class="i_text w250" id="module_id" name="module_id" value="${O.objModule.mid?if_exists?html}" />
+      <p>알파벳 소문자와 숫자 _ 를 사용하여 모듈명을 완성하세요.</p>
+      </div>
+    </td>
+  </tr>
+
+  <tr>
+    <th scope="row">브라우저 제목</th>
+    <td>
+      <div class="item">
+      <input type="text" class="i_text w250" id="browser_title" name="browser_title" value="${O.objModule.browser_title?if_exists?html}" />
+      </div>
+    </td>
+  </tr>
+
+  <tr>
+    <th scope="row">레이아웃</th>
+    <td>
+      <div class="item">
+      <select name="layout_orl" id="layout_orl">
+        <option value="0" selected="selected">선택</option>
+        <#list O.listLayout as objLayout>
+        <option value="${objLayout.layout_orl}">${objLayout.title}</option>
+        </#list>
+      </select>
+      </div>
+    </td>
+  </tr>
+
+  <tr>
+    <th scope="row">외부페이지 경로</th>
+    <td>
+      <div class="item">
+      <input type="text" class="i_text w400" id="options_outside_page" name="options_outside_page" value="${O.objModule.options_outside_page?if_exists?html}" />
+      <p>${MEI_PATH_ABSOLUTE_RELATIVE} 이하 모든 경로를 입력하세요. / 시작하세요.</p>
+      </div>
+    </td>
+  </tr>
+      <tr>
+        <th scope="row">스킨</th>
+        <td>
+          <div class="item">
+          <select name="skin" id="skin">
+            <option value="" selected="selected">선택</option>
+            <#list O.listSkins as objSkins>
+            <option value="${objSkins?if_exists?html}">${objSkins}</option>
+            </#list>
+          </select>
+          <p>선택하지 않으면 기본 스킨으로 적용됩니다.</p>
+          <div id="sub_page">
+          </div>
+          <p>서브 페이지는 target 파라메터를 이용하여 호출되게 됩니다.</p>
+          </div>
+        </td>
+      </tr>   
+      
+  </tbody>
+  </table>
+  </div>
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 기타</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="120"><col>
+  </colgroup>
+  <tbody>
+
+  <tr>
+    <th scope="row">상단 내용</th>
+    <td>
+      <div class="item">
+      <textarea class="i_text" id="header_content" name="header_content" cols="80" rows="10">${O.objModule.header_content?if_exists}</textarea>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">하단 내용</th>
+    <td>
+      <div class="item">
+      <textarea class="i_text" id="footer_content" name="footer_content" cols="80" rows="10">${O.objModule.footer_content?if_exists}</textarea>
+      <p>해당 게시판 모듈의 상, 하단에 출력될 내용을 지정할 수 있습니다.</p>
+      </div>
+    </td>
+  </tr>
+
+  <#if O.options_include?exists>
+  <#include O.options_include />
+  </#if>
+
+
+  </tbody>
+  </table>
+  </div>
+
+  <div class="document-foot-menu tr">
+    <span class="button medium icon"><a href="./dispOutsidepageAdminList.me${param.get('?module_orl=')?html}"><span class="iconset list"></span>목록</a></span>
+    <span class="button medium icon"><button type="button" onclick="save();"><span class="iconset accept"></span>저장</button></span>
+  </div>
+
+</form>
+</div>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+ * module_orl,module,mid,layout_orl,menu_orl,content,rdate
+//-->
+
+<sqlMap namespace="modules.module">
+  <typeAlias alias="ModuleBean" type="com.syaku.modules.module.ModuleBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-module" class="ModuleBean">
+
+    <result property="module_orl" column="module_orl" nullValue="" />
+    <result property="module" column="module" nullValue="" />
+    <result property="mid" column="mid" nullValue="" />
+    <result property="browser_title" column="browser_title" nullValue="" />
+    <result property="skin" column="skin" nullValue="" />
+    <result property="layout_orl" column="layout_orl" nullValue="" />
+    <result property="menu_orl" column="menu_orl" nullValue="" />
+    <result property="content" column="content" nullValue="" />
+    <result property="rdate" column="rdate" nullValue="" />
+    <result property="header_content" column="header_content" nullValue="" />
+    <result property="footer_content" column="footer_content" nullValue="" />
+
+  </resultMap>
+
+  <sql id="select-module">
+    SELECT 
+      module_orl,
+      module,
+      mid,
+      browser_title,
+      skin,
+      layout_orl,
+      menu_orl,
+      content,
+      rdate,
+      header_content,
+      footer_content
+    FROM SK_MODULE
+  </sql>
+
+  <select id="select-module-list" parameterClass="hashMap" resultMap="result-module">
+    <include refid="modules.module.select-module" />
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="module" >
+        module = #module#
+      </isNotEmpty>
+      <isNotEmpty prepend="AND" property="mid">
+        mid = #mid#
+      </isNotEmpty>
+    </dynamic>
+
+    <isNotEmpty prepend="LIMIT" property="page_start" >
+     $page_start$,$page_row$
+    </isNotEmpty>
+
+  </select>
+
+  <select id="select-module-count" parameterClass="hashMap" resultClass="Long">
+    SELECT IFNULL(COUNT(module_orl),0) FROM SK_MODULE
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="module" >
+        module = #module#
+      </isNotEmpty>
+      <isNotEmpty prepend="AND" property="mid">
+        mid = #mid#
+      </isNotEmpty>
+    </dynamic>
+
+  </select>
+
+  <select id="select-module-one" parameterClass="hashMap" resultMap="result-module">
+    <include refid="modules.module.select-module" />
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="module_orl" >
+        module_orl = #module_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="mid" >
+        mid = #mid#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="module" >
+        module = #module#
+      </isNotEmpty>
+    </dynamic>
+
+    LIMIT 1
+
+  </select>
+
+  <insert id="insert-module" parameterClass="ModuleBean">
+    <selectKey resultClass="String" keyProperty="module_orl">
+      SELECT (IFNULL(MAX(module_orl),0) + 1) AS module_orl FROM SK_MODULE
+    </selectKey>
+
+    INSERT INTO SK_MODULE
+    (
+      module_orl,
+      module,
+      mid,
+      browser_title,
+      skin,
+      layout_orl,
+      menu_orl,
+      content,
+      rdate,
+      header_content,
+      footer_content
+    ) VALUES (
+
+
+      #module_orl#,
+      #module#,
+      #mid#,
+      #browser_title#,
+      #skin#,
+      #layout_orl#,
+      #menu_orl#,
+      #content#,
+      #rdate#,
+      #header_content#,
+      #footer_content#
+
+    )
+  </insert>
+
+  <update id="update-module" parameterClass="ModuleBean">
+    UPDATE SK_MODULE SET
+
+      browser_title = #browser_title#,
+      skin = #skin#,
+      layout_orl = #layout_orl#,
+      menu_orl = #menu_orl#,
+      content = #content#,
+      header_content = #header_content#,
+      footer_content = #footer_content#
+
+    WHERE module_orl = #module_orl#
+
+  </update>
+
+  <update id="update-module-layout" parameterClass="hashMap">
+    UPDATE SK_MODULE SET
+    layout_orl = #new_layout_orl#
+    WHERE layout_orl = #layout_orl#
+  </update>
+  <update id="update-module-menu" parameterClass="hashMap">
+    UPDATE SK_MODULE SET
+    menu_orl = #new_menu_orl#
+    WHERE menu_orl = #menu_orl#
+  </update>
+  <update id="update-module-layout-menu" parameterClass="hashMap">
+    UPDATE SK_MODULE SET
+    menu_orl = #menu_orl#
+    WHERE layout_orl = #layout_orl#
+  </update>
+
+
+  <delete id="delete-module" parameterClass="hashMap">
+    DELETE FROM SK_MODULE
+    WHERE module_orl = #module_orl#
+
+  </delete>
+
+</sqlMap>

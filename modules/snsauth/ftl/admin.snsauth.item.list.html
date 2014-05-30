@@ -1,0 +1,46 @@
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+  <form id="form" method="get" action="?">
+  <div class="document-list">
+  <table cellspacing="0" border="1" summary="" class="table-list">
+  <colgroup>
+  <col width="100"><col><col width="120"><col width="120"><col width="120"><col width="120"><col width="140">
+  </colgroup>
+  <caption>Total ${paging.total_count?string(",###")} Page ${paging.page?string(",###")}/${paging.total_page?string(",###")}</caption>
+  <thead>
+    <tr>
+      <th scope="col">SNS</th>
+      <th scope="col">토큰</th>
+      <th scope="col">계정</th>
+      <th scope="col">대표소셜</th>
+      <th scope="col">글전송여부</th>
+      <th scope="col">IP</th>
+      <th scope="col">등록일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <#list O.listAuth as obj>
+    <tr>
+      <td>${obj.name}</td>
+      <td class="title">${obj.token}</td>
+      <td>${obj.uid}</td>
+      <td>${obj.main}</td>
+      <td>${obj.post_send}</td>
+      <td>${obj.ip}</td>
+      <td><#assign reg_date = obj.reg_date?datetime("yyyyMMddHHmmss")>${reg_date?string("yyyy/MM/dd")}</td>
+    </tr>
+    </#list>
+    <#if paging.total_count == 0>
+    <tr><td colspan="6" class="zero">등록된 자료가 없습니다.</td></tr>
+    </#if>
+
+  </tbody>
+
+  </table>
+  </div>
+
+  <@pagenavigator url = param.get('?page=')?j_string form="#form" params = paging />
+
+  </form>
+</div>

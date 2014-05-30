@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+  <package name="snsauth" extends="globals">
+
+   <action name="dispSnsAuthAdminInsert" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.snsauth.insert.html</param>
+    </action>
+
+    <action name="procSnsAuthAdminInsert" class="com.syaku.modules.module.ModuleAdminController" method="procModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+   <action name="dispSnsAuthItemAdminList" class="com.syaku.modules.snsauth.SnsAuthAdminView" method="dispSnsAuthItemAdminList">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.snsauth.item.list.html</param>
+    </action>
+
+   <action name="dispSnsAuthSignIn" class="com.syaku.modules.snsauth.SnsAuthView" method="dispSnsAuthSignIn">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">view</param>
+      <param name="act_template">snsauth.sign.html</param>
+    </action>
+
+   <action name="dispSnsAuthSampleList" class="com.syaku.modules.snsauth.SnsAuthView" method="dispSnsAuthSampleList">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">view</param>
+      <param name="act_template">snsauth.sample.list.html</param>
+    </action>
+
+    <action name="procSnsAuthMainUpdate" class="com.syaku.modules.snsauth.SnsAuthController" method="procSnsAuthMainUpdate">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procSnsAuthSignOut" class="com.syaku.modules.snsauth.SnsAuthController" method="procSnsAuthSignOut">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procSnsAuthPostSend" class="com.syaku.modules.snsauth.SnsAuthController" method="procSnsAuthPostSend">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">controller</param>
+    </action>
+
+  </package>
+
+</struts>

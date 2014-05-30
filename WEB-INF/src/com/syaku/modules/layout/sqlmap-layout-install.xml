@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.layout">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-layout" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_LAYOUT (
+      layout_orl BIGINT(11) NOT NULL COMMENT '레이아웃 ORL' ,
+      menu_orl BIGINT(11) NULL DEFAULT 0 COMMENT '메뉴 ORL' ,
+      layout VARCHAR(250) NULL DEFAULT NULL COMMENT '레아이웃' ,
+      title VARCHAR(250) NULL DEFAULT NULL COMMENT '타이틀' ,
+      head_script LONGTEXT NULL DEFAULT NULL COMMENT '헤더 스크립트' ,
+      extra_vars TEXT NULL DEFAULT NULL COMMENT '확장변수' ,
+      mobile CHAR(1) NULL DEFAULT 'N' COMMENT '모바일여부' ,
+      rdate CHAR(14) NULL DEFAULT NULL COMMENT '등록일' ,
+      PRIMARY KEY (layout_orl) ,
+      INDEX idx_rdate (rdate ASC) ,
+      INDEX idx_mobile (mobile ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '레이아웃' 
+  </insert>
+
+</sqlMap>

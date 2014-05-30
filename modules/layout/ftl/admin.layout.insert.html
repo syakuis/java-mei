@@ -1,0 +1,136 @@
+<#assign layout_orl = param.value('layout_orl')?if_exists>
+
+<script type="text/javascript">//<![CDATA[
+<#if layout_orl == "">
+  var mod = "insert";
+<#else>
+  var mod = "update";
+</#if>
+
+jQuery(function() {
+  if (mod == 'insert') {
+    jQuery('#form #layout').attr("disabled",false);
+    jQuery('#form #menu_orl').attr("disabled",false);
+  } else {
+    jQuery.ja.setValue("#form #layout","${O.objLayout.layout?if_exists}");
+    jQuery.ja.setValue("#form #mobile","${O.objLayout.mobile?if_exists}");
+    jQuery.ja.setValue("#form #menu_orl","${O.objLayout.menu_orl?if_exists}");
+  }
+
+});
+
+
+function save() {
+
+  jQuery('#form').jaAction({
+    filter : [
+    { target : "#title", params : "&filter=notnull&title=제목" },
+    { target : "#layout", params : "&filter=notnull&title=레이아웃" }
+    ],
+    param : _mei_gb_params,
+    ask : mod , 
+    redirect : "dispLayoutAdminList.me?" + _mei_gb_params
+  });
+
+}
+
+//]]></script>
+
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+<form id="form" method="post" action="procLayoutAdminInsert.me">
+<input type="hidden" id="layout_orl" name="layout_orl" value="${layout_orl?html}" />
+
+<h4 class="document-sub-title"><span class="iconset title"></span> 레이아웃 설정</h4>
+<div class="document-write">
+<table class="table-write" summary="document write" border="1" cellspacing="0">
+<colgroup>
+<col width="100"><col>
+</colgroup>
+<tbody>
+
+  <tr>
+  <th scope="row">제목</th>
+  <td>
+    <div class="item">
+      <input type="text" class="i_text w250" id="title" name="title" value="${O.objLayout.title?if_exists?html}" />
+    </div>
+  </td>
+  </tr>
+
+  <tr>
+    <th>모바일 여부</th>
+    <td>
+    <div class="item">
+      <input type="radio" id="mobile1" name="mobile" value="Y" class="i_radio" /><label for="mobile1" class="i_label">사용함</label>
+      <input type="radio" id="mobile2" name="mobile" value="N" class="i_radio" checked="checked" /><label for="mobile2" class="i_label">사용안함</label>
+      <p>스마트폰 등을 이용하여 접속할 때 사용되는 레이아웃입니다.</p>
+    </div>
+    </td>
+  </tr>
+
+
+  <tr>
+  <th scope="row">레이아웃</th>
+  <td>
+    <div class="item">
+      <#if O.objLayout.layout_orl?exists>
+      <input type="hidden" name="layout" value="${O.objLayout.layout}" />
+      </#if>
+      <select name="layout" id="layout" disabled="disabled" class="i_select">
+        <option value="0">선택</option>
+        <#list O.listLayout as obj>
+        <option value="${obj?if_exists?html}">${obj?if_exists}</option>
+        </#list>
+      </select>
+      <p>한번 선택된 레이아웃은 변경할 수 없습니다.</p>
+    </div>
+  </td>
+  </tr>
+
+  <tr>
+  <th scope="row">메뉴</th>
+  <td>
+    <div class="item">
+      <#if O.objLayout.layout_orl?exists>
+      <input type="hidden" name="menu_orl" value="${O.objLayout.menu_orl}" />
+      </#if>
+      <select name="menu_orl" id="menu_orl" disabled="disabled" class="i_select">
+        <option value="0">선택</option>
+        <#list O.listMenu as obj>
+        <option value="${obj.menu_orl?if_exists?html}">${obj.title}</option>
+        </#list>
+      </select>
+      <p>한번 선택된 메뉴는 변경할 수 없습니다.</p>
+    </div>
+  </td>
+  </tr>
+
+  <tr>
+  <th scope="row">헤더 스크립트</th>
+  <td>
+    <div class="item">
+      <textarea class="i_text" id="head_script" name="head_script" cols="80" rows="10">${O.objLayout.head_script?if_exists}</textarea>
+      <p>HTML의 &lt;head>와 &lt;/head> 사이에 들어가는 코드를 직접 입력할 수 있습니다.&lt;script, &lt;style 또는 &lt;meta 태그 등을 이용하실 수 있습니다</p>
+    </div>
+  </td>
+  </tr>
+
+  <#if O.options_include?exists>
+  <#include O.options_include />
+  </#if>
+
+</tbody>
+</table>
+</div>
+
+<div class="document-foot-menu tr">
+  <span class="button medium icon"><a href="dispLayoutAdminList.me${param.get('?layout_orl=')?html}"><span class="iconset list"></span>목록</a></span>
+  <span class="button medium icon"><button type="button" onclick="save();"><span class="iconset accept"></span>저장</button></span>
+</div>
+
+</form>
+
+</div>

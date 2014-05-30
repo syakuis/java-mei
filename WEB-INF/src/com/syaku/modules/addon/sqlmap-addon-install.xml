@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.addon">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-addon" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_ADDON (
+      addon_orl BIGINT(11) NOT NULL COMMENT '애드온 ORL' ,
+      module_orl BIGINT(11) NULL COMMENT '모듈 ORL' ,
+      addon VARCHAR(100) NOT NULL COMMENT '애드온 이름' ,
+      addon_type VARCHAR(100) NOT NULL COMMENT '애드온 종류' ,
+      title VARCHAR(250) NOT NULL COMMENT '애드온 제목' ,
+      addon_path VARCHAR(250) NOT NULL COMMENT '애드온 경로' ,
+      first_load CHAR(1) NULL DEFAULT 'N' COMMENT '같은 종류 애드온 중에 먼저 로드됨' ,
+      is_use CHAR(1) NULL DEFAULT 'N' COMMENT '애드온 사용여부' ,
+      regdate CHAR(14) NULL COMMENT '등록일' ,
+      listorder BIGINT(11) NULL COMMENT '역정렬' ,
+      PRIMARY KEY (addon_orl) ,
+      INDEX idx_module_orl (module_orl ASC) ,
+      INDEX idx_isuse (is_use ASC) ,
+      INDEX idx_listorder (listorder ASC) ,
+      UNIQUE INDEX addon_UNIQUE (addon ASC) )
+    ENGINE = InnoDB
+    COMMENT = '애드온'
+  </insert>
+
+</sqlMap>

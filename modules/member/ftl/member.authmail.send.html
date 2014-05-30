@@ -1,0 +1,83 @@
+<script type="text/javascript">//<![CDATA[
+
+  function search() {
+    jQuery('#form').jaAction({
+      filter : [
+        { target : "#user_id", params : "&filter=notnull&title=아이디" },
+        { target : "#email", params : "&filter=notnull&title=이메일" }
+      ],
+      param : _mei_gb_params,
+      beforeAction : function() {
+          jQuery('#result_text').text('');
+      },
+      setAjax : {
+        success : function(xml) {
+          var message = jQuery(xml).find('message').text();
+          jQuery('#result_text').text(message);
+        }
+      }
+
+    });
+
+  }
+
+//]]></script>
+
+
+<div id="sub_column_content">
+
+<div class="document-title">
+  <div class="document-title-name">회원 인증메일 재발송</div>
+  <div class="document-title-brief">
+    <p>회원 가입 후 회원인증을 거쳐야 회원가입이 완료됩니다.</p>
+    <p>가입하실때 입력한 이메일 주소로 인증메일이 발송되오니 받은 메일함 혹은 스팸메일함의 인증메일을 확인하시기 바랍니다.</p>
+    <p>인증메일이 발송되지 않았을때 아래의 정보를 입력하면 재발송됩니다.</p>
+    <p>이메일 주소는 꼭 가입할때 입력한 이메일 주소를 입력하세요.</p>
+  </div>
+</div>
+
+<form id="form" method="post" action="procMemberAuthMailSend.me">
+
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+
+    <tr>
+    <th scope="row">아이디</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w150" id="user_id" name="user_id" maxlength="15" value="" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">이메일</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w450" id="email" name="email" maxlength="250" value="" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">결과</th>
+    <td>
+      <div class="item" id="result_text">
+      </div>
+    </td>
+    </tr>
+
+  </tbody>
+  </table>
+  </div>
+
+  <div class="document-foot-menu">
+    <span class="button medium"><button type="button" onclick="search();">검색</button></span>
+  </div>
+
+</form>
+</div>

@@ -1,0 +1,29 @@
+<#if MID?if_exists == 'admin'>
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  // Tab on class
+  targetOnClass('#admin-document-tab li','on','single', { target : [
+    { search : ['dispAddonAdminModuleInsert'] , def : false },
+    { search : ['dispAddonAdminList','dispAddonAdminView','dispAddonAdminInsert'] , def : false , condition : 'or' }
+
+    ]} );
+
+});
+
+//]]></script>
+
+
+<div class="document-title">
+  <div class="document-title-name">애드온</div>
+</div>
+
+<div class="document-tab">
+<ul id="admin-document-tab">
+   <li><a href="./dispAddonAdminModuleInsert.me${param.pick('?mid=&module_orl=${MODULE_ORL}')?html}">모듈관리</a></li> 
+   <li><a href="./dispAddonAdminList.me${param.get('?module_orl=${MODULE_ORL}')?html}">애드온관리</a></li> 
+</ul>
+</div>
+
+</#if>

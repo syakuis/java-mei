@@ -1,0 +1,23 @@
+<link rel="stylesheet" type="text/css" href="${M.MODULE_INFO.SKIN_PATH}/css/snsauth.css" />
+<div style="height:15px;"></div>
+<div style="width:550px;">
+
+  <div><img src="${modConfig.getString("mei.http.layouts")}/bongan/img/etc/bongan_head_title.gif" /></div>
+  <div class="snsauth">
+    <p class="wait"><span class="loadingGIF32"></span> 잠시만 기다려주세요.</p>
+    <p><span class="replace"><a href="${O.url}">30초 동안 반응이 없을 경우 눌러주세요.</a></p>
+  </div>
+</div>
+
+<script type="text/javascript">//<![CDATA[
+
+  <#if O.auth_url?exists>
+    <#if O.auth_url == "SUCCESS">
+    opener.document.location.reload();
+    close();
+    <#else>
+    location.href="${O.auth_url?if_exists?js_string}";
+    </#if>
+  </#if>
+
+//]]></script>

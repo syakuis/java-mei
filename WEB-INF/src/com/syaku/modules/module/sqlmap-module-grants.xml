@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+ * module_orl,module,mid,layout_orl,menu_orl,content,rdate
+//-->
+
+<sqlMap namespace="modules.module">
+  <typeAlias alias="ModuleGrantsBean" type="com.syaku.modules.module.ModuleGrantsBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-module-grants" class="ModuleGrantsBean">
+    <result property="module_orl" column="module_orl" nullValue="" />
+    <result property="name" column="name" nullValue="" />
+    <result property="group_orl" column="group_orl" nullValue="" />
+  </resultMap>
+
+  <sql id="sql-field-module-grants">
+    module_orl,
+    name,
+    group_orl
+  </sql>
+
+  <select id="select-module-grants-list" parameterClass="hashMap" resultMap="result-module-grants">
+    SELECT
+    <include refid="modules.module.sql-field-module-grants" />
+    FROM SK_MODULE_GRANTS
+    WHERE module_orl = #module_orl#
+    
+    <isNotEmpty prepend="AND" property="name">
+      name = #name#
+    </isNotEmpty>
+
+  </select>
+
+  <insert id="insert-module-grants" parameterClass="ModuleGrantsBean">
+    INSERT INTO SK_MODULE_GRANTS
+    (
+      module_orl,
+      name,
+      group_orl
+    ) VALUES (
+      #module_orl#,
+      #name#,
+      #group_orl#
+
+    )
+  </insert>
+
+  <insert id="insert-module-grants-array" parameterClass="hashMap">
+    INSERT INTO SK_MODULE_GRANTS
+    (
+      module_orl,
+      name,
+      group_orl
+    ) VALUES
+    <iterate property="listGrant" open="" close="" conjunction=",">
+      (
+        #module_orl#,
+        #listGrant[].name#,
+        #listGrant[].group_orl#
+      )
+    </iterate>
+
+  </insert>
+
+
+  <delete id="delete-module-grants" parameterClass="hashMap">
+    DELETE FROM SK_MODULE_GRANTS WHERE module_orl = #module_orl#
+  </delete>
+
+  <delete id="delete-module-grants-group" parameterClass="hashMap">
+    DELETE FROM SK_MODULE_GRANTS WHERE group_orl = #group_orl#
+  </delete>
+
+</sqlMap>

@@ -1,0 +1,25 @@
+<#if MID?if_exists == 'admin'>
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  // Tab on class
+  targetOnClass('#admin-document-tab li','on','single', { target : [
+    { search : ['dispAdminSettingInsert'] , def : true }
+  ]} );
+
+});
+
+//]]></script>
+
+<div class="document-title">
+  <div class="document-title-name">설정</div>
+</div>
+
+<div class="document-tab">
+<ul id="admin-document-tab">
+  <li><a href="./dispAdminSettingInsert.me${param.pick('?mid=')?html}">기본설정</a></li>
+</ul>
+</div>
+
+</#if>

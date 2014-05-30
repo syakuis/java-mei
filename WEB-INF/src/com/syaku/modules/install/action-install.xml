@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+  <package name="install" extends="globals">
+
+    <action name="dispInstallAdminInsert" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.install.insert.html</param>
+    </action>
+
+     <action name="procInstallAdminInsert" class="com.syaku.modules.module.ModuleAdminController" method="procModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="dispInstallAdminView" class="com.syaku.modules.install.InstallAdminView" method="dispInstallAdminView">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.install.view.html</param>
+    </action>
+
+     <action name="procInstallAdminModuleInstall" class="com.syaku.modules.install.InstallAdminController" method="procInstallAdminModuleInstall">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+  </package>
+
+</struts>

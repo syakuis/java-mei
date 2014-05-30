@@ -1,0 +1,85 @@
+  <script type="text/javascript">
+
+    jQuery(function() {
+
+      jQuery.snsauth.initialize({
+        sns_main : '${O.sns_main_name?if_exists?js_string}',
+        yozm_userid : '${O.yozm.user_id?if_exists?js_string}',
+        yozm_nickname : '${O.yozm.nickname?if_exists?js_string}',
+        yozm_photo : '${O.yozm.profile_cover?if_exists?js_string}',
+        yozm_send : '${O.yozm.post_send?if_exists?js_string}',
+
+        twitter_userid : '${O.twitter.user_id?if_exists?js_string}',
+        twitter_nickname : '${O.twitter.nickname?if_exists?js_string}',
+        twitter_photo : '${O.twitter.profile_cover?if_exists?js_string}',
+        twitter_send : '${O.twitter.post_send?if_exists?js_string}',
+
+        me2day_userid : '${O.me2day.user_id?if_exists?js_string}',
+        me2day_nickname : '${O.me2day.nickname?if_exists?js_string}',
+        me2day_photo : '${O.me2day.profile_cover?if_exists?js_string}',
+        me2day_send : '${O.me2day.post_send?if_exists?js_string}',
+
+        facebook_userid : '${O.facebook.user_id?if_exists?js_string}',
+        facebook_nickname : '${O.facebook.nickname?if_exists?js_string}',
+        facebook_photo : '${O.facebook.profile_cover?if_exists?js_string}',
+        facebook_send : '${O.facebook.post_send?if_exists?js_string}'
+
+      });
+
+    });
+
+    function snsPost() {
+    
+      jQuery('#f').jaAction({
+        formAttr : "action=sns_proc.jsp&method=post",
+        values : "mode=post",
+        filter : [
+          { target : "#sns_name", params : "&filter=notnull&title=분류" },
+          { target : "#sns_content", params : "&filter=notnull&title=내용" }
+        ],
+        
+        ask : "insert"
+      });
+
+    }
+
+    function snsDelete() {
+    
+      jQuery('#f').jaAction({
+        formAttr : "action=sns_proc.jsp&method=post",
+        values : "mode=delete",
+        ask : "del"
+      });
+
+    }
+
+  </script>
+
+    <div id="sns_menu_list" style="position: absolute;z-index:2;display:none;">
+      <div><img src="${M.MODULE_INFO.SKIN_PATH}/images/sns-bar1.png"/></div>
+      <div><img src="${M.MODULE_INFO.SKIN_PATH}/images/sns-main.png" id="sns_btn_main" style="cursor:pointer;" /></div>
+      <div><img src="${M.MODULE_INFO.SKIN_PATH}/images/sns-send.png" id="sns_btn_send" style="cursor:pointer;" /></div>
+      <div><img src="${M.MODULE_INFO.SKIN_PATH}/images/sns-not-send.png" id="sns_btn_not_send" style="cursor:pointer;" /></div>
+      <div><img src="${M.MODULE_INFO.SKIN_PATH}/images/sns-close.png" id="sns_btn_close" style="cursor:pointer;" /></div>
+      <div><img src="${M.MODULE_INFO.SKIN_PATH}/images/sns-bar3.png" /></div>
+    </div>
+
+    <form id="f">
+    <div>
+    <div style="float:left;"><img src="${M.MODULE_INFO.SKIN_PATH}/images/btn_facebook_conn_off.png" id="sns_btn_facebook" title="페이스북" style="cursor:pointer;" /></div>
+    <div style="float:left;padding-left:5px;"><img src="${M.MODULE_INFO.SKIN_PATH}/images/btn_twitter_conn_off.png" id="sns_btn_twitter" title="트위터" style="cursor:pointer;" /></div>
+    <div style="float:left;padding-left:5px;"><img src="${M.MODULE_INFO.SKIN_PATH}/images/btn_me2day_conn_off.png" id="sns_btn_me2day" title="네이버 미투데이" style="cursor:pointer;" /></div>
+    <div style="float:left;padding-left:5px;"><img src="${M.MODULE_INFO.SKIN_PATH}/images/btn_yozm_conn_off.png" id="sns_btn_yozm" title="다음 요즘" style="cursor:pointer;" /></div>
+    <div class="clear"></div>
+    </div>
+    <div style="padding-top:10px;">
+      <div style="float:left;"><img src="" id="sns_me_photo" width="50" height="50" /><br><p id="sns_me_name"><p></div>
+      <div><textarea cols="0" rows="0" style="height:80px;width:500px;" id="sns_content" name="sns_content" ></textarea></div>
+    </div>
+    <div>
+      <button type="button" onclick="snsPost();">글쓰기</button>
+      <button type="button" onclick="snsDelete();">삭제</button>
+    </div>
+
+    </form>
+

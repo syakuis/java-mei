@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.code">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-code" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_CODE (
+      code_orl BIGINT(11) NOT NULL COMMENT '코드 ORL' ,
+      module_orl BIGINT(11) NOT NULL DEFAULT 0 COMMENT '모듈 ORL (0 : 공통 , 0 이상인 경우 대상있음)' ,
+      code_id VARCHAR(100) NOT NULL COMMENT '코드 ID' ,
+      title VARCHAR(100) NOT NULL COMMENT '제목' ,
+      comment TEXT NULL COMMENT '비고' ,
+      rdate CHAR(14) NULL DEFAULT NULL COMMENT '등록일' ,
+      listorder BIGINT(11) NULL DEFAULT 0 COMMENT '역정렬' ,
+      PRIMARY KEY (code_orl) ,
+      INDEX idx_listorder (listorder ASC) ,
+      UNIQUE INDEX code_id_UNIQUE (code_id ASC) ,
+      INDEX idx_module_orl (module_orl ASC) ,
+      INDEX idx_select (module_orl ASC, code_id ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '코드' 
+  </insert>
+
+ <insert id="create-code-item" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_CODE_ITEM (
+      code_item_orl BIGINT(11) NOT NULL COMMENT '코드 아이템 ORL' ,
+      parent_orl BIGINT(11) NOT NULL DEFAULT 0 COMMENT '부모 ORL' ,
+      num BIGINT(11) NOT NULL DEFAULT 0 COMMENT '순번' ,
+      code_orl BIGINT(11) NOT NULL COMMENT '코드 ORL' ,
+      name VARCHAR(100) NOT NULL COMMENT '코드명' ,
+      color VARCHAR(11) NULL ,
+      rdate CHAR(14) NULL DEFAULT NULL COMMENT '등록일' ,
+      PRIMARY KEY (code_item_orl) ,
+      INDEX idx_menu_orl (code_orl ASC) ,
+      INDEX idx_rdate (rdate ASC) ,
+      INDEX idx_parent_orl (parent_orl ASC) ,
+      INDEX idx_num (num ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '코드 항목' 
+  </insert>
+
+
+  <insert id="create-code-counter" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_CODE_COUNTER (
+      code_orl BIGINT(11) NOT NULL COMMENT '코드 ORL' ,
+      code_item_orl BIGINT(11) NOT NULL COMMENT '대상 ORL' ,
+      count BIGINT(11) NOT NULL DEFAULT 0 COMMENT '수' ,
+      reg_date CHAR(14) NULL COMMENT '등록일' ,
+      last_update CHAR(14) NULL COMMENT '수정일' ,
+      UNIQUE INDEX unique_module_category (code_orl ASC, code_item_orl ASC) ,
+      INDEX idx_count (count ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '코드 카운터' 
+  </insert>
+
+
+</sqlMap>

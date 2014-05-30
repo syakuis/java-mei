@@ -1,0 +1,31 @@
+<#assign module_orl = param.value('module_orl')?if_exists>
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  // Tab on class
+  targetOnClass('#admin-outsidepage-tab li','on','single', { target : [
+    { search : ['dispOutsidepageAdminList'] , def : true },
+    { search : ['dispOutsidepageAdminInsert'] , def : false },
+    { search : ['dispOutsidepageAdminGrant'] , def : false }
+  ]} );
+
+});
+
+//]]></script>
+
+
+
+<div class="document-title">
+<div class="document-title-name">외부페이지</div>
+</div>
+
+<div class="document-tab">
+<ul id="admin-outsidepage-tab">
+  <li><a href="./dispOutsidepageAdminList.me${param.get('?module_orl=')?html}">목록</a></li>
+  <li><a href="./dispOutsidepageAdminInsert.me${param.get('?')?html}">모듈관리</a></li>
+  <#if module_orl?if_exists != ''>
+  <li><a href="./dispOutsidepageAdminGrantInsert.me${param.get('?')?html}">권한관리</a></li>
+  </#if>
+</ul>
+</div>

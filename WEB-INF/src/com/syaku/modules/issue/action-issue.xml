@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+  <package name="issue" extends="globals">
+
+    <action name="dispIssueAdminList" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminList">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.issue.list.html</param>
+    </action>
+
+    <action name="dispIssueAdminInsert" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.issue.insert.html</param>
+    </action>
+
+    <action name="procIssueAdminInsert" class="com.syaku.modules.module.ModuleAdminController" method="procModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procIssueAdminDelete" class="com.syaku.modules.issue.IssueAdminController" method="procIssueAdminDelete">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <!-- 분류 -->
+    <action name="dispIssueCategoryAdminInsert" class="com.syaku.modules.category.CategoryView" method="dispCategoryInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.issue.category.insert.html</param>
+    </action>
+
+    <action name="dispIssueCategoryAdminView" class="com.syaku.modules.category.CategoryView" method="dispCategoryView">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.issue.category.view.html</param>
+    </action>
+
+    <action name="procIssueCategoryAdminInsert" class="com.syaku.modules.category.CategoryController" method="procCategoryInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procIssueCategoryAdminMove" class="com.syaku.modules.category.CategoryController" method="procCategoryMove">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+   <action name="getIssueCategoryXml" class="com.syaku.modules.category.CategoryModel" method="getCategoryXml">
+      <param name="act_permission">member</param>
+      <param name="act_type">model</param>
+    </action>
+
+   <action name="getIssueCategoryCache" class="com.syaku.modules.category.CategoryModel" method="getCategoryCache">
+      <param name="act_permission">member</param>
+      <param name="act_type">model</param>
+    </action>
+    <!-- 분류 -->
+
+    <action name="dispIssueInsert" class="com.syaku.modules.issue.IssueView" method="dispIssueInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">issue.insert.html</param>
+    </action>
+
+    <action name="dispIssueList" class="com.syaku.modules.issue.IssueView" method="dispIssueList">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">issue.list.html</param>
+    </action>
+
+    <action name="dispIssueView" class="com.syaku.modules.issue.IssueView" method="dispIssueView">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">issue.view.html</param>
+    </action>
+
+    <action name="procIssueInsert" class="com.syaku.modules.issue.IssueController" method="procIssueInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procIssueDelete" class="com.syaku.modules.issue.IssueController" method="procIssueDelete">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+  </package>
+</struts>

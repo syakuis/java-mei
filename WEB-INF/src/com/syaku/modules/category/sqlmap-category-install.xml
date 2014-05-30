@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.category">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-category" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_CATEGORY (
+      category_orl BIGINT(11) NOT NULL COMMENT '분류 ORL' ,
+      parent_orl BIGINT(11) NOT NULL DEFAULT 0 COMMENT '부모 ORL' ,
+      category_seq BIGINT(11) NOT NULL DEFAULT 0 COMMENT '분류 순번' ,
+      module_orl BIGINT(11) NOT NULL DEFAULT 0 COMMENT '모듈 ORL' ,
+      title VARCHAR(150) NOT NULL COMMENT '분류명' ,
+      rdate VARCHAR(14) NULL COMMENT '등록일' ,
+      color VARCHAR(11) NULL DEFAULT NULL ,
+      PRIMARY KEY (category_orl) )
+    ENGINE = InnoDB, 
+    COMMENT = '분류' 
+  </insert>
+
+  <insert id="create-category-counter" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_CATEGORY_COUNTER (
+      module_orl BIGINT(11) NOT NULL COMMENT '모듈 ORL' ,
+      category_orl BIGINT(11) NOT NULL COMMENT '대상 ORL' ,
+      count BIGINT(11) NOT NULL DEFAULT 0 COMMENT '수' ,
+      reg_date VARCHAR(14) NULL COMMENT '등록일' ,
+      last_update VARCHAR(14) NULL COMMENT '수정일' ,
+      UNIQUE INDEX unique_module_category (module_orl ASC, category_orl ASC) ,
+      INDEX idx_count (count ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '분류 카운터' 
+  </insert>
+
+</sqlMap>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="modules.code">
+  <typeAlias alias="CodeBean" type="com.syaku.modules.code.CodeBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-code" class="CodeBean">
+
+  <result property="code_orl" column="code_orl" nullValue="" />
+  <result property="code_id" column="code_id" nullValue="" />
+  <result property="module_orl" column="module_orl" nullValue="" />
+  <result property="title" column="title" nullValue="" />
+  <result property="comment" column="comment" nullValue="" />
+  <result property="rdate" column="rdate" nullValue="" />
+  <result property="listorder" column="listorder" nullValue="" />
+ 
+  </resultMap>
+  <sql id="sql-code">
+
+    SELECT
+
+    code_orl,
+    module_orl,
+    code_id,
+    title,
+    comment,
+    rdate,
+    listorder
+
+    FROM SK_CODE
+  </sql>
+ 
+ <select id="select-code-list" parameterClass="hashMap" resultMap="result-code">
+  <include refid="sql-code" />
+
+    <dynamic prepend="WHERE">
+
+      <isNotEmpty prepend="AND" property="module_orl" >
+      module_orl = #module_orl#
+      </isNotEmpty>
+
+    </dynamic>
+
+  <isEmpty prepend="ORDER BY" property="order">
+  listorder
+  </isEmpty>
+  <isNotEmpty prepend="ORDER BY" property="order">
+  $order$
+  </isNotEmpty>
+
+  <isNotEmpty prepend="LIMIT" property="page_start" >
+  $page_start$,$page_row$
+  </isNotEmpty>
+  </select>
+
+    <select id="select-code-count" parameterClass="hashMap" resultClass="long">
+      SELECT IFNULL(COUNT(code_orl),0) FROM SK_CODE
+
+    <dynamic prepend="WHERE">
+
+      <isNotEmpty prepend="AND" property="module_orl" >
+      module_orl = #module_orl#
+      </isNotEmpty>
+
+    </dynamic>
+
+    </select>
+
+    <select id="select-code-count-overlap" parameterClass="hashMap" resultClass="long">
+      SELECT IFNULL(COUNT(code_orl),0) FROM SK_CODE
+
+    <dynamic prepend="WHERE">
+
+      <isNotEmpty prepend="AND" property="code_orl" >
+      code_orl &lt;&gt; #code_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="code_id" >
+      code_id = #code_id#
+      </isNotEmpty>
+
+    </dynamic>
+
+    </select>
+
+  <select id="select-code-one" parameterClass="hashMap" resultMap="result-code">
+    SELECT
+
+    code_orl,
+    code_id,
+    module_orl,
+    title,
+    comment,
+    rdate,
+    listorder
+
+    FROM SK_CODE 
+    
+    <dynamic prepend="WHERE">
+
+      <isNotEmpty prepend="AND" property="code_orl" >
+      code_orl = #code_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="code_id" >
+      code_id = #code_id#
+      </isNotEmpty>
+
+    </dynamic>
+
+    LIMIT 1
+
+  </select>
+
+  <insert id="insert-code" parameterClass="CodeBean">
+  <selectKey resultClass="String" keyProperty="code_orl">
+  SELECT (IFNULL(MAX(code_orl),0) + 1) AS code_orl FROM SK_CODE
+  </selectKey>
+
+    INSERT INTO SK_CODE
+    (
+      code_orl,
+      module_orl, 
+      code_id, 
+      title, 
+      comment, 
+      rdate, 
+      listorder
+
+     ) VALUES (
+
+    #code_orl#,
+    #module_orl#,
+    #code_id#,
+    #title#,
+    #comment#,
+    #rdate#,
+    #code_orl# * -1
+    )
+  </insert>
+
+  <update id="update-code" parameterClass="CodeBean">
+    UPDATE SK_CODE SET 
+
+    title = #title#,
+    comment = #comment#,
+    module_orl = #module_orl#
+
+
+    WHERE code_orl = #code_orl# 
+  </update>
+ 
+ 
+  <delete id="delete-code" parameterClass="hashMap">
+    DELETE FROM SK_CODE WHERE code_orl = #code_orl#
+  </delete>
+
+</sqlMap>

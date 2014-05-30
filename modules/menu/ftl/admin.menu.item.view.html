@@ -1,0 +1,117 @@
+<#assign menu_orl = param.value('menu_orl')>
+
+<link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="${MEI_PATH_RELATIVE}/common/ui.simple.tree/jquery.simple.tree.css" />
+<script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/ui.simple.tree/jquery.simple.tree.js"></script>
+<script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/ui.simple.tree/jquery.simple.tree.extend.js"></script>
+
+<script type="text/javascript">
+
+jQuery(function() {
+
+
+  jQuery('#form').simpleTreeExtend({
+    title : '${O.objMenu.title}',
+    target : '#set-tree',
+    node : 'tree_',
+
+    idx : 'menu_item_orl',
+    parent_idx : 'parent_orl',
+    num : 'num',
+    name : 'name',
+    
+    // 시작 &
+    ajax_data : '&menu_orl=${menu_orl}&' + _mei_gb_params,
+    ajax_move_url : 'procMenuItemAdminMove.me',
+    ajax_url_load : 'getMenuItemXml.me',
+
+    _add : function(idx,num) {
+      callInput('',idx,num);
+    },
+
+    _modify : function(idx) {
+      callInput(idx);
+    },
+
+    _del : function(idx) {
+      var obj = this;
+
+      if (confirm("삭제하시겠습니까?")) {
+        jQuery.ajax({
+          url : 'procMenuItemAdminDelete.me',
+          data : obj.ajax_data + '&' + obj.idx + '=' + idx,
+          type : 'post',
+          success : function(xml) {
+            reload(xml);
+          }
+        });
+      }
+
+    }
+
+  });
+
+  jQuery("#menu_input").dialog({
+    bgiframe: true,
+    autoOpen: false,
+    width: 600,
+    modal: true,
+    draggable: true,
+    closeOnEscape: true,
+    title: '메뉴관리',
+    resizable: false
+  });
+
+});
+
+
+function callInput(idx,parent_idx,num) {
+  var url = './dispMenuItemAdminInsert.me?' + _mei_gb_params + '&menu_orl=${menu_orl}&menu_item_orl=' + idx + '&parent_orl=' + parent_idx + '&num=' + num;
+
+  jQuery.get(url, function(data) {
+    jQuery('#menu_input').html(data).dialog('open');
+  });
+
+}
+
+
+// callInput 처리 후 화면 리로딩
+function reload(xml) {
+  jQuery.simpleTreeExtend._ajaxLoad();
+  jQuery('#menu_input').dialog('close');
+}
+
+function cache() {
+  jQuery.ajax({
+    url : 'getMenuItemCache.me',
+    data : _mei_gb_params + '&menu_orl=${menu_orl}',
+    type : 'post',
+    success : function(xml) {
+      jQuery.simpleTreeExtend._ajaxLoad();
+    }
+  });
+}
+
+</script>
+
+<div id="sub_column_content">
+
+  <div id="menu_input"></div>
+
+  <#include "./admin.sub.html">
+
+  <form id="form" method="post" action="./getMenuItemXml.me">
+  <input type="hidden" id="menu_orl" name="menu_orl" value="${menu_orl}" />
+
+  <div class="document-head-menu">
+    <span class="button medium icon"><a href="javascript:cache();"><span class="iconset cache"></span>캐시파일 재생성</a></span>
+  </div>
+
+  <div class="pt10">
+    <div class="custom-simple-tree">
+      <ul id="set-tree" class="simpleTree"></ul>
+    </div>
+  </div>
+
+  </form>
+
+</div>

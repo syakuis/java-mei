@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+ * module_orl,module,mid,layout_orl,menu_orl,content,rdate
+//-->
+
+<sqlMap namespace="modules.module">
+  <typeAlias alias="ModuleOptionsBean" type="com.syaku.modules.module.ModuleOptionsBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-module-options" class="ModuleOptionsBean">
+
+    <result property="module_orl" column="module_orl" nullValue="" />
+    <result property="name" column="name" nullValue="" />
+    <result property="value" column="value" nullValue="" />
+  </resultMap>
+
+  <sql id="select-module-options">
+    SELECT 
+      module_orl,
+      name,
+      value
+    FROM SK_MODULE_OPTIONS
+  </sql>
+
+  <select id="select-module-options-list" parameterClass="hashMap" resultMap="result-module-options">
+    <include refid="modules.module.select-module-options" />
+    WHERE module_orl = #module_orl#
+  </select>
+
+  <select id="select-module-options-count" parameterClass="hashMap" resultClass="Long">
+    SELECT IFNULL(COUNT(module_orl),0) FROM SK_MODULE_OPTIONS
+    
+    WHERE module_orl = #module_orl#
+
+    <isNotEmpty prepend="AND" property="name" >
+      name = #name#
+    </isNotEmpty>
+
+  </select>
+
+  <select id="select-module-options-one" parameterClass="hashMap" resultMap="result-module-options">
+    <include refid="modules.module.select-module-options" />
+    WHERE module_orl = #module_orl#
+    AND name = #name#
+    LIMIT 1
+  </select>
+
+  <insert id="insert-module-options" parameterClass="ModuleOptionsBean">
+    INSERT INTO SK_MODULE_OPTIONS
+    (
+      module_orl,
+      name,
+      value
+    ) VALUES (
+      #module_orl#,
+      #name#,
+      #value#
+    )
+  </insert>
+
+  <update id="update-module-options" parameterClass="ModuleOptionsBean">
+    UPDATE SK_MODULE_OPTIONS SET
+
+      value = #value#
+
+    WHERE module_orl = #module_orl#
+    AND name = #name#
+
+  </update>
+
+  <delete id="delete-module-options" parameterClass="hashMap">
+    DELETE FROM SK_MODULE_OPTIONS
+    WHERE module_orl = #module_orl#
+  </delete>
+
+</sqlMap>

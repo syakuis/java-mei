@@ -1,0 +1,75 @@
+<link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="${MOD_FTL_MODULE_SKIN}/css/style.css" />
+<script type="text/javascript" src="${MOD_PATH_RELATIVE}/js/handlers.js"></script>
+
+<#if O.editor?if_exists != ''>
+<!--<script type="text/javascript" src="${MOD_PATH_RELATIVE}/js/ckeditor.handlers.js"></script>-->
+<script type="text/javascript" src="${MOD_PATH_RELATIVE}/js/smarteditor.handlers.js"></script>
+</#if>
+
+<div class='file_upload'>
+
+  <div class='file_single_filed'>
+    <div style="float:left;padding-right:5px;">
+    <input type="hidden" id="file_orl${O.seq}" name="file_orl${O.seq}" value="<#if O.objFile?exists>{ 
+      file_orl : '${O.objFile.file_orl}' , 
+      file : '${O.objFile.filename}' , 
+      re_file : '${O.objFile.re_filename}' , 
+      folder : '${O.objFile.folder}' , 
+      file_size : '${O.objFile.size}' ,
+      extension : '${O.objFile.extension}' , 
+      type : '${O.objFile.type}' 
+      }</#if>" />
+    <input type="text" class="i_text w300" id="file${O.seq}" name="file${O.seq}" value="<#if O.objFile?exists>${O.objFile.filename} (${fnCls.getFileSizeUnit(O.objFile.size)})</#if>" readonly="readonly" />
+    </div>
+    <div>
+    <span id='swfu_button${O.seq}'></span>
+
+    <span class="button medium"><button type="button" onclick="jQuery.file.deleteSwfupload(swfu[${O.seq}]<#if O.editor?if_exists != ''>,${O.editor}</#if>);">삭제</button></span>
+    <#if O.editor?if_exists != ''>
+    <span class="button medium"><button type="button" onclick="jQuery.file.editor_file_input(swfu[${O.seq}],${O.editor});">삽입</button></span>
+    <span class="button medium"><button type="button" onclick="jQuery.file.editor_file_remove(swfu[${O.seq}],${O.editor});">제거</button></span>
+    </#if>
+
+
+    </div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="file_text">
+    <#if MM.options_file_type == ''>
+    <#assign options_file_type = "*.*">
+    <#assign options_file_type_description = "모든 파일">
+    <#else>
+    <#assign options_file_type = MM.options_file_type>
+    <#assign options_file_type_description = "사용자 지정 파일">
+    </#if>
+    <p>파일 제한 크기 : <#if MM.options_file_once_size == '0'>무제한<#else>${MM.options_file_once_size?number?string(",###")} KB</#if> (${options_file_type})</p>
+  </div>
+
+</div>
+
+<script type="text/javascript">//<![CDATA[
+  swfu[${O.seq}] = jQuery.file.swfupload({
+    ele_file : '#file${O.seq}',
+    ele_file_orl : '#file_orl${O.seq}',
+    ele_file_size : '#file_size_text${O.seq}',
+    ele_preview : '#file_preview${O.seq}',
+    file_size_limit : ${MM.options_file_once_size} * 1024 , // KB -> Byte 변경
+    file_types : '${options_file_type}',
+    file_types_description : '${options_file_type_description}',
+    file_upload_multi : false,
+    file_upload_limit : 0, // 파일 첨부수
+    file_upload_unlimited : <#if MM.options_file_limit?number  &gt; 0>false<#else>true</#if>,
+    post_params: { 
+      file_orl : '',
+      module_orl : '${MODULE_ORL}', // 시스템ID
+      target_orl : '${O.target_orl?if_exists}', // 자료ID
+      mid : '${MID}',
+      sid : '${MEI_SID}',
+      seq : '${O.seq}',
+      member_orl : '${Session._MEI_MEMBER_ORL}'  // 시스템ID
+    },
+    button_placeholder_id : 'swfu_button${O.seq}',
+
+  });
+//]]></script>

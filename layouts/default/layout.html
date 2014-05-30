@@ -1,0 +1,108 @@
+<#include "./macro.html">
+<#assign MEI_IMAGES_STYLES_ICONS = MEI_PATH_RELATIVE + "/common/styles/icons/images">
+<!--
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="ko" xml:lang="ko" xmlns="http://www.w3.org/1999/xhtml">
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ko">
+
+<head>
+  <meta content="MEI" name="Generator" />
+  <meta content="2.0.0" name="Version" />
+  <meta content="Seok Kyun. Choi. (http://syaku.tistory.com)" name="Programmed" />
+
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta content="no" http-equiv="imagetoolbar" />
+  <title>MEI 2</title>
+
+  <!-- Commons -->
+  <link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="${MEI_PATH_RELATIVE}/common/style.css" />
+  <link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="${MEI_PATH_RELATIVE}/common/styles/button/button.css" />
+  <link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="${MEI_PATH_RELATIVE}/common/styles/icons/icons.css" />
+
+  <script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/json2.js"></script>
+  <script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/xml2json.js"></script>
+  <!-- Commons -->
+
+  <!-- jQuery -->
+  <script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/jquery/jquery-1.10.1.min.js"></script>
+  <script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/jquery/jquery-migrate-1.2.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="${MEI_PATH_RELATIVE}/common/jquery.ui/jquery-ui-1.10.3.min.css" />
+  <script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/jquery.ui/jquery-ui-1.10.3.min.js"></script>
+  <!-- jQuery -->
+
+  <!-- jindo -->
+  <script type="text/javascript" charset="utf-8" src="${MEI_PATH_RELATIVE}/common/jindo/jindo.desktop.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="${MEI_PATH_RELATIVE}/common/jindo/jindo_component.min.js"></script>
+  <!-- jindo -->
+
+  <script type="text/javascript">
+  var _mei_path_relative = '${MEI_PATH_RELATIVE?js_string}';
+
+  var _mei_path_common = _mei_path_relative + '${meiConfig.getString("mei.path.common")?js_string}';
+  var _mei_path_attach = _mei_path_relative + '${meiConfig.getString("mei.path.attach")?js_string}';
+  var _mei_path_cache = _mei_path_relative + '${meiConfig.getString("mei.path.cache")?js_string}';
+  
+  var _mei_host_url = '${meiConfig.getString("mei.host.url")?js_string}';
+  var _mei_host_port = '${meiConfig.getString("mei.host.port")?js_string}';
+  var _mei_host_URL = '${MEI_HOST_URL?js_string}';
+
+  var _mei_navi_page = ${meiConfig.getString("mei.paging.now")};
+  var _mei_navi_page_row = ${meiConfig.getString("mei.paging.row")};
+  var _mei_navi_page_link = ${meiConfig.getString("mei.paging.link")};
+
+  var _mei_gb_params = '${param.pick('mid=&module_orl=')?js_string}';
+
+  jQuery.noConflict();
+  /** jQuery coding
+  jQuery(document).ready(function($) {
+    // Code that uses jQuery's $ can follow here.
+  });
+  // Code that uses other library's $ can follow here.
+
+  (function($) {
+    $(function() {
+      // more code using $ as alias to jQuery
+    });
+  })(jQuery);
+  // other code using $ as an alias to the other library
+
+  */
+
+  </script>
+
+
+  <link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="${MEI_PATH_RELATIVE}/common/action/jquery.action.css" />
+  <script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/action/jquery.action.js"></script>
+  <script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/action/jquery.action-ko.js"></script>
+
+  <script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/common.js"></script>
+
+  <link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="${MEI_PATH_RELATIVE}/common/ui.simple.tree/jquery.simple.tree.css" />
+  <script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/ui.simple.tree/jquery.simple.tree.js"></script>
+  <script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/ui.simple.tree/jquery.simple.tree.extend.js"></script>
+
+  <#list meiResConfing.getList("mei.addons.load") as addon>
+    <#include MEI_PATH_RELATIVE + addon>
+  </#list>
+
+  <#list meiCollection.getList("mei.globals.import.css") as name>
+  <link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="${MEI_PATH_RELATIVE}${name}" />
+  </#list>
+
+  <#list meiCollection.getList("mei.globals.import.js") as name>
+  <script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}${name}"></script>
+  </#list> 
+
+</head>
+
+<body>
+
+<#if MOD_FTL_MODULE_LAYOUT?if_exists != ""><#include MOD_FTL_MODULE_LAYOUT>
+<#else><#if MOD_FTL_MODULE?if_exists != ""><#include MOD_FTL_MODULE></#if></#if>
+
+</body>
+
+</html>

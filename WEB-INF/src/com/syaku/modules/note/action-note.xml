@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+  <package name="note" extends="globals">
+
+    <action name="dispNoteAdminInsert" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.note.insert.html</param>
+    </action>
+
+     <action name="procNoteAdminInsert" class="com.syaku.modules.module.ModuleAdminController" method="procModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="dispNoteAdminItemList" class="com.syaku.modules.note.NoteAdminView" method="dispNoteAdminItemList">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.note.item.list.html</param>
+    </action>
+
+    <action name="dispNoteSendInsert" class="com.syaku.modules.note.NoteView" method="dispNoteSendInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">note.send.insert.html</param>
+    </action>
+
+
+    <action name="procNoteDelete" class="com.syaku.modules.note.NoteController" method="procNoteDelete">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procNoteSendInsert" class="com.syaku.modules.note.NoteController" method="procNoteSendInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+
+    <action name="dispNoteView" class="com.syaku.modules.note.NoteView" method="dispNoteView">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">note.view.html</param>
+    </action>
+
+<!--
+dispNoteList
+ -->
+  </package>
+
+</struts>

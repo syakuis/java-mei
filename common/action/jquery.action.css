@@ -1,0 +1,88 @@
+/*
+  jQuery JavaScript Action CSS
+  Written by Seok Kyun. Choi. 최석균 (http://syaku.tistory.com)
+*/
+
+/** 로딩 **/
+.loadingArea {
+  border:1px solid #9cbbd7;
+  background:#ecf2f7;
+  padding:5px;
+  z-index:1003;
+}
+
+.loadingArea .style {
+  border:1px solid #9cbbd7;
+  background:#fff;
+}
+
+.loadingArea .style .contents {
+  margin:20px;
+  padding-left:20px;
+  background: url(images/loading2.gif) no-repeat;
+}
+
+/** 레이어 **/
+.layerBg {
+  left:0;
+  top:0;
+  position:absolute;
+  z-index:1001;
+  filter:alpha(opacity=50); 
+  opacity:0.5;
+}
+
+/** 달력 **/
+.monthpick, .monthpick-table {
+  background:#fff !important;
+}
+
+.monthpick {
+  padding:0;
+  margin:0;
+  font-size:9pt !important;
+}
+
+.monthpick-table {
+  margin:3px;
+  border-collapse: collapse;
+  border:1px solid #39424B;
+}
+
+.monthpick-table tr th, .monthpick-table tr td {
+  padding:2px;
+}
+
+.monthpick-table tr th {
+  background:#dddddd;
+  border-right:1px solid #f4f4f4;
+}
+
+.monthpick-table tbody tr:hover {
+  background:#dddddd;
+}
+
+.monthpick-table tbody tr th:hover, .monthpick-table tbody tr td:hover {
+  background:#39424B;
+  color:#fff;
+}
+
+
+
+/* UI Object */
+.ld_line{position:absolute;top:0;left:0;z-index:1000;height:40px}
+.ld_line:after{display:block;clear:both;content:''}
+.ld_line .lft,.ld_line .rgt{float:left;width:11px;height:40px;font-size:0;line-height:0}
+.ld_line .lft{background:url(images/ld1_lft.png) no-repeat 0 0;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/ld1_lft.png',sizingMethod='crop')}
+.ld_line .rgt{background:url(images/ld1_rgt.png) no-repeat 0 0;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/ld1_rgt.png',sizingMethod='crop')}
+.ld_line .cont{float:left;height:26px;padding:14px 7px 0 0;background:url(images/ld1_cen.png) repeat-x 0 0;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/ld1_cen.png',sizingMethod='scale');color:#fff}
+.ld_line .cont img{margin:-3px 9px 0 0;vertical-align:top}
+.ld_line .cont .contents {
+  padding-left:24px;
+  padding-bottom:5px;
+  background: url(images/ico_ld_cm.gif) no-repeat;
+  font-weight:bold;
+}
+
+
+/* //UI Object */

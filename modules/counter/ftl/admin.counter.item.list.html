@@ -1,0 +1,40 @@
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+<form id="form" method="get" action="?">
+
+  <div class="document-list">
+  <table cellspacing="0" border="1" summary="" class="table-list">
+  <colgroup>
+  <col width="120"><col><col width="120">
+  </colgroup>
+  <caption>Total ${paging.total_count?string(",###")} Page ${paging.page?string(",###")}/${paging.total_page?string(",###")}</caption>
+  <thead>
+    <tr>
+      <th scope="col">IP</th>
+      <th scope="col">User Agent</th>
+      <th scope="col">접속일</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <#list O.listCounter as objCounter>
+    <tr>
+      <td>${objCounter.ip}</td>
+      <td class="title">${objCounter.user_agent}</td>
+      <td><#if objCounter.rdate != ""><#assign rdate = objCounter.rdate?datetime("yyyyMMddHHmmss")>${rdate?string("yyyy/MM/dd HH:mm:ss")}</#if></td>
+    </tr>
+    </#list>
+    <#if !O.listCounter?exists>
+    <tr><td colspan="3" class="zero">등록된 자료가 없습니다.</td></tr>
+    </#if>
+
+  </tbody>
+  </table>
+  </div>
+
+  <@pagenavigator url = param.get('?page=')?j_string form="#form" params = paging />
+
+</form>
+
+</div>

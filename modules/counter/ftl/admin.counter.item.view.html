@@ -1,0 +1,44 @@
+<#if O.listCounter?size &gt; 0>
+<script type="text/javascript">
+
+$(document).ready(function(){
+  var data = [ ];
+  <#list O.listCounter as obj>
+  data.push(['${obj.reg_date}',parseInt(${obj.count})]);
+  </#list>
+
+  var plot1 = $.jqplot('chart1', [data], {
+      axesDefaults: {
+          tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+          tickOptions: {
+            angle: -30,
+            fontSize: '10pt'
+          }
+      },
+      axes: {
+        xaxis: {
+          renderer: $.jqplot.CategoryAxisRenderer
+        }
+      },
+
+      seriesDefaults: {
+        showMarker:false,
+        pointLabels: { show:true }
+      }
+  });
+
+});
+
+</script>
+</#if>
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+<div id="chart1" class="jqplot-target">
+<#if O.listCounter?size == 0>
+<div style="text-align:center;height:200px;padding-top:100px;">등로된 데이터가 없습니다.</div>
+</#if>
+</div>
+
+</div>

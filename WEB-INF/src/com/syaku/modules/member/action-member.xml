@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+  <package name="member" extends="globals">
+
+   <action name="dispMemberAdminConfigInsert" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.member.config.insert.html</param>
+    </action>
+
+    <action name="procMemberAdminConfigInsert" class="com.syaku.modules.module.ModuleAdminController" method="procModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="dispMemberAdminList" class="com.syaku.modules.member.MemberAdminView" method="dispMemberAdminList">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.member.list.html</param>
+    </action>
+
+    <action name="dispMemberAdminView" class="com.syaku.modules.member.MemberAdminView" method="dispMemberAdminView">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.member.view.html</param>
+    </action>
+
+    <action name="dispMemberAdminInsert" class="com.syaku.modules.member.MemberAdminView" method="dispMemberAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.member.insert.html</param>
+    </action>
+
+    <action name="procMemberAdminInsert" class="com.syaku.modules.member.MemberAdminController" method="procMemberAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procMemberAdminDelete" class="com.syaku.modules.member.MemberAdminController" method="procMemberAdminDelete">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="dispGroupAdminList" class="com.syaku.modules.member.MemberAdminView" method="dispGroupAdminList">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.group.list.html</param>
+    </action>
+
+    <action name="dispGroupAdminUpdate" class="com.syaku.modules.member.MemberAdminView" method="dispGroupAdminUpdate">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.group.update.html</param>
+    </action>
+
+    <action name="procGroupAdminInsert" class="com.syaku.modules.member.MemberAdminController" method="procGroupAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procGroupAdminDelete" class="com.syaku.modules.member.MemberAdminController" method="procGroupAdminDelete">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+
+    <action name="dispMemberLoginForm" class="com.syaku.modules.member.MemberView" method="dispMemberLoginForm">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">view</param>
+      <param name="act_template">login.form.html</param>
+      <interceptor-ref name="meiStack" />
+    </action>
+
+    <action name="procMemberLogin" class="com.syaku.modules.member.MemberController" method="procMemberLogin">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">controller</param>
+      <interceptor-ref name="meiStack" />
+    </action>
+
+    <action name="procMemberLogout" class="com.syaku.modules.member.MemberController" method="procMemberLogout">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">controller</param>
+      <interceptor-ref name="meiStack" />
+    </action>
+
+    <action name="getMemberNickNameCheck" class="com.syaku.modules.member.MemberModel" method="getMemberNickNameCheck">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">model</param>
+    </action>
+
+    <action name="getMemberUserIdCheck" class="com.syaku.modules.member.MemberModel" method="getMemberUserIdCheck">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">model</param>
+    </action>
+
+    <action name="getMemberEmailCheck" class="com.syaku.modules.member.MemberModel" method="getMemberEmailCheck">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">model</param>
+    </action>
+
+    <action name="getMemberUserIdSearch" class="com.syaku.modules.member.MemberModel" method="getMemberUserIdSearch">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">model</param>
+    </action>
+
+    <action name="dispMemberInsert" class="com.syaku.modules.member.MemberView" method="dispMemberInsert">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">view</param>
+      <param name="act_template">member.insert.html</param>
+    </action>
+
+    <action name="dispMemberView" class="com.syaku.modules.member.MemberView" method="dispMemberView">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">member.view.html</param>
+    </action>
+
+    <action name="procMemberInsert" class="com.syaku.modules.member.MemberController" method="procMemberInsert">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="dispMemberUserIdSearch" class="com.syaku.modules.member.MemberView" method="dispMemberUserIdSearch">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">view</param>
+      <param name="act_template">member.userid.search.html</param>
+    </action>
+    <action name="procMemberUserIdSearch" class="com.syaku.modules.member.MemberController" method="procMemberUserIdSearch">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="dispMemberPasswordSearch" class="com.syaku.modules.member.MemberView" method="dispMemberPasswordSearch">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">view</param>
+      <param name="act_template">member.password.search.html</param>
+    </action>
+    <action name="procMemberPasswordSearch" class="com.syaku.modules.member.MemberController" method="procMemberPasswordSearch">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="dispMemberAuthMailSend" class="com.syaku.modules.member.MemberView" method="dispMemberAuthMailSend">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">view</param>
+      <param name="act_template">member.authmail.send.html</param>
+    </action>
+    <action name="procMemberAuthMailSend" class="com.syaku.modules.member.MemberController" method="procMemberAuthMailSend">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">controller</param>
+    </action>
+    <action name="dispMemberAuthView" class="com.syaku.modules.member.MemberView" method="dispMemberAuthView">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">view</param>
+      <param name="act_template">member.auth.view.html</param>
+    </action>
+
+    <action name="procMemberPasswordUpdate" class="com.syaku.modules.member.MemberController" method="procMemberPasswordUpdate">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">controller</param>
+    </action>
+
+  </package>
+
+</struts>

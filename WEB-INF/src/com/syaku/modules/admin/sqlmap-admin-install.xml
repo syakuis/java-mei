@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.admin">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-admin" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_ADMIN (
+      admin_orl BIGINT(11) NOT NULL ,
+      module_orl BIGINT(11) NULL COMMENT '기본 모듈' ,
+      listorder BIGINT(11) NULL COMMENT '역정렬' ,
+      PRIMARY KEY (admin_orl) ,
+      INDEX idx_listorder (listorder ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '관리자' 
+  </insert>
+
+</sqlMap>

@@ -1,0 +1,75 @@
+<script type="text/javascript">//<![CDATA[
+
+function del(note_orl) {
+    jQuery('#form').jaAction({ 
+    formAttr :'action=./procNoteDelete.me&method=post', 
+    param : _mei_gb_params + '&note_orl=' + note_orl,
+    ask : 'del',
+    <#if MID="admin">
+    redirect : "./dispNoteAdminItemList.me?" + _mei_gb_params
+    <#else>
+    redirect : "./dispNoteList.me?" + _mei_gb_params
+    </#if>
+  });
+}
+
+//]]></script>
+
+<div id="sub_column_content">
+
+  <#include "admin.sub.html">
+
+  <form id="form" method="post" >
+
+  <div class="document-write">
+    <table summary="입력" border="1" cellspacing="0" class="table-write">
+    <colgroup>
+    <col width="100"><col>
+    </colgroup>
+    <tbody>
+
+      <tr>
+      <th scope="row">정보</th>
+      <td>
+        <div class="item">
+         rec_member_orl : ${O.objNote.rec_member_orl}
+         rec_user_id : ${O.objNote.rec_user_id}
+         rec_user_name : ${O.objNote.rec_user_name}
+         rec_nickname : ${O.objNote.rec_nickname}
+        </div>
+      </td>
+      </tr>
+
+      <tr>
+      <th scope="row">제목</th>
+      <td>
+        <div class="item">
+        ${O.objNote.title}
+        </div>
+      </td>
+      </tr>
+
+      <tr>
+      <th scope="row">내용</th>
+      <td>
+        <div class="item">
+            ${O.objNote.content}
+         </div>
+      </td>
+      </tr>
+
+    </tbody>
+    </table>
+  </div>
+
+  <div class="document-foot-menu">
+    <span class="button medium icon"><a href="javascript:del('${O.objNote.note_orl}');" title="삭제"><span class="iconset delete"></span>삭제</a></span>
+    <#if  MID="admin" >
+      <span class="button medium icon"><a href="dispNoteAdminItemList.me${param.get('?')?html}"><span class="iconset list"></span>목록</a></span>
+    <#else>
+      <span class="button medium icon"><a href="dispNoteList.me${param.get('?')?html}"><span class="iconset list"></span>목록</a></span>
+    </#if>
+   </div>
+  </form>
+
+</div>

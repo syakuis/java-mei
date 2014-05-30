@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.member">
+  <typeAlias alias="MemberBean" type="com.syaku.modules.member.MemberBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-member" class="MemberBean">
+
+    <result property="member_orl" column="member_orl" nullValue="" />
+    <result property="module_orl" column="module_orl" nullValue="" />
+    <result property="user_id" column="user_id" nullValue="" />
+    <result property="nickname" column="nickname" nullValue="" />
+    <result property="user_name" column="user_name" nullValue="" />
+    <result property="password" column="password" nullValue="" />
+    <result property="temp_password" column="temp_password" nullValue="" />
+    <result property="email" column="email" nullValue="" />
+    <result property="email_id" column="email_id" nullValue="" />
+    <result property="email_host" column="email_host" nullValue="" />
+    <result property="homepage" column="homepage" nullValue="" />
+    <result property="state" column="state" nullValue="" />
+    <result property="is_admin" column="is_admin" nullValue="" />
+    <result property="rdate" column="rdate" nullValue="" />
+    <result property="last_login" column="last_login" nullValue="" />
+    <result property="listorder" column="listorder" nullValue="" />
+
+  </resultMap>
+
+  <select id="select-member-list" parameterClass="hashMap" resultMap="result-member">
+    SELECT * FROM SK_MEMBER
+
+    <dynamic prepend="WHERE">
+    
+      <isNotEmpty prepend="AND" property="module_orl" >
+        module_orl = #module_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="user_id" >
+        user_id = #user_id#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="state" >
+        state = #state#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="nickname" >
+        nickname = #nickname#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="sch_value">
+        <isNotEmpty property="sch_type">
+          $sch_type$ LIKE CONCAT('%', #sch_value#, '%')
+        </isNotEmpty>
+      </isNotEmpty>
+
+    </dynamic>
+
+    ORDER BY listorder
+
+    <isNotEmpty prepend="LIMIT" property="page_start" >
+     $page_start$,$page_row$
+    </isNotEmpty>
+
+  </select>
+
+  <select id="select-member-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(member_orl),0) FROM SK_MEMBER
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="module_orl" >
+        module_orl = #module_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="member_orl" >
+        member_orl = #member_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="not_member_orl" >
+        member_orl &lt;&gt; #not_member_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="user_id" >
+        user_id = #user_id#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="nickname" >
+        nickname = #nickname#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="sch_value">
+        <isNotEmpty property="sch_type">
+          $sch_type$ LIKE CONCAT('%', #sch_value#, '%')
+        </isNotEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="state" >
+        state = #state#
+      </isNotEmpty>
+
+    </dynamic>
+
+  </select>
+
+  <select id="select-member-overlap" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(member_orl),0) FROM SK_MEMBER
+    WHERE
+  <isNotEmpty prepend="AND" property="module_orl" >
+    module_orl = #module_orl#
+  </isNotEmpty>
+  <isEqual property="overlap_type" compareValue="user_id" >
+    user_id = #user_id#
+  </isEqual>
+  <isEqual property="overlap_type" compareValue="email" >
+    email = #email#
+  </isEqual>
+  <isEqual property="overlap_type" compareValue="nickname" >
+    nickname = #nickname#
+  </isEqual>
+  <isNotEmpty prepend="AND" property="member_orl" >
+    member_orl &lt;&gt; #member_orl#
+  </isNotEmpty>
+
+    LIMIT 1
+  </select>
+
+  <select id="select-member-one" parameterClass="hashMap" resultMap="result-member">
+    SELECT * FROM SK_MEMBER
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="module_orl" >
+        module_orl = #module_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="member_orl" >
+        member_orl = #member_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="user_id" >
+        user_id = #user_id#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="user_name" >
+        user_name = #user_name#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="email" >
+        email = #email#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="nickname" >
+        nickname = #nickname#
+      </isNotEmpty>
+
+    </dynamic>
+
+    LIMIT 1
+
+  </select>
+
+  <insert id="insert-member" parameterClass="MemberBean">
+    <selectKey resultClass="String" keyProperty="member_orl">
+      SELECT (IFNULL(MAX(member_orl),0) + 1) AS member_orl FROM SK_MEMBER
+    </selectKey>
+
+    INSERT INTO SK_MEMBER
+    (
+      member_orl,
+      module_orl,
+      user_id,
+      nickname,
+      user_name,
+      password,
+      email,
+      email_id,
+      email_host,
+      homepage,
+      state,
+      is_admin,
+      rdate,
+      last_login,
+      listorder
+
+    ) VALUES (
+
+      #member_orl#,
+      #module_orl#,
+      #user_id#,
+      #nickname#,
+      #user_name#,
+      #password#,
+      #email#,
+      #email_id#,
+      #email_host#,
+      #homepage#,
+      #state#,
+      #is_admin#,
+      #rdate#,
+      #last_login#,
+      #member_orl# * -1
+
+    )
+  </insert>
+
+  <update id="update-member" parameterClass="MemberBean">
+    UPDATE SK_MEMBER SET
+
+    <isNotEmpty property="user_name" >
+    user_name = #user_name#,
+    </isNotEmpty>
+    <isNotEmpty property="nickname" >
+    nickname = #nickname#,
+    </isNotEmpty>
+    <isNotEmpty property="password" >
+    password = #password#,
+    </isNotEmpty>
+    email = #email#,
+    email_id = #email_id#,
+    email_host = #email_host#,
+    <isNotEmpty property="state" >
+    state = #state#,
+    </isNotEmpty>
+    <isNotEmpty property="is_admin" >
+    is_admin = #is_admin#,
+    </isNotEmpty>
+    homepage = #homepage#
+
+    WHERE member_orl = #member_orl#
+  </update>
+
+  <update id="update-member-dynamic" parameterClass="hashMap">
+    UPDATE SK_MEMBER SET
+    <iterate property="member" conjunction=",">
+    $member[].name$ = #member[].value#
+    </iterate>
+    WHERE member_orl = #member_orl#
+  </update>
+
+
+  <update id="update-member-moduleorl" parameterClass="hashMap">
+    UPDATE SK_MEMBER SET
+    module_orl = #module_orl#
+    WHERE member_orl = #member_orl#
+  </update>
+
+  <update id="update-member-password" parameterClass="hashMap">
+    UPDATE SK_MEMBER SET
+    password = #password#
+    WHERE member_orl = #member_orl#
+  </update>
+
+  <update id="update-member-state" parameterClass="hashMap">
+    UPDATE SK_MEMBER SET
+
+    state = #state#
+
+    WHERE member_orl = #member_orl#
+  </update>
+
+  <update id="update-member-last_login" parameterClass="hashMap">
+    UPDATE SK_MEMBER SET
+
+    last_login = #last_login#
+
+    WHERE user_id = #user_id#
+  </update>
+
+  <update id="update-member-temppassword" parameterClass="hashMap">
+    UPDATE SK_MEMBER SET
+    temp_password = #temp_password#
+    WHERE member_orl = #member_orl#
+  </update>
+
+  <update id="update-member-temppassword-reset" parameterClass="hashMap">
+    UPDATE SK_MEMBER SET
+    password = #password#,
+    temp_password = null
+    WHERE member_orl = #member_orl#
+  </update>
+
+  
+
+  <delete id="delete-member" parameterClass="hashMap">
+    DELETE FROM SK_MEMBER WHERE member_orl = #member_orl#
+  </delete>
+
+</sqlMap>

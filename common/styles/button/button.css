@@ -1,0 +1,54 @@
+@charset "utf-8";
+
+.button { font-family:Tahoma,Geneva,sans-serif; font-size:12px;}
+
+.button,
+.button *{display:inline-block;overflow:visible;position:relative;margin:0;padding:0;border:0;background:url(./images/btn_pack.gif) no-repeat;color:#333;text-decoration:none !important;vertical-align:top;white-space:nowrap}
+.button { margin-right:4px }
+.button *{left:4px;cursor:pointer;_cursor:hand}
+.button *:hover, .button *:active, .button *:focus{color:#690}
+
+.button.strong *{font-weight:bold !important}
+
+.button.black,
+.button.black *{border:0;background:url(./images/buttonBlack.gif) no-repeat;color:#fff;}
+.button.black *:hover, .button.black *:active, .button.black *:focus{color:#000}
+
+.button.blue,
+.button.blue *{border:0;background:url(./images/buttonBlue.gif) no-repeat;color:#fff;}
+.button.blue *:hover, .button.blue *:active, .button.blue *:focus{color:#000}
+
+.button.green,
+.button.green *{border:0;background:url(./images/buttonGreen.gif) no-repeat;color:#fff;}
+.button.green *:hover, .button.green *:active, .button.green *:focus{color:#000}
+
+.button.red,
+.button.red *{border:0;background:url(./images/buttonRed.gif) no-repeat;color:#fff;}
+.button.red *:hover, .button.red *:active, .button.red *:focus{color:#000}
+
+.button.white,
+.button.white *{border:0;background:url(./images/buttonWhite.gif) no-repeat;color:#000;}
+.button.white *:hover, .button.white *:active, .button.white *:focus{color:#000}
+
+.button.yellow,
+.button.yellow *{border:0;background:url(./images/buttonYellow.gif) no-repeat;color:#000;}
+.button.yellow *:hover, .button.yellow *:active, .button.yellow *:focus{color:#000}
+
+.button.bongan,
+.button.bongan *{border:0;background:url(./images/buttonBongan.gif) no-repeat;color:#000;}
+.button.bongan *:hover, .button.yellow *:active, .button.yellow *:focus{color:#000}
+
+.button.medium, .button.medium *{height:24px;line-height:22px}
+.button.large, .button.large *{height:30px;line-height:27px}
+.button.xlarge, .button.xlarge *{height:36px;line-height:34px}
+.button.small, .button.small *{height:19px;line-height:}
+
+.button.medium{background-position:left 0}
+.button.large{background-position:left -30px}
+.button.xlarge{background-position:left -65px}
+.button.small{background-position:left -106px}
+
+.button.medium *{padding:0 10px 2px 6px;background-position:right top;font-size:12px}
+.button.large *{padding:0 10px 2px 6px;background-position:right -30px;font-size:16px}
+.button.xlarge *{padding:0 10px 2px 6px;background-position:right -65px;font-size:20px}
+.button.small *{padding:0 6px 0 2px;background-position:right -106px;font-size:12px}

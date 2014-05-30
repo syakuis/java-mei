@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.admin">
+  <typeAlias alias="AdminBean" type="com.syaku.modules.admin.AdminBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-admin" class="AdminBean">
+  <result property="admin_orl" column="admin_orl" nullValue="" />
+  <result property="module_orl" column="module_orl" nullValue="" />
+  </resultMap>
+
+  <select id="select-admin-list" parameterClass="hashMap" resultMap="result-admin">
+    SELECT
+      admin_orl,
+      module_orl,
+      listorder
+    FROM SK_ADMIN
+
+    ORDER BY listorder
+
+    <isNotEmpty prepend="LIMIT" property="page_start" >
+     $page_start$,$page_row$
+    </isNotEmpty>
+
+  </select>
+
+  <select id="select-admin-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(admin_orl),0) FROM SK_ADMIN
+  </select>
+
+  <select id="select-admin-one" parameterClass="hashMap" resultMap="result-admin">
+    SELECT
+      admin_orl,
+      module_orl,
+      listorder
+    FROM SK_ADMIN
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="admin_orl" >
+        admin_orl = #admin_orl#
+      </isNotEmpty>
+    </dynamic>
+
+    LIMIT 1
+
+  </select>
+
+  <insert id="insert-admin" parameterClass="AdminBean">
+    <selectKey resultClass="String" keyProperty="admin_orl">
+      SELECT (IFNULL(MAX(admin_orl),0) + 1) AS admin_orl FROM SK_ADMIN
+    </selectKey>
+
+    INSERT INTO SK_ADMIN
+    (
+
+      admin_orl,
+      module_orl,
+      listorder
+
+    ) VALUES (
+
+      #admin_orl#,
+      #module_orl#,
+      #admin_orl# * -1
+
+    )
+  </insert>
+
+  <update id="update-admin" parameterClass="AdminBean">
+    UPDATE SK_ADMIN SET
+
+    module_orl = #module_orl#
+
+    WHERE admin_orl = #admin_orl#
+  </update>
+
+  <delete id="delete-admin" parameterClass="hashMap">
+    DELETE FROM SK_ADMIN WHERE admin_orl = #admin_orl#
+  </delete>
+
+</sqlMap>

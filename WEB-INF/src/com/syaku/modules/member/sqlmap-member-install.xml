@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.member">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-member" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_MEMBER (
+      member_orl BIGINT(11) NOT NULL COMMENT '회원 ORL' ,
+      module_orl BIGINT(11) NULL COMMENT '모듈 ORL' ,
+      user_id VARCHAR(100) NOT NULL COMMENT '아이디' ,
+      nickname VARCHAR(100) NOT NULL COMMENT '닉네임' ,
+      user_name VARCHAR(100) NOT NULL COMMENT '이름' ,
+      password VARCHAR(200) NOT NULL COMMENT '비밀번호' ,
+      temp_password VARCHAR(200) NULL DEFAULT NULL COMMENT '임시암호' ,
+      email VARCHAR(250) NOT NULL COMMENT '메일주소' ,
+      email_id VARCHAR(100) NOT NULL COMMENT '메이아이디' ,
+      email_host VARCHAR(250) NOT NULL COMMENT '메일호스트' ,
+      homepage VARCHAR(250) NULL ,
+      state TINYINT(1) NULL DEFAULT 0 COMMENT '상태\n0 : 일반\n-1 : 탈퇴신청\n-2 : 탈퇴승인\n-3 : 인증되지 않음' ,
+      is_admin TINYINT(1) NULL DEFAULT 0 COMMENT '최고관리자' ,
+      rdate CHAR(14) NULL DEFAULT NULL COMMENT '가입일' ,
+      last_login CHAR(14) NULL DEFAULT NULL COMMENT '마지막 접속일' ,
+      listorder BIGINT(11) NOT NULL DEFAULT 0 COMMENT '역정렬' ,
+      PRIMARY KEY (member_orl) ,
+      INDEX idx_rdate (rdate DESC) ,
+      UNIQUE INDEX unq_nickname (nickname ASC) ,
+      UNIQUE INDEX unq_user_id (user_id ASC) ,
+      INDEX idx_listorder (listorder ASC) ,
+      INDEX idx_last_login (last_login ASC) ,
+      INDEX idx_state (state ASC) ,
+      INDEX idx_module_orl (module_orl ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '회원관리' 
+  </insert>
+  
+  <insert id="create-member-auth" parameterClass="hashMap">
+     CREATE  TABLE IF NOT EXISTS SK_MEMBER_AUTH (
+      member_orl BIGINT(11) NOT NULL COMMENT '회원 ORL' ,
+      auth_key TEXT NOT NULL COMMENT '인증키' ,
+      success_date VARCHAR(14) NULL DEFAULT NULL COMMENT '승인일' ,
+      regdate VARCHAR(14) NULL COMMENT '신청일' ,
+      PRIMARY KEY (member_orl) ,
+      INDEX idx_success_date (success_date ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '회원인증' 
+  </insert>
+
+  <insert id="create-group" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_GROUP (
+      group_orl BIGINT(11) NOT NULL COMMENT '그룹 ORL' ,
+      title VARCHAR(80) NOT NULL COMMENT '그룹명' ,
+      regdate VARCHAR(14) NULL DEFAULT NULL COMMENT '등록일' ,
+      is_default CHAR(1) NULL DEFAULT 'N' COMMENT '기본그룹여부' ,
+      is_admin CHAR(1) NULL DEFAULT 'N' COMMENT '관리자그룹여부' ,
+      description TEXT NULL DEFAULT NULL COMMENT '설명' ,
+      PRIMARY KEY (group_orl) ,
+      UNIQUE INDEX unique_title (title ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '그룹' 
+  </insert>
+
+  <insert id="create-group-member" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_GROUP_MEMBER (
+      group_orl BIGINT(11) NOT NULL COMMENT '그룹 ORL' ,
+      member_orl BIGINT(11) NOT NULL COMMENT '회원 ORL' ,
+      regdate VARCHAR(14) NULL DEFAULT NULL COMMENT '등록일' ,
+      INDEX idx_group_member (group_orl ASC, member_orl ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '그룹 회원' 
+  </insert>
+
+</sqlMap>

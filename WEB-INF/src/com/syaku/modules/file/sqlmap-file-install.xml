@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.file">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-file" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_FILE (
+      file_orl BIGINT(11) NOT NULL COMMENT '파일 ORL' ,
+      target_orl BIGINT(11) NOT NULL DEFAULT 0 COMMENT '파일과 연결되는 자료' ,
+      sid VARCHAR(100) NULL COMMENT '세션ID' ,
+      seq INT(11) NOT NULL DEFAULT 1 COMMENT '파일그룹' ,
+      module_orl BIGINT(11) NOT NULL DEFAULT 0 COMMENT '모듈 ORL' ,
+      member_orl BIGINT(11) NOT NULL COMMENT '회원 ORL' ,
+      filename VARCHAR(250) NOT NULL COMMENT '실제 파일명 (업로드 파일명)' ,
+      re_filename VARCHAR(250) NOT NULL COMMENT '변경된 파일명 (실제 저장되는 파일명)' ,
+      folder VARCHAR(250) NOT NULL COMMENT '상위 파일경로 제외' ,
+      folder_date CHAR(8) NOT NULL COMMENT '경로로 만들어지는 등록일' ,
+      size BIGINT(11) NOT NULL DEFAULT 0 COMMENT '파일 용량' ,
+      checksum BIGINT(11) NULL ,
+      extension VARCHAR(10) NULL DEFAULT NULL COMMENT '파일 확장자명 (소문자)' ,
+      type VARCHAR(10) NULL DEFAULT NULL COMMENT '파일형식' ,
+      rdate CHAR(14) NULL DEFAULT NULL COMMENT '등록일' ,
+      ip VARCHAR(128) NOT NULL ,
+      num INT(11) NOT NULL DEFAULT 0 COMMENT '노출번호' ,
+      listorder BIGINT(11) NULL COMMENT '역정렬' ,
+      PRIMARY KEY (file_orl) ,
+      INDEX idx_target_orl (target_orl ASC) ,
+      INDEX idx_module_orl (module_orl ASC) ,
+      INDEX idx_sid (sid ASC) ,
+      INDEX idx_seq (seq ASC) ,
+      INDEX idx_num (num ASC) ,
+      INDEX idx_listorder (listorder ASC) )
+    ENGINE = InnoDB
+    COMMENT = '파일'
+  </insert>
+
+  <insert id="create-file-counter" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_FILE_COUNTER (
+      module_orl BIGINT(11) NOT NULL COMMENT '모듈 ORL' ,
+      target_orl BIGINT(11) NOT NULL COMMENT '대상 ORL' ,
+      seq INT(11) NULL ,
+      count BIGINT(11) NOT NULL DEFAULT 0 COMMENT '수' ,
+      reg_date CHAR(14) NULL COMMENT '등록일' ,
+      last_update CHAR(14) NULL COMMENT '수정일' ,
+      UNIQUE INDEX unique_module_target (module_orl ASC, target_orl ASC, seq ASC) ,
+      INDEX idx_count (count ASC) )
+    ENGINE = InnoDB
+    COMMENT = '파일 카운터'
+  </insert>
+
+</sqlMap>

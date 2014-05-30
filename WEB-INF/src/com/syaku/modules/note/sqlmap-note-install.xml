@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.note">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-note" parameterClass="hashMap">
+
+  CREATE  TABLE IF NOT EXISTS sk_note (
+    note_orl BIGINT(11) NOT NULL COMMENT '쪽지 ORL' ,
+    member_orl BIGINT(11) NOT NULL COMMENT '회원 ORL' ,
+    user_id VARCHAR(100) NOT NULL COMMENT '회원 아이디' ,
+    user_name VARCHAR(100) NOT NULL COMMENT '회원 이름' ,
+    nickname VARCHAR(100) NOT NULL COMMENT '회원 별명' ,
+    rec_member_orl BIGINT(11) NOT NULL COMMENT '받는 사람 ORL' ,
+    rec_user_id VARCHAR(100) NOT NULL COMMENT '받는 사람 아이디' ,
+    rec_user_name VARCHAR(100) NOT NULL COMMENT '받는 사람 이름' ,
+    rec_nickname VARCHAR(100) NOT NULL COMMENT '받는 사람 별명' ,
+    title VARCHAR(250) NOT NULL COMMENT '제목' ,
+    content TEXT NOT NULL COMMENT '내용' ,
+    send_date CHAR(14) NULL COMMENT '보내는 날짜' ,
+    readed_date CHAR(14) NULL COMMENT '읽은 날짜' ,
+    ipaddress VARCHAR(128) NULL COMMENT '보낸 사람 아이피' ,
+    listorder BIGINT(11) NULL COMMENT '역정렬' ,
+    PRIMARY KEY (note_orl) ,
+    INDEX idx_member_orl (member_orl ASC) ,
+    INDEX idx_rec_member_orl (rec_member_orl ASC) ,
+    INDEX idx_readed_date (readed_date ASC) ,
+    INDEX idx_send_date (send_date ASC) )
+  ENGINE = InnoDB
+  COMMENT = '쪽지'
+
+  </insert>
+
+</sqlMap>

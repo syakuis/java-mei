@@ -1,0 +1,65 @@
+<#assign module_orl = param.value('module_orl')>
+<#assign category_orl = param.value('category_orl')>
+<#assign parent_orl = param.value('parent_orl')>
+<#assign category_seq = param.value('category_seq')>
+
+<script type="text/javascript">
+
+<#if category_orl == "">
+  var mod = "insert";
+<#else>
+  var mod = "update";
+</#if>
+
+function save_category() {
+
+  jQuery('#form_category').jaAction({ 
+    filter : [
+      { target : "#title", params : "&filter=notnull&title=분류명" }
+    ],
+    param : _mei_gb_params,
+    ask : mod,
+    setAjax : {
+      success : function(xml) {
+        reload(xml);
+      }
+    }
+  });
+
+}
+
+</script>
+
+<form id="form_category" method="post" action="./procIssueCategoryAdminInsert.me">
+<input type="hidden" id="module_orl" name="module_orl" value="${module_orl}" />
+<input type="hidden" id="category_orl" name="category_orl" value="${category_orl}" />
+<input type="hidden" id="parent_orl" name="parent_orl" value="${parent_orl}" />
+<input type="hidden" id="category_seq" name="category_seq" value="${category_seq}" />
+
+
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+
+    <tr>
+    <th scope="row">분류명</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w95p" id="title" name="title" value="${O.objCategory.title?if_exists?html}" />
+      </div>
+    </td>
+    </tr>
+
+  </tbody>
+  </table>
+  </div>
+
+  <div class="document-foot-menu tr">
+    <span class="button medium icon"><button type="button" onclick="save_category();"><span class="iconset accept"></span>저장</button></span>
+  </div>
+</form>
+
+</div>

@@ -1,0 +1,311 @@
+<#assign target_orl = param.value('target_orl')?if_exists>
+
+<link rel="stylesheet" type="text/css" href="${MOD_FTL_MODULE_SKIN}/css/comment.sns.css" />
+<script type="text/javascript">
+
+function go_login() {
+
+  if (confirm("로그인 화면으로 이동하시겠습니까?")) {
+    jQuery.member.login();
+  }
+
+}
+
+jQuery(function() {
+
+  jQuery("span .comment_disp_event").click(function () {
+    var target = jQuery(this).parent();
+    if (target.hasClass('disp_on') == false) {
+      target.addClass("disp_on");
+    }
+
+    var parent = target.parent();
+    jQuery('span',parent).each(function() {
+      var t = jQuery(this);
+      if (t.hasClass('disp_on') == false) {
+        t.toggle();
+      } else {
+        t.removeClass("disp_on");
+      }
+
+    });
+
+    target = jQuery('a',target);
+    target.toggle();
+
+  });
+
+  <#if !MEI_GRANT_LOGIN>
+  jQuery('#comment textarea').click(function() {
+    go_login();
+  });
+  </#if>
+
+  jQuery(".btn_comment_add").mousedown(function() {
+    jQuery(this).attr("src","${MOD_FTL_MODULE_SKIN}/images/btn_registry_down.gif");
+  }).mouseup(function() { jQuery(this).attr("src","${MOD_FTL_MODULE_SKIN}/images/btn_registry.gif"); });
+
+  jQuery.snsauth.initialize({
+    sns_main : '${O.sns_main_name?if_exists}',
+    yozm_uid : '${O.yozm.uid?if_exists}',
+    yozm_nickname : '${O.yozm.nickname?if_exists}',
+    yozm_photo : '${O.yozm.profile_cover?if_exists}',
+    yozm_send : '${O.yozm.post_send?if_exists}',
+
+    twitter_uid : '${O.twitter.uid?if_exists}',
+    twitter_nickname : '${O.twitter.nickname?if_exists}',
+    twitter_photo : '${O.twitter.profile_cover?if_exists}',
+    twitter_send : '${O.twitter.post_send?if_exists}',
+
+    me2day_uid : '${O.me2day.uid?if_exists}',
+    me2day_nickname : '${O.me2day.nickname?if_exists}',
+    me2day_photo : '${O.me2day.profile_cover?if_exists}',
+    me2day_send : '${O.me2day.post_send?if_exists}',
+
+    facebook_uid : '${O.facebook.uid?if_exists}',
+    facebook_nickname : '${O.facebook.nickname?if_exists}',
+    facebook_photo : '${O.facebook.profile_cover?if_exists}',
+    facebook_send : '${O.facebook.post_send?if_exists}'
+  });
+
+  jQuery.comment.text_count('#form_comment #content','#form_comment #string_count');
+
+});
+
+</script>
+
+<div id="sns_menu_list" style="position: absolute;z-index:2;display:none;">
+  <div><img src="${MOD_FTL_MODULE_SKIN}/images/sns-bar1.png"/></div>
+  <div><img src="${MOD_FTL_MODULE_SKIN}/images/sns-main.png" id="sns_btn_main" style="cursor:pointer;" /></div>
+  <div><img src="${MOD_FTL_MODULE_SKIN}/images/sns-send.png" id="sns_btn_send" style="cursor:pointer;" /></div>
+  <div><img src="${MOD_FTL_MODULE_SKIN}/images/sns-not-send.png" id="sns_btn_not_send" style="cursor:pointer;" /></div>
+  <div><img src="${MOD_FTL_MODULE_SKIN}/images/sns-close.png" id="sns_btn_close" style="cursor:pointer;" /></div>
+  <div><img src="${MOD_FTL_MODULE_SKIN}/images/sns-bar3.png" /></div>
+</div>
+
+<div id="comment">
+
+<div class="cb_module cb_fluid">
+  <h5 class="cb_h_type cb_h_type2">댓글 <span>(<strong>${O.listComment?size?string(",###")}</strong>)</span></h5>
+
+  <form id="form_comment_delete" method="post" action="procCommentDelete.me">
+  </form>
+
+  <div class="cb_lstcomment">
+    <ul>
+
+    <#list O.listComment as objComment>
+
+    <#if objComment.sns_photo?exists>
+    <#assign cb_thumb = 'cb_thumb_on'>
+    <#else>
+    <#assign cb_thumb = 'cb_thumb_off'>
+    </#if>
+
+    <#if objComment.reply_depth?number != 0>
+    <#assign padding_left = 'padding-left:30px'>
+    <#assign html_left = 'left:30px;'>
+    <#else>
+    <#assign padding_left = 'padding-left:0px;'>
+    <#assign html_left = 'left:0px;'>
+    </#if>
+    <li class="${cb_thumb}" id="comment_${objComment.comment_orl}" style="${padding_left}">
+    <#if objComment.reply_depth?number != 0>
+    <span class="cb_bu_subnode">ㄴ</span>
+    </#if>
+
+    <#if objComment.sns_photo?exists><div class="cb_thumb" style="${html_left}"><a href="${objComment.sns_url?if_exists}" target="_blank"><img class="cb_usr_thumb" src="${objComment.sns_photo}" width="40" height="40" /></a><span class="cb_tmp_border"></span></div></#if>
+
+      <div class="cb_comment_area">
+        <div class="cb_info_area">
+          <div class="cb_section">
+            <span class="cb_nick_name"><#if objComment.sns_name?exists><img src="${MOD_FTL_MODULE_SKIN}/images/${objComment.sns_name}.png" />&nbsp;</#if>${objComment.nickname}</span>
+            <span class="cb_usr_id"><#if objComment.user_id?exists>(${objComment.user_id})</#if></span>
+            <span class="cb_date"><#if objComment.rdate?exists>${objComment.rdate?date("yyyyMMddHHmmss")?string("yyyy-MM-dd HH:mm")}</#if></span>
+          </div>
+          <div class="cb_section2">
+            <#if objComment.is_del == 'N'>
+            <span class="cb_nobar"><#if MEI_GRANT_LOGIN><a class="comment_disp_event" href="javascript:jQuery.comment.reply('${objComment.comment_orl}','${objComment.reply_group}','${objComment.reply_depth}','${objComment.reply_seq}');">답글</a><#else><a href="javascript:go_login();">답글</a></#if>
+            <a class="comment_disp_event" href="javascript:jQuery.comment.reply_close('${objComment.comment_orl}');" style="color:#ff0000;display:none;">답글취소</a>
+            </span>
+            </#if>
+            <#if objComment.is_mine && objComment.is_del == 'N'>
+            <!--
+            <span class="cb_nobar"><a class="comment_disp_event" href="javascript:jQuery.comment.update('${objComment.comment_orl}');">수정</a>
+            <a class="comment_disp_event" href="javascript:jQuery.comment.update_close('${objComment.comment_orl}');" style="color:#ff0000;display:none;">수정취소</a></span>-->
+            <span class="cb_nobar"><a href="javascript:jQuery.comment.del('${objComment.comment_orl}');" style="color:#ff0000;">삭제</a></span>
+            </#if>
+          </div>
+        </div>
+        <div class="cb_dsc_comment">
+          <p class="cb_dsc" id="c_content_${objComment.comment_orl}">${objComment.content?replace('\n','<br />')}</p>
+        </div>
+        <!-- 숨김처리
+        <div class="cb_info_area2">
+          <a href="#">3개</a>의 답글이 있습니다.
+        </div>
+        //숨김처리 -->
+      </div>
+    </li>
+    </#list>
+
+    </ul>
+  </div>
+
+  <div style="padding-top:15px;"></div>
+
+  <!-- 입력 폼 -->
+  <div class="cb_wrt cb_wrt_default">
+    <div class="cb_wrt_box">
+      <div class="cb_wrt_box2">
+      <form id="form_comment" method="post" action="procCommentInsert.me">
+      <input type="hidden" name="target_orl" id="target_orl" value="${target_orl}"/>
+      <input type="hidden" name="parent_orl" id="parent_orl" value="0"/>
+      <input type="hidden" name="reply_group" id="reply_group" value="0"/>
+      <input type="hidden" name="reply_depth" id="reply_depth" value="0"/>
+      <input type="hidden" name="reply_seq" id="reply_seq" value="0"/>
+      <fieldset>
+      <legend>등록 폼</legend>
+        <div class="cb_usr_area">
+          <div class="cb_txt_area">
+            <table cellspacing="0" border="1" class="cb_section">
+            <caption>덧글 입력박스</caption>
+            <col><col width="90">
+            <thead>
+            <tr>
+            <th colspan="2" scope="col">유동형 덧글모듈</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            
+            <td>
+              <div class="cb_sns_message">
+                <div style="float:left;"><img src="${MOD_FTL_MODULE_SKIN}/images/btn_facebook_conn_off.png" id="sns_btn_facebook" title="페이스북" style="cursor:pointer;" /></div>
+                <div style="float:left;padding-left:5px;"><img src="${MOD_FTL_MODULE_SKIN}/images/btn_twitter_conn_off.png" id="sns_btn_twitter" title="트위터" style="cursor:pointer;" /></div>
+                <div style="float:left;padding-left:5px;"><img src="${MOD_FTL_MODULE_SKIN}/images/btn_me2day_conn_off.png" id="sns_btn_me2day" title="네이버 미투데이" style="cursor:pointer;" /></div>
+                <div style="float:left;padding-left:5px;"><img src="${MOD_FTL_MODULE_SKIN}/images/btn_yozm_conn_off.png" id="sns_btn_yozm" title="다음 요즘" style="cursor:pointer;" /></div>
+                <div style="float:left;padding-left:5px;padding-top:5px;"><input type="checkbox" id="sns_not_send" name="sns_not_send" value="Y"/> <label for="sns_not_send"><span class="tooltip">모든 SNS 전송안함<span class="classic">체크하면 연결된 모든 소셜네트워크에 글이 일시적으로 전송되지 않습니다. 글 전송차단을 유지하려면 각 소셜네트워크에서 전송안함으로 설정하시면 됩니다.</span></span></label></div>
+                <div class="clear"></div>
+              </div>
+            </td>
+            <td>
+              <div id="string_count" class="cb_string_count">0</div>
+            </td>
+            </tr>
+            <tr>
+            <td>
+              <div class="cb_photo"><div><img src="${MOD_FTL_MODULE_SKIN}/images/no_imgs.gif" id="sns_me_photo" width="50" height="50" /><br><p id="sns_me_name"><p></div></div>
+              <div class="cb_message">
+              <textarea name="content" id="content"><#if !MEI_GRANT_LOGIN>로그인 하셔야 댓글을 작성할 수 있습니다.</#if></textarea>
+              </div>
+            </td>
+            <td class="cb_btn_area" style="vertical-align:top;"><a href="javascript:<#if MEI_GRANT_LOGIN>jQuery.comment.save('#form_comment');<#else>go_login();</#if>"><img src="${MOD_FTL_MODULE_SKIN}/images/btn_registry.gif" class="btn_comment_add"/></a></td>
+            </tr>
+            </tbody>
+            </table>
+
+          </div>
+        </div>
+      </fieldset>
+      </form>
+      </div>
+    </div>
+  </div>
+  <!-- 입력 폼 -->
+
+</div>
+
+  <!-- 수정 폼 -->
+  <div class="cb_wrt cb_wrt_default" id="comment_update" style="display:none;">
+    <div class="cb_wrt_box">
+      <div class="cb_wrt_box2">
+      <form>
+      <input type="hidden" name="comment_orl" id="comment_orl" />
+      <fieldset>
+      <legend>댓글 등록 폼</legend>
+        <div class="cb_usr_area">
+          <div class="cb_txt_area">
+            <table cellspacing="0" border="1" class="cb_section">
+            <caption>덧글 입력박스</caption>
+            <col><col width="90">
+            <thead>
+            <tr>
+            <th colspan="2" scope="col">유동형 덧글모듈</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>
+              <textarea cols="80" rows="20" name="content" id="content"></textarea>
+            </td>
+            <td class="cb_btn_area">
+              <img src="${MOD_FTL_MODULE_SKIN}/images/btn_registry.gif" id="update_btn" class="btn_comment_add" />
+            </td>
+            </tr>
+            </tbody>
+            </table>
+
+          </div>
+        </div>
+      </fieldset>
+      </form>
+      </div>
+    </div>
+  </div>
+  <!-- 수정 폼 -->
+
+<!-- 댓글 입력 폼 -->
+<ul id="comment_reply" style="display:none;">
+<li class="cb_thumb_off" style="padding-bottom:10px;">
+<span class="cb_bu_subnode">ㄴ</span>
+
+<div class="cb_wrt cb_wrt_default">
+  <div class="cb_wrt_box">
+    <div class="cb_wrt_box2">
+
+    <form>
+    <input type="hidden" name="target_orl" id="target_orl" value="${target_orl}"/>
+    <input type="hidden" name="parent_orl" id="parent_orl" value="0"/>
+    <input type="hidden" name="reply_group" id="reply_group" value="0"/>
+    <input type="hidden" name="reply_depth" id="reply_depth" value="0"/>
+    <input type="hidden" name="reply_seq" id="reply_seq" value="0"/>
+
+    <fieldset>
+    <legend>댓글 등록 폼</legend>
+      <div class="cb_usr_area">
+        <div class="cb_txt_area">
+
+          <table cellspacing="0" border="1" class="cb_section">
+          <caption>덧글 입력박스</caption>
+          <col><col width="90">
+          <thead>
+          <tr>
+          <th colspan="2" scope="col">유동형 덧글모듈</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+          <td>
+            <textarea maxlength="130" cols="80" rows="20" name="content" id="content" <#if !MEI_GRANT_LOGIN>onclick="go_login();"</#if>><#if !MEI_GRANT_LOGIN>로그인 하셔야 댓글을 작성할 수 있습니다.</#if></textarea>
+          </td>
+          <td class="cb_btn_area">
+            <img src="${MOD_FTL_MODULE_SKIN}/images/btn_registry.gif" id="reply_btn" class="btn_comment_add" />
+          </td>
+          </tr>
+          </tbody>
+          </table>
+
+        </div>
+      </div>
+    </fieldset>
+    </form>
+    </div>
+  </div>
+</div>
+
+</li>
+</ul>
+<!-- 댓글 입력 폼 -->
+
+</div>

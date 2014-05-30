@@ -1,0 +1,127 @@
+
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  jQuery.ja.setValue("#form #layout_orl","${O.objModule.layout_orl?if_exists}");
+  jQuery.ja.setValue("#form #skin","${O.objModule.skin?if_exists}");
+
+});
+
+function save() {
+
+  jQuery('#form').jaAction({
+    filter : [
+      { target : "#module_id", params : "&filter=notnull&title=모듈명" } , 
+      { target : "#browser_title", params : "&filter=notnull&title=브라우저 제목" }
+     ],
+    param : _mei_gb_params, 
+    ask : 'save',
+    afterSend : function() { location.reload(); }
+  });
+
+}
+
+//]]></script>
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+<form id="form" method="post" action="dispNoteAdminItemList.me">
+  <input type="hidden" id="module_orl" name="module_orl" value="${O.objModule.module_orl?html}" />
+  <input type="hidden" id="module_id" name="module_id" value="${O.objModule.mid?html}" />
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 모듈</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+    <tr>
+    <th scope="row">모듈명</th>
+    <td>
+      <div class="item">${O.objModule.mid?html}</div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">브라우저 제목</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w250" id="browser_title" name="browser_title" value="${O.objModule.browser_title?html}" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">레이아웃</th>
+    <td>
+      <div class="item">
+        <select name="layout_orl" id="layout_orl">
+          <option value="0">선택</option>
+          <#list O.listLayout as objLayout>
+          <option value="${objLayout.layout_orl?if_exists?html}">${objLayout.title}</option>
+          </#list>
+        </select>
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">스킨</th>
+    <td>
+      <div class="item">
+        <select name="skin" id="skin">
+          <option value="" selected="selected">선택</option>
+          <#list O.listSkins as objSkins>
+          <option value="${objSkins?if_exists?html}">${objSkins}</option>
+          </#list>
+        </select>
+        <p>선택하지 않으면 기본 스킨으로 적용됩니다.</p>
+      </div>
+    </td>
+    </tr>
+  </tbody>
+  </table>
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 출력</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+
+    <tr>
+    <th scope="row">목록수</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w50" id="options_list_count" name="options_list_count" value="${O.objModule.options_list_count?if_exists?html}" />
+        <p>한 페이지에 표시될 글 수를 지정하실 수 있습니다. (기본 20개)</p>
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">페이지수</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w50" id="options_page_count" name="options_page_count" value="${O.objModule.options_page_count?if_exists?html}" />
+        <p>목록 하단, 페이지를 이동하는 링크 수를 지정하실 수 있습니다. (기본 10개)</p>
+      </div>
+    </td>
+    </tr>
+    
+    </tbody>
+    </table>
+  </div>
+
+  </div>
+
+  <div class="document-foot-menu">
+    <span class="button medium icon"><button type="button" onclick="save();"><span class="iconset accept"></span>저장</button></span>
+  </div>
+
+</form>
+</div>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * @xml 
+ * @brief 
+ *
+ * registered date 20110222
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.counter">
+  <typeAlias alias="CounterBean" type="com.syaku.modules.counter.CounterBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <!--@brief  -->
+  <resultMap id="result-counter" class="CounterBean">
+    <result property="ip" column="ip" nullValue="" />
+    <result property="rdate" column="rdate" nullValue="" />
+    <result property="user_agent" column="user_agent" nullValue="" />
+  </resultMap>
+
+  <select id="select-counter-list" parameterClass="hashMap" resultMap="result-counter">
+    SELECT
+      ip,
+      rdate,
+      user_agent
+    FROM SK_COUNTER
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="rdate" >
+        SUBSTRING(rdate,1,8) = #rdate#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="sdate" >
+        SUBSTRING(rdate,1,8) &lt;= #edate# AND SUBSTRING(rdate,1,8) &gt;= #sdate#
+      </isNotEmpty>
+
+    </dynamic>
+
+    <isNotEmpty property="listorder" >
+    ORDER BY $listorder$
+    </isNotEmpty>
+
+    <isNotEmpty prepend="LIMIT" property="page_start" >
+     $page_start$,$page_row$
+    </isNotEmpty>
+
+  </select>
+
+  <select id="select-counter-count" parameterClass="hashMap" resultClass="long">
+    SELECT COUNT(ip) FROM SK_COUNTER
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="rdate" >
+        SUBSTRING(rdate,1,8) = #rdate#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="sdate" >
+        SUBSTRING(rdate,1,8) &lt;= #edate# AND SUBSTRING(rdate,1,8) &gt;= #sdate#
+      </isNotEmpty>
+
+    </dynamic>
+  </select>
+
+  <select id="select-counter-stats-day" parameterClass="hashMap" resultClass="hashMap">
+    SELECT 
+    COUNT(rdate) as count,
+    SUBSTR(rdate,1,8) as reg_date 
+    FROM SK_COUNTER
+    
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="sdate" >
+        SUBSTRING(rdate,1,8) &lt;= #edate# AND SUBSTRING(rdate,1,8) &gt;= #sdate#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_agent_array" prepend="AND">
+      <iterate property="user_agent_array" conjunction="AND">
+        user_agent NOT LIKE '%$user_agent_array[]$%'
+      </iterate>
+      </isNotEmpty>
+
+      <isNotEmpty property="ip_array" prepend="AND">
+      <iterate prepend="ip NOT IN " property="ip_array" open="(" close=")" conjunction=",">
+        #ip_array[]#
+      </iterate>
+      </isNotEmpty>
+
+    </dynamic>
+
+    GROUP BY reg_date;
+  </select>
+
+  <insert id="insert-counter" parameterClass="CounterBean">
+    INSERT INTO SK_COUNTER
+    (
+      ip,
+      rdate,
+      user_agent
+    ) VALUES (
+    #ip#,
+    #rdate#,
+    #user_agent#
+    )
+  </insert>
+
+</sqlMap>

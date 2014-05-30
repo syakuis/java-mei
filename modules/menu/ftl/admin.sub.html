@@ -1,0 +1,29 @@
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  // Tab on class
+  targetOnClass('#admin-menu-tab li','on','single', { target : [
+    { search : ['dispMenuAdminList'] , def : true },
+    { search : ['dispMenuAdminInsert'] , def : false },
+    { search : ['dispMenuItemAdminView'] , def : false },
+    { search : ['dispMenuItemAdminList'] , def : false }
+  ]} );
+
+});
+
+//]]></script>
+
+<div class="document-title">
+  <div class="document-title-name">메뉴</div>
+</div>
+
+<div class="document-tab">
+  <ul id="admin-menu-tab">
+    <li><a href="./dispMenuAdminList.me${param.get('?menu_orl=')?html}">목록</a></li>
+    <li><a href="./dispMenuAdminInsert.me${param.get('?')?html}">메뉴</a></li>
+    <#if param.value('menu_orl')?if_exists != ''>
+    <li><a href="./dispMenuItemAdminView.me${param.get('?')?html}">메뉴구성</a></li>
+    </#if>
+  </ul>
+</div>

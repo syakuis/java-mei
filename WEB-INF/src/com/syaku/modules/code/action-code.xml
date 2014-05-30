@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+  <package name="code" extends="globals">
+
+    <action name="dispCodeAdminInsert" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.code.insert.html</param>
+    </action>
+
+     <action name="procCodeAdminInsert" class="com.syaku.modules.module.ModuleAdminController" method="procModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="dispCodeList" class="com.syaku.modules.code.CodeView" method="dispCodeList">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">code.list.html</param>
+    </action>
+
+    <action name="dispCodeInsert" class="com.syaku.modules.code.CodeView" method="dispCodeInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">code.insert.html</param>
+    </action>
+
+    <action name="dispCodeItemInsert" class="com.syaku.modules.code.CodeView" method="dispCodeItemInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">code.item.insert.html</param>
+    </action>
+
+     <action name="procCodeInsert" class="com.syaku.modules.code.CodeController" method="procCodeInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+     <action name="procCodeDelete" class="com.syaku.modules.code.CodeController" method="procCodeDelete">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+     <action name="procCodeItemDelete" class="com.syaku.modules.code.CodeController" method="procCodeItemDelete">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+     <action name="procCodeItemMove" class="com.syaku.modules.code.CodeController" method="procCodeItemMove">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+     <action name="procCodeItemInsert" class="com.syaku.modules.code.CodeController" method="procCodeItemInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="getCodeCache" class="com.syaku.modules.code.CodeModel" method="getCodeCache">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="getCodeXml" class="com.syaku.modules.code.CodeModel" method="getCodeXml">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">model</param>
+     </action>
+
+  </package>
+</struts>

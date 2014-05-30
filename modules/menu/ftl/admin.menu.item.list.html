@@ -1,0 +1,43 @@
+<div id="sub_column_content">
+  <#include "./admin.sub.html">
+  <form id="form" method="get" action="?">
+
+  <div class="document-list">
+    <table class="table-list">
+      <caption>Total ${navi.total_count?string(",###")} Page ${navi.page?string(",###")}/${navi.total_page?string(",###")}</caption>
+      <thead>
+        <tr>
+          <th class="first">고유번호</th>
+          <th class="title">메뉴명</th>
+          <th>open_window</th>
+          <th>expand</th>
+          <th>mobile</th>
+          <th class="last">등록일</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <#list O.listMenuItem as obj>
+        <tr>
+          <td>${obj.menu_item_orl}</td>
+          <td class="title">${obj.name}</td>
+          <td><input type="checkbox" id="open_window" name="open_window" value="1" /></td>
+          <td><input type="checkbox" id="open_window" name="expand" value="1" /></td>
+          <td><input type="checkbox" id="open_window" name="is_mobile" value="1" /></td>
+          <td><#if obj.rdate != ""><#assign rdate = obj.rdate?datetime("yyyyMMddHHmmss")>${rdate?string("yyyy/MM/dd")}</#if></td>
+        </tr>
+        </#list>
+        <#if navi.total_count == 0>
+        <tr><td colspan="6" class="zero">등록된 자료가 없습니다.</td></tr>
+        </#if>
+
+      </tbody>
+
+    </table>
+  </div>
+
+  <@pagenavigator url = param.get('?page=')?j_string form="#form" params = navi />
+  </form>
+
+</div>

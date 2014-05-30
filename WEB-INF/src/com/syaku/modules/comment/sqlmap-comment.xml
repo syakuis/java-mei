@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.comment">
+  <typeAlias alias="CommentBean" type="com.syaku.modules.comment.CommentBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-comment" class="CommentBean">
+
+    <result property="comment_orl" column="comment_orl" nullValue="" />
+    <result property="module_orl" column="module_orl" nullValue="" />
+    <result property="target_orl" column="target_orl" nullValue="" />
+    <result property="parent_orl" column="parent_orl" nullValue="" />
+    <result property="reply_group" column="reply_group" nullValue="" />
+    <result property="reply_depth" column="reply_depth" nullValue="" />
+    <result property="reply_seq" column="reply_seq" nullValue="" />
+    <result property="member_orl" column="member_orl" nullValue="" />
+    <result property="user_id" column="user_id" nullValue="" />
+    <result property="password" column="password" nullValue="" />
+    <result property="user_name" column="user_name" nullValue="" />
+    <result property="nickname" column="nickname" nullValue="" />
+    <result property="content" column="content" nullValue="" />
+    <result property="rdate" column="rdate" nullValue="" />
+    <result property="ip" column="ip" nullValue="" />
+    <result property="listorder" column="listorder" nullValue="" />
+    <result property="sns_name" column="sns_name" nullValue="" />
+    <result property="sns_photo" column="sns_photo" nullValue="" />
+    <result property="sns_id" column="sns_id" nullValue="" />
+    <result property="is_del" column="is_del" nullValue="" />
+  </resultMap>
+
+  <sql id="sql-comment">
+
+    SELECT 
+      comment_orl,
+      module_orl,
+      target_orl,
+      parent_orl,
+      reply_group,
+      reply_depth,
+      reply_seq,
+      member_orl,
+      user_id,
+      password,
+      user_name,
+      nickname,
+      content,
+      rdate,
+      ip,
+      listorder,
+      sns_name,
+      sns_photo,
+      sns_id,
+      is_del
+    FROM SK_COMMENT
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="module_orl" >
+        module_orl = #module_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="target_orl" >
+        target_orl = #target_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="parent_orl" >
+        parent_orl = #parent_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="reply_group" >
+        reply_group = #reply_group#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="is_del" >
+        is_del = #is_del#
+      </isNotEmpty>
+
+    </dynamic>
+
+    ORDER BY listorder, reply_seq
+
+  </sql>
+
+  <select id="select-comment-list" parameterClass="hashMap" resultMap="result-comment">
+    <include refid="sql-comment" />
+  </select>
+
+  <select id="select-map-comment" parameterClass="hashMap" resultClass="hashMap">
+    <include refid="sql-comment" />
+  </select>
+
+  <select id="select-comment-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(comment_orl),0) FROM SK_COMMENT
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="module_orl" >
+        module_orl = #module_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="target_orl" >
+        target_orl = #target_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="member_orl" >
+        member_orl = #member_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="user_id" >
+        user_id = #user_id#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="sns_id" >
+        sns_id = #sns_id#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="parent_orl" >
+        parent_orl = #parent_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="reply_group" >
+        reply_group = #reply_group#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="is_del" >
+        is_del = #is_del#
+      </isNotEmpty>
+
+    </dynamic>
+
+  </select>
+
+
+  <select id="select-comment-one" parameterClass="hashMap" resultMap="result-comment">
+    SELECT 
+      comment_orl,
+      module_orl,
+      target_orl,
+      parent_orl,
+      reply_group,
+      reply_depth,
+      reply_seq,
+      member_orl,
+      user_id,
+      password,
+      user_name,
+      nickname,
+      content,
+      rdate,
+      ip,
+      listorder,
+      sns_name,
+      sns_photo,
+      sns_id,
+      is_del
+    FROM SK_COMMENT
+    WHERE comment_orl = #comment_orl#
+    LIMIT 1
+  </select>
+
+
+  <insert id="insert-comment" parameterClass="CommentBean">
+    <selectKey resultClass="String" keyProperty="comment_orl">
+      SELECT (IFNULL(MAX(comment_orl),0) + 1) AS comment_orl FROM SK_COMMENT
+    </selectKey>
+
+    INSERT INTO SK_COMMENT
+    (
+      comment_orl,
+      module_orl,
+      target_orl,
+      parent_orl,
+      listorder,
+      reply_group,
+      reply_depth,
+      reply_seq,
+      member_orl,
+      user_id,
+      password,
+      user_name,
+      nickname,
+      content,
+      rdate,
+      ip,
+      sns_name,
+      sns_photo,
+      sns_id,
+      is_del
+
+    ) VALUES (
+    #comment_orl#,
+    #module_orl#,
+    #target_orl#,
+    #parent_orl#,
+    <isNotEmpty property="reply_group" >
+    #reply_group# * -1,
+    #reply_group#,
+    </isNotEmpty>
+    <isEmpty property="reply_group" >
+    #comment_orl# * -1,
+    #comment_orl#,
+    </isEmpty>
+    #reply_depth#,
+    #reply_seq#,
+    #member_orl#,
+    #user_id#,
+    #password#,
+    #user_name#,
+    #nickname#,
+    #content#,
+    #rdate#,
+    #ip#,
+    #sns_name#,
+    #sns_photo#,
+    #sns_id#,
+    #is_del#
+
+    )
+  </insert>
+
+  <update id="update-comment" parameterClass="CommentBean">
+    UPDATE SK_COMMENT SET
+    content = #content#
+    WHERE comment_orl = #comment_orl#
+  </update>
+
+  <update id="update-comment-del" parameterClass="hashMap">
+    UPDATE SK_COMMENT SET
+    is_del = #is_del#
+    WHERE comment_orl = #comment_orl#
+  </update>
+
+  <update id="update-comment-reply-seq" parameterClass="hashMap">
+    UPDATE SK_COMMENT SET
+    reply_seq = reply_seq + 1
+    WHERE reply_group = #reply_group#
+    AND reply_seq > #reply_seq#
+  </update>
+
+  <delete id="delete-comment" parameterClass="hashMap">
+    DELETE FROM SK_COMMENT WHERE comment_orl = #comment_orl#
+  </delete>
+
+  <delete id="delete-comment-module" parameterClass="hashMap">
+    DELETE FROM SK_COMMENT WHERE module_orl = #module_orl#
+  </delete>
+
+  <delete id="delete-comment-target" parameterClass="hashMap">
+    DELETE FROM SK_COMMENT 
+    WHERE module_orl = #module_orl#
+    AND target_orl = #target_orl#
+  </delete>
+
+  <delete id="delete-comment-replygroup" parameterClass="hashMap">
+    DELETE FROM SK_COMMENT 
+    WHERE module_orl = #module_orl#
+    AND target_orl = #target_orl#
+    AND reply_group = #reply_group#
+  </delete>
+
+  <delete id="delete-comment-reply" parameterClass="hashMap">
+    DELETE FROM SK_COMMENT
+    WHERE reply_group = #reply_group#
+    AND reply_seq > #reply_seq#
+  </delete>
+
+</sqlMap>

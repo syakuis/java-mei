@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+  <package name="addon" extends="globals">
+
+    <action name="dispAddonAdminModuleInsert" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.addon.module.insert.html</param>
+    </action>
+
+     <action name="procAddonAdminModuleInsert" class="com.syaku.modules.module.ModuleAdminController" method="procModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="dispAddonAdminList" class="com.syaku.modules.addon.AddonAdminView" method="dispAddonAdminList">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.addon.list.html</param>
+    </action>
+
+    <action name="procAddonInstall" class="com.syaku.modules.addon.AddonAdminController" method="procAddonInstall">
+    <param name="act_permission">member</param>
+    <param name="act_type">controller</param>
+    </action>
+
+    <action name="procAddonDelete" class="com.syaku.modules.addon.AddonAdminController" method="procAddonDelete">
+    <param name="act_permission">member</param>
+    <param name="act_type">controller</param>
+    </action>
+
+    <action name="procAddonIsUseUpdate" class="com.syaku.modules.addon.AddonAdminController" method="procAddonIsUseUpdate">
+    <param name="act_permission">member</param>
+    <param name="act_type">controller</param>
+    </action>
+
+    <action name="procAddonFirstLoadUpdate" class="com.syaku.modules.addon.AddonAdminController" method="procAddonFirstLoadUpdate">
+    <param name="act_permission">member</param>
+    <param name="act_type">controller</param>
+    </action>
+
+
+  </package>
+
+</struts>

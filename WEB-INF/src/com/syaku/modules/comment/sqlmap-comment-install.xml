@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.comment">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-comment" parameterClass="hashMap">
+     CREATE  TABLE IF NOT EXISTS SK_COMMENT (
+      comment_orl BIGINT(11) NOT NULL COMMENT '댓글 ORL' ,
+      module_orl BIGINT(11) NOT NULL DEFAULT 0 COMMENT '모듈 ORL' ,
+      target_orl BIGINT(11) NOT NULL DEFAULT 0 COMMENT '대상 ORL' ,
+      parent_orl BIGINT(11) NOT NULL DEFAULT 0 COMMENT '덧글의 부모 ORL' ,
+      reply_group BIGINT(11) NOT NULL DEFAULT 0 COMMENT '덧글 그룹' ,
+      reply_depth BIGINT(11) NOT NULL DEFAULT 0 COMMENT '덧글 깊이' ,
+      reply_seq BIGINT(11) NOT NULL DEFAULT 0 COMMENT '덧글 정렬 순서' ,
+      member_orl BIGINT(11) NOT NULL COMMENT '회원 ORL' ,
+      user_id VARCHAR(100) NULL DEFAULT NULL COMMENT '아이디' ,
+      password VARCHAR(100) NULL DEFAULT NULL COMMENT '비밀번호' ,
+      user_name VARCHAR(100) NOT NULL COMMENT '이름' ,
+      nickname VARCHAR(100) NOT NULL COMMENT '닉네임' ,
+      content LONGTEXT NOT NULL COMMENT '내용' ,
+      rdate VARCHAR(14) NULL COMMENT '등록일' ,
+      ip VARCHAR(50) NOT NULL COMMENT '아이피' ,
+      listorder BIGINT(11) NULL COMMENT '역정렬' ,
+      sns_name VARCHAR(100) NULL DEFAULT NULL COMMENT 'SNS 명' ,
+      sns_photo VARCHAR(250) NULL DEFAULT NULL COMMENT 'SNS 프로필 사진' ,
+      sns_id VARCHAR(100) NULL DEFAULT NULL COMMENT 'SNS 사용자 계정' ,
+      is_del CHAR(1) NOT NULL DEFAULT 'N' COMMENT '삭제여부' ,
+      PRIMARY KEY (comment_orl) ,
+      INDEX idx_module_orl (module_orl ASC) ,
+      INDEX idx_target_orl (target_orl ASC) ,
+      INDEX idx_member_orl (member_orl ASC) ,
+      INDEX idx_rdate (rdate ASC) ,
+      INDEX idx_listorder (listorder ASC) ,
+      INDEX idx_module_target_orl (module_orl ASC, target_orl ASC) ,
+      INDEX idx_reply_seq (reply_seq ASC) ,
+      INDEX idx_is_del (is_del ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '댓글' 
+  </insert>
+
+    <insert id="create-comment-counter" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_COMMENT_COUNTER (
+      module_orl BIGINT(11) NOT NULL COMMENT '모듈 ORL' ,
+      target_orl BIGINT(11) NOT NULL COMMENT '대상 ORL' ,
+      count BIGINT(11) NOT NULL DEFAULT 0 COMMENT '댓글 수' ,
+      reg_date VARCHAR(14) NULL COMMENT '등록일' ,
+      last_update VARCHAR(14) NULL COMMENT '수정일' ,
+      UNIQUE INDEX unique_module_target (module_orl ASC, target_orl ASC) ,
+      INDEX idx_count (count ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '댓글 카운터' 
+  </insert>
+
+
+  <insert id="create-comment-sns" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_COMMENT_SNS (
+      comment_orl BIGINT(11) NOT NULL COMMENT '댓글 orl' ,
+      sns_name VARCHAR(100) NOT NULL COMMENT '소셜네트워크 명\n\nTWITTER\nFACEBOOK\nME2DAY\nYOZM' ,
+      module_orl BIGINT(11) NOT NULL COMMENT '모듈 ORL' ,
+      target_orl BIGINT(11) NOT NULL COMMENT '대상 ORL' ,
+      msg_id VARCHAR(100) NOT NULL COMMENT '소셜네트워크 글 번호' ,
+      PRIMARY KEY (comment_orl, sns_name) ,
+      INDEX idx_module_orl (module_orl ASC) ,
+      INDEX idx_target_orl (target_orl ASC) ,
+      INDEX idx_msg_id (msg_id ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '댓글 소셜네트워크 연동' /* comment truncated */ 
+  </insert>
+
+</sqlMap>

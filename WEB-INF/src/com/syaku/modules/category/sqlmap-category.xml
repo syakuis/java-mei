@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.category">
+  <typeAlias alias="CategoryBean" type="com.syaku.modules.category.CategoryBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <!--@brief  -->
+  <resultMap id="result-category" class="CategoryBean">
+    <result property="category_orl" column="category_orl" nullValue="" />
+    <result property="parent_orl" column="parent_orl" nullValue="" />
+    <result property="category_seq" column="category_seq" nullValue="" />
+    <result property="module_orl" column="module_orl" nullValue="" />
+    <result property="title" column="title" nullValue="" />
+    <result property="rdate" column="rdate" nullValue="" />
+  </resultMap>
+
+  <sql id="select-category">
+    SELECT
+      category_orl,
+      parent_orl,
+      category_seq,
+      module_orl,
+      title,
+      rdate
+
+    FROM SK_CATEGORY
+  </sql>
+
+  <resultMap id="result-category-join" class="CategoryBean">
+    <result property="category_orl" column="category_orl" nullValue="" />
+    <result property="parent_orl" column="parent_orl" nullValue="" />
+    <result property="category_seq" column="category_seq" nullValue="" />
+    <result property="module_orl" column="module_orl" nullValue="" />
+    <result property="title" column="title" nullValue="" />
+    <result property="rdate" column="rdate" nullValue="" />
+
+    <result property="count" column="count" nullValue="" />
+  </resultMap>
+  <sql id="select-category-join">
+    SELECT
+      A.*,
+      IFNULL(B.count,0) AS count
+    FROM SK_CATEGORY A
+    LEFT JOIN SK_CATEGORY_COUNTER B
+    ON B.module_orl = A.module_orl
+    AND B.category_orl = A.category_orl
+  </sql>
+
+  <select id="select-category-list" parameterClass="hashMap" resultMap="result-category-join">
+  <include refid="modules.category.select-category-join" />
+   WHERE A.module_orl = #module_orl#
+
+    ORDER BY category_seq
+  </select>
+
+  <select id="select-category-xml" parameterClass="hashMap" resultClass="xml" xmlResultName="data">
+    <include refid="modules.category.select-category-join" />
+    WHERE A.module_orl = #module_orl#
+
+    ORDER BY category_seq
+  </select>
+
+  <select id="select-category-one" parameterClass="hashMap" resultMap="result-category">
+    <include refid="modules.category.select-category" />
+    WHERE category_orl = #category_orl#
+    LIMIT 1
+  </select>
+
+  <select id="select-category-map" parameterClass="hashMap" resultClass="hashMap">
+    <include refid="modules.category.select-category" />
+    WHERE category_orl = #category_orl#
+    LIMIT 1
+  </select>
+
+  <insert id="insert-category" parameterClass="CategoryBean">
+    <selectKey resultClass="String" keyProperty="category_orl">
+      SELECT (IFNULL(MAX(category_orl),0) + 1) AS category_orl FROM SK_CATEGORY
+    </selectKey>
+
+    INSERT INTO SK_CATEGORY
+    (
+      category_orl,
+      parent_orl,
+      category_seq,
+      module_orl,
+      title,
+      rdate
+    ) VALUES (
+      #category_orl#,
+      #parent_orl#,
+      #category_seq#,
+      #module_orl#,
+      #title#,
+      #rdate#
+    )
+  </insert>
+
+  <update id="update-category" parameterClass="CategoryBean">
+    UPDATE SK_CATEGORY SET
+    
+      title = #title#
+
+    WHERE module_orl = #module_orl#
+    AND category_orl = #category_orl#
+  </update>
+
+  <select id="select-category-move-seq" parameterClass="hashMap" resultClass="String">
+    SELECT
+      IFNULL(category_seq,0)
+
+    FROM SK_CATEGORY
+    WHERE module_orl = #module_orl#
+    AND category_orl = #category_orl#
+  </select>
+
+  <select id="select-category-max-seq" parameterClass="hashMap" resultClass="String">
+    SELECT
+      IFNULL(MAX(category_seq),0)
+
+    FROM SK_CATEGORY
+    WHERE module_orl = #module_orl#
+    AND parent_orl = #parent_orl#
+  </select>
+
+  <update id="update-category-move" parameterClass="hashMap">
+    UPDATE SK_CATEGORY SET
+
+      parent_orl = #parent_orl#,
+      category_seq = #category_seq#
+
+    WHERE module_orl = #module_orl#
+    AND category_orl = #category_orl#
+  </update>
+
+  <update id="update-category-sort" parameterClass="hashMap">
+    UPDATE SK_CATEGORY SET
+
+      category_seq = category_seq + 1
+
+    WHERE module_orl = #module_orl#
+    AND category_seq > #category_seq#
+  </update>
+
+  <delete id="delete-category" parameterClass="hashMap">
+    DELETE FROM SK_CATEGORY
+    WHERE module_orl = #module_orl#
+
+    <isEmpty prepend="AND" property="category_orl_array" >
+      category_orl = #category_orl#
+    </isEmpty>
+
+    <isNotEmpty prepend="AND" property="category_orl_array">
+      <iterate prepend="category_orl NOT IN " property="category_orl_array" open="(" close=")" conjunction=",">
+        #category_orl_array[]#
+      </iterate>
+    </isNotEmpty>
+
+  </delete>
+
+  <delete id="delete-category-module" parameterClass="hashMap">
+    DELETE FROM SK_CATEGORY WHERE module_orl = #module_orl#
+  </delete>
+
+</sqlMap>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.member">
+  <typeAlias alias="GroupMemberBean" type="com.syaku.modules.member.GroupMemberBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-group-member" class="GroupMemberBean">
+  <result property="group_orl" column="group_orl" nullValue="" />
+  <result property="member_orl" column="member_orl" nullValue="" />
+  <result property="regdate" column="regdate" nullValue="" />
+  </resultMap>
+
+  <sql id="sql-field-group-member">
+    group_orl,
+    member_orl,
+    regdate
+  </sql>
+
+  <select id="select-group-member-list" parameterClass="hashMap" resultMap="result-group-member">
+    SELECT 
+    <include refid="modules.member.sql-field-group-member" />
+    FROM SK_GROUP_MEMBER
+    WHERE member_orl = #member_orl#
+  </select>
+
+  <select id="select-group-member-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(group_orl),0) FROM SK_GROUP_MEMBER
+    WHERE member_orl = #member_orl#
+    <isNotEmpty prepend="AND" property="group_orl">
+      group_orl = #group_orl#
+    </isNotEmpty>
+  </select>
+
+  <insert id="insert-group-member" parameterClass="GroupMemberBean">
+
+    INSERT INTO SK_GROUP_MEMBER
+    (
+      group_orl,
+      member_orl,
+      regdate
+
+    ) VALUES (
+
+    #group_orl#,
+    #member_orl#,
+    #regdate#
+
+    )
+  </insert>
+
+  <insert id="insert-group-member-array" parameterClass="hashMap">
+
+    INSERT INTO SK_GROUP_MEMBER
+    (
+      group_orl,
+      member_orl,
+      regdate
+
+    ) VALUES
+    <iterate property="group_orl_array" open="" close="" conjunction=",">
+      (
+        #group_orl_array[]#,
+        #member_orl#,
+        #regdate#
+      )
+    </iterate>
+
+  </insert>
+
+  <delete id="delete-group-member" parameterClass="hashMap">
+    DELETE FROM SK_GROUP_MEMBER WHERE member_orl = #member_orl#
+  </delete>
+
+  <delete id="delete-group-member-group" parameterClass="hashMap">
+    DELETE FROM SK_GROUP_MEMBER WHERE group_orl = #group_orl#
+  </delete>
+
+</sqlMap>

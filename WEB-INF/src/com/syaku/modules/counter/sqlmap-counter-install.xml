@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.counter">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-counter" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_COUNTER (
+      ip VARCHAR(50) NOT NULL COMMENT '접속 아이피' ,
+      rdate CHAR(14) NOT NULL COMMENT '접속일' ,
+      user_agent VARCHAR(250) NULL DEFAULT NULL COMMENT 'HTTP USER_AGENT' ,
+      INDEX idx_ip (ip ASC) ,
+      INDEX idx_rdate (rdate ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '접속로그' 
+  </insert>
+
+</sqlMap>

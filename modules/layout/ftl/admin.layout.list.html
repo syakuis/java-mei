@@ -1,0 +1,59 @@
+<script type="text/javascript">
+
+  // 삭제
+  function admin_layout_list_del(layout_orl) {
+    jQuery('#form').jaAction({
+      formAttr : 'action=./procLayoutAdminDelete.me&method=post', 
+      param : _mei_gb_params + '&layout_orl=' + layout_orl , 
+      ask : 'del' ,
+      afterSend : function() { location.reload(); }
+    });
+  }
+</script>
+
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+<form id="form" method="get" action="?">
+<div class="document-list">
+  <table cellspacing="0" border="1" summary="document list" class="table-list">
+  <caption>Total ${paging.total_count?string(",###")} Page ${paging.page?string(",###")}/${paging.total_page?string(",###")}</caption>
+  <colgroup>
+  <col width="100"><col width="100"><col><col width="100">
+  </colgroup>
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">레이아웃</th>
+      <th scope="col">제목</th>
+      <th scope="col">생성일</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <#list O.listLayout as obj>
+      <tr>
+        <td class="setting">
+        <a href="./dispLayoutAdminInsert.me${param.get('?layout_orl=${obj.layout_orl}')?html}" title="설정"><span class="iconset setting"></span></a>
+        <#if obj.layout_orl != "1">
+        <a href="javascript:admin_layout_list_del('${obj.layout_orl}');" title="삭제"><span class="iconset delete"></span></a>
+        </#if>
+        </td>
+        <td>${obj.layout?if_exists}</td>
+        <td class="title">${obj.title?if_exists}</td>
+        <td class="date"><#if obj.rdate?if_exists != ""><#assign rdate = obj.rdate?datetime("yyyyMMddHHmmss")>${rdate?string("yyyy/MM/dd")}</#if></td>
+      </tr>
+    </#list>
+
+  </tbody>
+  </table>
+</div>
+
+<div class="document-foot-menu">
+  <span class="button medium icon"><a href="./dispLayoutAdminInsert.me${param.get('?')?html}"><span class="iconset add"></span>추가</a></span>
+</div>
+
+<@pagenavigator url = param.get('?page=')?j_string form="#form" params = paging />
+</form>
+</div>

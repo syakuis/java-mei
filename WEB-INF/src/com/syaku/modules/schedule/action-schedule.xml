@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+  <package name="schedule" extends="globals">
+
+  <action name="procScheduleAdminState" class="com.syaku.modules.schedule.ScheduleAdminController" method="procScheduleAdminState">
+    <param name="act_permission">member</param>
+    <param name="act_type">controller</param>
+  </action>
+
+  <action name="dispScheduleAdminInsert" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminInsert">
+    <param name="act_permission">member</param>
+    <param name="act_type">view</param>
+    <param name="act_template">admin.schedule.insert.html</param>
+  </action>
+
+  <action name="procScheduleAdminInsert" class="com.syaku.modules.module.ModuleAdminController" method="procModuleAdminInsert">
+    <param name="act_permission">member</param>
+    <param name="act_type">controller</param>
+  </action>
+
+  <action name="dispScheduleItemAdminInsert" class="com.syaku.modules.schedule.ScheduleAdminView" method="dispScheduleItemAdminInsert">
+    <param name="act_permission">member</param>
+    <param name="act_type">view</param>
+    <param name="act_template">admin.schedule.item.insert.html</param>
+  </action>
+
+  <action name="procScheduleItemAdminInsert" class="com.syaku.modules.schedule.ScheduleAdminController" method="procScheduleItemAdminInsert">
+    <param name="act_permission">member</param>
+    <param name="act_type">view</param>
+   </action>
+
+  <action name="dispScheduleItemAdminList" class="com.syaku.modules.schedule.ScheduleAdminView" method="dispScheduleItemAdminList">
+    <param name="act_permission">member</param>
+    <param name="act_type">view</param>
+    <param name="act_template">admin.schedule.item.list.html</param>
+  </action>
+
+  <action name="procScheduleAdminExecute" class="com.syaku.modules.schedule.ScheduleAdminController" method="procScheduleAdminExecute">
+    <param name="act_permission">member</param>
+    <param name="act_type">controller</param>
+  </action>
+
+  <action name="procScheduleItemAdminDelete" class="com.syaku.modules.schedule.ScheduleAdminController" method="procScheduleItemAdminDelete">
+    <param name="act_permission">member</param>
+    <param name="act_type">controller</param>
+  </action>
+
+
+  </package>
+
+</struts>

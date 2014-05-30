@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<addon>
+  <type>editor</type>
+  <version>4.1.2</version>
+  <name>ckeditor</name>
+  <title>CKEditor 4</title>
+  <description>위지윅 에디터</description>
+  <developer>
+    <name>CKEditor</name>
+    <site>http://ckeditor.com</site>
+  </developer>
+</addon>

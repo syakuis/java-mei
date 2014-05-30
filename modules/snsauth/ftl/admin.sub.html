@@ -1,0 +1,24 @@
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  // Tab on class
+  targetOnClass('#admin-tab li','on','single', { target : [
+    { search : ['dispSnsAuthAdminInsert'] , def : true },
+    { search : ['dispSnsAuthItemAdminList'] , def : false }
+  ]} );
+
+});
+
+//]]></script>
+
+<div class="document-title">
+  <div class="document-title-name">소셜네트워크 인증</div>
+</div>
+
+<div class="document-tab">
+<ul id="admin-tab">
+  <li><a href="./dispSnsAuthAdminInsert.me${param.pick('?mid=&module_orl=${MODULE_ORL}')?html}">모듈</a></li>
+  <li><a href="./dispSnsAuthItemAdminList.me${param.pick('?mid=&module_orl=${MODULE_ORL}')?html}">인증관리</a></li>
+</ul>
+</div>

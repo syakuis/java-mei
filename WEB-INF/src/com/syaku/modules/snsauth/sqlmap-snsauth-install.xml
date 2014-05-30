@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.snsauth">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-snsauth" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SNS_AUTH (
+      oauth_orl BIGINT(11) NOT NULL ,
+      token VARCHAR(250) NOT NULL COMMENT 'OAuth 임시 토큰' ,
+      name VARCHAR(50) NOT NULL COMMENT 'SNS 명' ,
+      access_token VARCHAR(250) NOT NULL COMMENT 'OAuth Access 토큰' ,
+      access_token_secret VARCHAR(250) NOT NULL COMMENT 'OAuth Access Secret 토큰' ,
+      main CHAR(1) NOT NULL DEFAULT 'N' COMMENT 'SNS 대표사진' ,
+      post_send CHAR(1) NOT NULL DEFAULT 'N' COMMENT '글 전송여부' ,
+      uid VARCHAR(100) NOT NULL COMMENT '계정' ,
+      reg_date VARCHAR(14) NULL COMMENT '등록일' ,
+      listorder BIGINT(11) NULL COMMENT '역정렬' ,
+      ip VARCHAR(50) NULL DEFAULT NULL COMMENT '아이피' ,
+      user_agent VARCHAR(250) NULL DEFAULT NULL COMMENT '사용자 정보' ,
+      PRIMARY KEY (oauth_orl) ,
+      UNIQUE INDEX unique_token_name (token ASC, name ASC) ,
+      INDEX idx_listorder (listorder ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '소셜네트워크 인증' 
+  </insert>
+</sqlMap>

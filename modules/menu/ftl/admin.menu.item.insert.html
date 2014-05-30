@@ -1,0 +1,147 @@
+<#assign menu_orl = param.value('menu_orl')>
+<#assign menu_item_orl = param.value('menu_item_orl')>
+<#assign parent_orl = param.value('parent_orl')>
+<#assign num = param.value('num')>
+
+<script type="text/javascript">
+  
+  <#if menu_item_orl == "">
+    var mod = "insert";
+  <#else>
+    var mod = "update";
+  </#if>
+
+
+jQuery(function() {
+
+  jQuery.ja.setValue('#form_menu #open_window','${O.objMenuItem.open_window?if_exists}');
+  jQuery.ja.setValue('#form_menu #expand','${O.objMenuItem.expand?if_exists}');
+  jQuery.ja.setValue('#form_menu #is_mobile','${O.objMenuItem.is_mobile?if_exists}');
+});
+
+function admin_menu_item_insert() {
+
+  jQuery('#form_menu').jaAction({ 
+    filter : [
+      { target : "#name", params : "&filter=notnull&title=메뉴명" }
+    ],
+    param : _mei_gb_params,
+    ask : mod,
+    setAjax : {
+      success : function(xml) {
+        reload(xml);
+      }
+    }
+  });
+
+}
+
+</script>
+
+<div>
+
+<form id="form_menu" method="post" action="./procMenuItemAdminInsert.me">
+<input type="hidden" id="menu_orl" name="menu_orl" value="${menu_orl?if_exists?html}" />
+<input type="hidden" id="menu_item_orl" name="menu_item_orl" value="${menu_item_orl?if_exists?html}" />
+<input type="hidden" id="parent_orl" name="parent_orl" value="${parent_orl?if_exists?html}" />
+<input type="hidden" id="num" name="num" value="${num?if_exists?html}" />
+
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+
+    <tr>
+    <th scope="row">메뉴명</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w250" id="name" name="name" value="${O.objMenuItem.name?if_exists?html}" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">메뉴경로</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w250" id="url" name="url" value="${O.objMenuItem.url?if_exists?html}" />
+        <span class="button green small icon"><button type="button" onclick="jQuery.module._open_search({return_mid : '#form_menu #url' });"><span class="iconset search"></span>검색</button></span>
+        <p>링크인 경우 http:// 등 프로토콜로 시작해야 하며, 내부 경로인 경우 / 로 시작해야 합니다.</p>
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">menu_item_orl</th>
+    <td>
+      <div class="item">${menu_item_orl?if_exists}</div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">메뉴 검색조건</th>
+    <td>
+      <div class="item">
+        <textarea class="i_text w95p" id="select_query" name="select_query" cols="50" rows="5">${O.objMenuItem.select_query?if_exists}</textarea>
+        <p>[예제] { "keyword" : [ "a" , "b" , "c" ] , condition : "and | or" , compare : "equals | indexof" } 줄바꿈 하지 마세요.</p>
+      </div>
+    </td>
+    </tr>
+
+
+    <tr>
+      <th scope="row">추가기능</th>
+      <td>
+        <div class="item">
+          <input type="checkbox" id="open_window" name="open_window" value="1" class="i_check" />
+          <label for="open_window">메뉴를 선택 했을 때, 새 창을 띄울 것인지 정할 수 있습니다.</label><br />
+          <input type="checkbox" id="expand" name="expand" value="1" class="i_check" />
+          <label for="expand">하위메뉴가 늘 펼쳐진 상태로 있게 합니다.</label><br />
+          <input type="checkbox" id="is_mobile" name="is_mobile" value="1" class="i_check" />
+          <label for="is_mobile">모바일 메뉴 사용여부 (체크하시면 노출되지 않습니다.)</label>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">버튼 일반</th>
+      <td>
+        <div class="item">
+      <input type="text" class="i_text w95p" id="btn_normal" name="btn_normal" value="${O.objMenuItem.btn_normal?if_exists?html}" />
+      <p>이미지 경로는 / 로 시작하셔야 합니다.</p>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">버튼 마우스 오버</th>
+      <td>
+        <div class="item">
+      <input type="text" class="i_text w95p" id="btn_hover" name="btn_hover" value="${O.objMenuItem.btn_hover?if_exists?html}" />
+      <p>이미지 경로는 / 로 시작하셔야 합니다.</p>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <th scope="row">버튼 선택</th>
+      <td>
+        <div class="item">
+      <input type="text" class="i_text w95p" id="btn_active" name="btn_active" value="${O.objMenuItem.btn_active?if_exists?html}" />
+      <p>이미지 경로는 / 로 시작하셔야 합니다.</p>
+        </div>
+      </td>
+    </tr>
+
+  </tbody>
+  </table>
+  </div>
+
+  <div class="document-foot-menu tr">
+    <span class="button medium icon"><button type="button" onclick="admin_menu_item_insert();"><span class="iconset accept"></span>저장</button></span>
+  </div>
+  </form>
+
+</div>

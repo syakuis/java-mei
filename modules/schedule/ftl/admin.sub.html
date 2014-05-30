@@ -1,0 +1,25 @@
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  // Tab on class
+  targetOnClass('#admin-tab li','on','single', { target : [
+    { search : ['dispScheduleAdminInsert'] , def : true },
+    { search : ['dispScheduleItemAdminList'] , def : false }
+  ]} );
+
+});
+
+//]]></script>
+
+
+<div class="document-title">
+  <div class="document-title-name">작업스케줄</div>
+</div>
+
+<div class="document-tab">
+<ul id="admin-tab">
+  <li><a href="./dispScheduleAdminInsert.me${param.pick('?mid=&module_orl=')?html}">모듈</a></li>
+  <li><a href="./dispScheduleItemAdminList.me${param.pick('?mid=&module_orl=${MM.module_orl}')?html}">스케줄</a></li>
+</ul>
+</div>

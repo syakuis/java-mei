@@ -1,0 +1,100 @@
+<#assign group_orl = param.value('group_orl')?if_exists>
+
+<script>
+  function save() {
+    jQuery('#form').jaAction({
+      filter : [
+      <#if MM.options_is_category == 'Y'>
+      { target : "#category_orl", params : "&filter=notnull&title=분류" },
+      </#if>
+      { target : "#title", params : "&filter=notnull&title=제목" },
+      { target : "#content", params : "&filter=notnull&title=내용" }
+      ],
+      param : _mei_gb_params,
+      ask : "insert" , 
+      <#if group_orl == "">
+      redirect : './dispIssueList.me?' + _mei_gb_params 
+      <#else>
+      redirect : './dispIssueView.me?' + _mei_gb_params + '&group_orl=${group_orl}'
+      </#if>
+    });
+  }
+  <@addon_editor target=".jquery_ckeditor"/>
+</script>
+
+<div id="sub_column_content">
+
+<#include "admin.sub.html">
+
+<form id="form" method="post" action="./procIssueInsert.me">
+<input type="hidden" id="group_orl" name="group_orl" value="${group_orl}" />
+<input type="hidden" id="sid" name="sid" value="${MEI_SID}" />
+
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+
+    <#if MM.options_is_category == 'Y'>
+    <tr>
+    <th scope="row">분류</th>
+    <td>
+      <div class="item">
+        <select id="category_orl" name="category_orl">
+          <option value="">선택</option>
+          <#list O.listCategory as obj>
+          <option value="${obj.category_orl?if_exists?html}">${obj.title}</option>
+          </#list>
+        </select>
+      </div>
+    </td>
+    </tr>
+    </#if>
+
+    <tr>
+    <th scope="row">상태</th>
+    <td>
+      <div class="item">
+        <input type="text" id="state_code_orl" name="state_code_orl" class="i_text" />
+    </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">제목</th>
+    <td>
+      <div class="item">
+        <input type="text" name="title" id="title" class="i_text w95p" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">내용</th>
+    <td>
+      <div class="item">
+          <textarea title="내용" cols="80" rows="10" class="jquery_ckeditor" id="content" name="content"></textarea>
+      </div>
+    </td>
+    </tr>
+      <tr>
+        <th>첨부파일</th>
+        <td>
+        <div class="item">
+        <@addon_file seq="1" editor="CKEDITOR.instances.content" mid=MID sid=MEI_SID target_orl= "" member_orl=O.objIssue.member_orl module=MM />
+        </div>
+        </td>
+      </tr>
+
+    </tbody>
+    </table>
+  </div>
+ </form>
+
+  <div class="document-foot-menu">
+    <span class="button medium"><a href="dispIssueList.me${param.get('?group_orl=')?html}">목록</a></span>
+    <span class="button medium"><a href="javascript:save();">저장</a></span>
+  </div>
+
+</div>

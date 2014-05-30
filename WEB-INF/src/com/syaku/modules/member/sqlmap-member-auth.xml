@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.member">
+  <typeAlias alias="MemberAuthBean" type="com.syaku.modules.member.MemberAuthBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-memberauth" class="MemberAuthBean">
+    <result property="member_orl" column="member_orl" nullValue="" />
+    <result property="auth_key" column="auth_key" nullValue="" />
+    <result property="success_date" column="success_date" nullValue="" />
+    <result property="regdate" column="regdate" nullValue="" />
+  </resultMap>
+
+
+  <select id="select-memberauth-last" parameterClass="hashMap" resultClass="int">
+    SELECT IFNULL(COUNT(member_orl),0) FROM SK_MEMBER_AUTH
+    WHERE member_orl = #member_orl#
+    AND success_date IS NULL
+  </select>
+
+  <select id="select-memberauth-one" parameterClass="hashMap" resultMap="result-memberauth">
+    SELECT * FROM SK_MEMBER_AUTH
+
+  <isEmpty prepend="WHERE" property="member_orl" >
+    auth_key = #auth_key#
+  </isEmpty>
+  <isNotEmpty prepend="WHERE" property="member_orl" >
+    member_orl = #member_orl#
+  </isNotEmpty>
+
+    LIMIT 1
+  </select>
+
+  <insert id="insert-memberauth" parameterClass="MemberAuthBean">
+    INSERT INTO SK_MEMBER_AUTH
+    (
+      member_orl,
+      auth_key,
+      regdate
+
+    ) VALUES (
+      #member_orl#,
+      #auth_key#,
+      #regdate#
+    )
+  </insert>
+
+  <update id="update-memberauth-successDate" parameterClass="hashMap">
+    UPDATE SK_MEMBER_AUTH SET
+      success_date = #success_date#
+    WHERE
+    <isEqual property="type" compareValue="member_orl" >
+    member_orl = #member_orl#
+    </isEqual>
+    <isEqual property="type" compareValue="auth_key" >
+    auth_key = #auth_key#
+    </isEqual>
+  </update>
+
+  <delete id="delete-memberauth" parameterClass="hashMap">
+    DELETE FROM SK_MEMBER_AUTH WHERE member_orl = #member_orl#
+  </delete>
+
+</sqlMap>

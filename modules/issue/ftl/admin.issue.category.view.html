@@ -1,0 +1,112 @@
+<#assign module_orl = param.value('module_orl')>
+
+<link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="${MEI_PATH_RELATIVE}/common/ui.simple.tree/jquery.simple.tree.css" />
+<script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/ui.simple.tree/jquery.simple.tree.js"></script>
+<script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/ui.simple.tree/jquery.simple.tree.extend.js"></script>
+
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+
+  jQuery('#form').simpleTreeExtend({
+    title : '분류관리',
+    target : '#set-tree',
+    node : 'tree_',
+
+    idx : 'category_orl',
+    parent_idx : 'parent_orl',
+    num : 'category_seq',
+    name : 'title',
+    
+    // 시작 &
+    ajax_data : _mei_gb_params,
+    ajax_move_url : 'procIssueCategoryAdminMove.me',
+    ajax_url_load : 'getIssueCategoryXml.me',
+
+    _add : function(idx,num) {
+      callInput('',idx,num);
+    },
+
+    _modify : function(idx) {
+      callInput(idx);
+    },
+
+    _del : function(idx) {
+      var obj = this;
+
+      jQuery.ajax({
+        url : 'procIssueCategoryAdminDelete.me',
+        data : obj.ajax_data + '&' + obj.idx + '=' + idx,
+        type : 'post',
+        success : function(xml) {
+          reload(xml);
+        }
+      });
+
+    }
+
+  });
+
+  jQuery("#category_input").dialog({
+    bgiframe: true,
+    autoOpen: false,
+    width: 400,
+    modal: true,
+    draggable: true,
+    closeOnEscape: true,
+    title: '분류관리',
+    resizable: false
+  });
+
+});
+
+function callInput(idx,parent_idx,num) {
+  var url = './dispIssueCategoryAdminInsert.me?' + _mei_gb_params + '&module_orl=${module_orl}&category_orl=' + idx + '&parent_orl=' + parent_idx + '&category_seq=' + num;
+
+  jQuery.get(url, function(data) {
+    jQuery('#category_input').html(data).dialog('open');
+  });
+
+}
+
+// callInput 처리 후 화면 리로딩
+function reload(xml) {
+  jQuery.simpleTreeExtend._ajaxLoad();
+  jQuery('#category_input').dialog('close');
+}
+
+function cache() {
+  jQuery.ajax({
+    url : 'getIssueCategoryCache.me',
+    data : _mei_gb_params + '&module_orl=${module_orl}',
+    type : 'post',
+    success : function(xml) {
+      $.simpleTreeExtend._ajaxLoad();
+    }
+  });
+}
+
+//]]></script>
+
+<div id="sub_column_content">
+
+<div id="category_input"></div>
+
+<#include "./admin.sub.html">
+
+<form id="form" method="post">
+  <input type="hidden" id="module_orl" name="module_orl" value="${module_orl}" />
+
+  <div class="document-head-menu">
+    <span class="button medium icon"><a href="javascript:cache();"><span class="iconset cache"></span>캐시 새로고침</a></span>
+  </div>
+
+  <div class="pt10">
+    <div class="custom-simple-tree">
+      <ul id="set-tree" class="simpleTree"></ul>
+    </div>
+  </div>
+
+</form>
+</div>

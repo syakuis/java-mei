@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.snsauth">
+  <typeAlias alias="SnsAuthBean" type="com.syaku.modules.snsauth.SnsAuthBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-snsauth" class="SnsAuthBean">
+
+    <result property="oauth_orl" column="oauth_orl" nullValue="" />
+    <result property="token" column="token" nullValue="" />
+    <result property="name" column="name" nullValue="" />
+    <result property="access_token" column="access_token" nullValue="" />
+    <result property="access_token_secret" column="access_token_secret" nullValue="" />
+    <result property="main" column="main" nullValue="" />
+    <result property="post_send" column="post_send" nullValue="" />
+    <result property="uid" column="uid" nullValue="" />
+    <result property="reg_date" column="reg_date" nullValue="" />
+    <result property="ip" column="ip" nullValue="" />
+    <result property="user_agent" column="user_agent" nullValue="" />
+    <result property="listorder" column="listorder" nullValue="" />
+
+  </resultMap>
+
+  <select id="select-snsauth-list" parameterClass="hashMap" resultMap="result-snsauth">
+    SELECT 
+
+      oauth_orl,
+      token,
+      name,
+      access_token,
+      access_token_secret,
+      main,
+      post_send,
+      uid,
+      reg_date,
+      listorder,
+      ip,
+      user_agent
+
+    FROM SNS_AUTH
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="token">
+        token = #token#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="name" >
+        name = #name#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="main" >
+        main = #main#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="post_send" >
+        post_send = #post_send#
+      </isNotEmpty>
+
+      <isNotEmpty property="sch_value">
+        <isNotEmpty prepend="AND" property="sch_type">
+          $sch_type$ LIKE CONCAT('%', #sch_value#, '%')
+          
+        </isNotEmpty>
+      </isNotEmpty>
+
+    </dynamic>
+
+    <isEmpty property="order" >
+    ORDER BY listorder
+    </isEmpty>
+    <isNotEmpty property="order" >
+    $order$
+    </isNotEmpty>
+
+    <isNotEmpty prepend="LIMIT" property="page_start" >
+     $page_start$,$page_row$
+    </isNotEmpty>
+
+  </select>
+
+  <select id="select-snsauth-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(oauth_orl),0) FROM SNS_AUTH
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="token">
+        token = #token#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="name" >
+      name = #name#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="main" >
+        main = #main#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="post_send" >
+        post_send = #post_send#
+      </isNotEmpty>
+
+      <isNotEmpty property="sch_value">
+        <isNotEmpty prepend="AND" property="sch_type">
+          $sch_type$ LIKE CONCAT('%', #sch_value#, '%')
+        </isNotEmpty>
+      </isNotEmpty>
+
+    </dynamic>
+  </select>
+
+
+  <select id="select-snsauth-one" parameterClass="hashMap" resultMap="result-snsauth">
+    SELECT *
+    FROM SNS_AUTH
+    WHERE token = #token#
+    <isNotEmpty prepend="AND" property="name" >
+    name = #name#
+    </isNotEmpty>
+    <isNotEmpty prepend="AND" property="main" >
+    main = #main#
+    </isNotEmpty>
+    <isNotEmpty prepend="AND" property="post_send" >
+      post_send = #post_send#
+    </isNotEmpty>
+
+    LIMIT 1
+  </select>
+
+
+  <insert id="insert-snsauth" parameterClass="SnsAuthBean">
+    <selectKey resultClass="String" keyProperty="oauth_orl">
+      SELECT (IFNULL(MAX(oauth_orl),0) + 1) AS oauth_orl FROM SNS_AUTH
+    </selectKey>
+
+    INSERT INTO SNS_AUTH
+    (
+      oauth_orl,
+      token,
+      name,
+      access_token,
+      access_token_secret,
+      main,
+      post_send,
+      uid,
+      reg_date,
+      listorder,
+      ip,
+      user_agent
+
+    ) VALUES (
+
+      #oauth_orl#,
+      #token#,
+      #name#,
+      #access_token#,
+      #access_token_secret#,
+      #main#,
+      #post_send#,
+      #uid#,
+      #reg_date#,
+      #oauth_orl# * -1,
+      #ip#,
+      #user_agent#
+
+    )
+  </insert>
+
+  <update id="update-snsauth-postsend" parameterClass="hashMap">
+    UPDATE SNS_AUTH SET
+    post_send = #post_send#
+    WHERE token = #token#
+    AND name = #name#
+  </update>
+
+  <update id="update-snsauth-main" parameterClass="hashMap">
+    UPDATE SNS_AUTH SET
+    main = #main#
+    WHERE token = #token#
+    AND name = #name#
+  </update>
+  <update id="update-snsauth-main-one" parameterClass="hashMap">
+    UPDATE SNS_AUTH SET
+    main = #main#
+    WHERE token = #token#
+    LIMIT 1
+  </update>
+
+  <update id="update-snsauth-main-reset" parameterClass="hashMap">
+    UPDATE SNS_AUTH SET
+    main = #main#
+    WHERE token = #token#
+    AND main = 'Y'
+  </update>
+
+  <delete id="delete-snsauth" parameterClass="hashMap">
+    DELETE FROM SNS_AUTH WHERE token = #token#
+    <isNotEmpty prepend="AND" property="name" >
+    name = #name#
+    </isNotEmpty>
+  </delete>
+
+</sqlMap>

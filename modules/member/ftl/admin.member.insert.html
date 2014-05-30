@@ -1,0 +1,186 @@
+<#assign member_orl = param.value('member_orl')?if_exists>
+
+<script type="text/javascript">//<![CDATA[
+<#if member_orl == "">var mod = "insert";<#else>var mod = "update";</#if>
+
+jQuery.jaFilter.setDefaults({ message : filter_message });
+
+// jaAction 필터데이터
+var filter_data;
+if (mod == 'insert') {
+  filter_data = [
+    { target : "#user_id", params : "&filter=notnull&filter=user_id&length=6,15&title=아이디" },
+    { target : "#password", params : "&filter=notnull&length=6,16&title=비밀번호" },
+    { target : "#user_name", params : "&filter=notnull&filter=user_name&length=2,20&title=이름" } , 
+    { target : "#nickname", params : "&filter=notnull&filter=nickname&length=2,20&title=닉네임" } , 
+    { target : "#email", params : "&filter=notnull&filter=email&title=이메일" }
+  ];
+} else {
+  filter_data = [
+    { target : "#user_name", params : "&filter=notnull&filter=user_name&length=2,20&title=이름" } , 
+    { target : "#password", params : "&length=6,16&title=비밀번호" },
+    { target : "#nickname", params : "&filter=notnull&filter=nickname&length=2,20&title=닉네임" } , 
+    { target : "#email", params : "&filter=notnull&filter=email&title=이메일" }
+  ];
+}
+
+jQuery(function() {
+
+  jQuery.ja.setValue('#form #is_admin','${O.objMember.is_admin?if_exists}');
+
+  <#list O.listGroupMember?if_exists as obj>
+    jQuery.ja.setValue('#form #group_${obj.group_orl}','${obj.group_orl}');
+  </#list>
+
+  // 필터링 정규식 셋팅
+  <#if MM.options_user_id_regx?if_exists != ''>
+  jQuery.member.user_id_regx(/${MM.options_user_id_regx}/);
+  </#if>
+  <#if MM.options_user_name_regx?if_exists != ''>
+  jQuery.member.user_name_regx(/${MM.options_user_name_regx}/);
+  </#if>
+  <#if MM.options_nickname_regx?if_exists != ''>
+  jQuery.member.nickname_regx(/${MM.options_nickname_regx}/);
+  </#if>
+
+  // 중복 값 체크
+  // user_id , user_id2
+  jQuery.member.repeat_check('user_id',filter_message);
+
+  <#if MM.options_overlap_nickname?if_exists == 'Y'>
+  // #nickname , #nickname2
+  jQuery.member.repeat_check('nickname',filter_message);
+  </#if>
+
+  <#if MM.options_overlap_email?if_exists == 'Y' || MM.options_auth_field?if_exists?index_of('email') &gt; -1 >
+  // #email , #email2
+  jQuery.member.repeat_check('email',filter_message);
+  </#if>
+
+});
+
+// 중복체크 및 유효성 검사 메세지 출력
+function filter_message(data) {
+  data.target.next('span').remove();
+  var o = jQuery("<span style='padding-left:10px;'></span>").text( data.message );
+  if (data.error) { o.css('color','red'); data.target.focus(); }
+  data.target.after(o.stop().css("opacity", 1).fadeIn(1).delay(2000).fadeOut(1000));
+}
+  
+function save() {
+  jQuery('#form').jaAction({
+    filter : filter_data,
+    param : _mei_gb_params,
+    ask : mod , 
+    redirect : "./dispMemberAdminList.me${param.get('?member_orl=')?js_string}",
+    beforeAction : function() {
+      jQuery("#form #user_id2").val(jQuery("#form #user_id").val());
+      jQuery("#form #nicckname2").val(jQuery("#form #nicckname").val());
+      jQuery("#form #email2").val(jQuery("#form #email").val());
+    }
+  });
+}
+
+//]]></script>
+
+
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+<form id="form" method="post" action="./procMemberAdminInsert.me">
+<input type="hidden" id="member_orl" name="member_orl" value="${member_orl}" />
+
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+
+    <tr>
+    <th scope="row">아이디</th>
+    <td>
+      <div class="item">
+        <#if member_orl == "">
+        <input type="hidden" id="user_id2" name="user_id2" value="${O.objMember.user_id?if_exists?html}" />
+        <input type="text" class="i_text w150" id="user_id" name="user_id" maxlength="15" value="${O.objMember.user_id?if_exists?html}" />
+        <p>알파벳 소문자와 숫자 그리고 _ 를 사용하여 6자 이상 16자 이하의 아이디를 완성하세요.</p>
+        <#else>
+        ${O.objMember.user_id?if_exists}
+        </#if>
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">비밀번호</th>
+    <td>
+      <div class="item">
+      <input type="password" class="i_text w150" id="password" name="password" maxlength="16" />
+      </div>
+    </td>
+    </tr>
+
+
+    <tr>
+    <th scope="row">이름</th>
+    <td>
+      <div class="item">
+      <input type="text" class="i_text w150" id="user_name" name="user_name" maxlength="20" value="${O.objMember.user_name?if_exists?html}" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">닉네임</th>
+    <td>
+      <div class="item">
+        <input type="hidden" id="nickname2" name="nickname2" value="${O.objMember.nickname?if_exists?html}" />
+        <input type="text" class="i_text w150" id="nickname" name="nickname" maxlength="20" value="${O.objMember.nickname?if_exists?html}" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">이메일</th>
+    <td>
+      <div class="item">
+      <input type="hidden" id="email2" name="email2" value="${O.objMember.email?if_exists}" />
+      <input type="text" class="i_text w250" id="email" name="email" value="${O.objMember.email?if_exists?html}" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">최고 관리자</th>
+    <td>
+      <div class="item">
+        <input type="checkbox" id="is_admin" name="is_admin" value="1" class="i_check" /> <label for="is_admin">최고 관리자로 설정합니다.</label>
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">소속 그룹</th>
+    <td>
+      <div class="item">
+      <#list O.listGroup as obj>
+      <input type="checkbox" class="i_check" id="group_${obj.group_orl}" name="group_orl" value="${obj.group_orl}" />&nbsp;<label for="group_${obj.group_orl}" class="i_label">${obj.title}</label>
+      </#list>
+      <p>한 아이디는 여러 개의 그룹에 속할 수 있습니다.</p>
+      </div>
+    </td>
+    </tr>
+
+  </tbody>
+  </table>
+  </div>
+
+  <div class="document-foot-menu">
+    <span class="button medium icon"><a href="./dispMemberAdminList.me${param.get('?member_orl=')?html}"><span class="iconset list"></span>목록</a></span>
+    <span class="button medium icon"><button type="button" onclick="save();"><span class="iconset accept"></span>저장</button></span>
+  </div>
+
+</form>
+</div>

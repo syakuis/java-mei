@@ -1,0 +1,385 @@
+<#assign module_orl = MODULE_ORL?if_exists>
+<script type="text/javascript">//<![CDATA[
+
+<#if module_orl == "">
+var mod = "insert";
+<#else>
+var mod = "update";
+</#if>
+
+jQuery(function() {
+
+if (mod == "update") {
+  jQuery.ja.setValue("#form #layout_orl","${O.objModule.layout_orl?if_exists}");
+  jQuery.ja.setValue("#form #skin","${O.objModule.skin?if_exists}");
+  jQuery.ja.setValue("#form #options_is_extravars","${O.objModule.options_is_extravars?if_exists}");
+  jQuery.ja.setValue("#form #options_is_consultation","${O.objModule.options_is_consultation?if_exists}");
+  jQuery.ja.setValue("#form #options_is_reply","${O.objModule.options_is_reply?if_exists}");
+  jQuery.ja.setValue("#form #options_is_comment","${O.objModule.options_is_comment?if_exists}");
+  jQuery.ja.setValue("#form #options_comment_skin","${O.objModule.options_comment_skin?if_exists}");
+  jQuery.ja.setValue("#form #options_is_sns","${O.objModule.options_is_sns?if_exists}");
+  jQuery.ja.setValue("#form #options_is_category","${O.objModule.options_is_category?if_exists}");
+  jQuery.ja.setValue("#form #options_is_mine","${O.objModule.options_is_mine?if_exists}");
+  jQuery.ja.setValue("#form #options_notify_type","${O.objModule.options_notify_type?if_exists}");
+
+  var options_icons = "${O.objModule.options_icons?if_exists}";
+  jQuery('#form input:checkbox[name=options_icons]').each(function() {
+    var val = jQuery(this).val();
+    if (options_icons.indexOf(val) > -1 ){
+      jQuery(this).attr("checked","checked");
+    }
+  });
+
+}
+
+});
+
+
+function save() {
+
+  jQuery('#form').jaAction({
+    formAttr : 'action=./procDocumentAdminInsert.me' ,
+    filter : [
+      { target : "#module_id", params : "&filter=user_id&filter=notnull&title=모듈명" },
+      { target : "#browser_title", params : "&filter=notnull&title=브라우저 제목" },
+      { target : "#options_list_count", params : "&filter=number&title=목록수" },
+      { target : "#options_page_count", params : "&filter=number&title=페이지수" }
+    ],
+    param : _mei_gb_params , 
+    ask : mod,
+    <#if module_orl == "">
+    redirect : "./dispDocumentAdminList.me${param.pick('?mid=')?js_string}"
+    <#else>
+    afterSend : function() { location.reload(); }
+    </#if>
+  });
+
+}
+
+//]]></script>
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+<form id="form" method="post">
+  <h4 class="document-sub-title"><span class="iconset title"></span> 모듈</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+    <tr>
+    <th scope="row">모듈명</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w250" id="module_id" name="module_id" value="${O.objModule.mid?if_exists?html}" />
+        <p>알파벳 소문자와 숫자 _ 를 사용하여 모듈명을 완성하세요.</p>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">브라우저 제목</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w250" id="browser_title" name="browser_title" value="${O.objModule.browser_title?if_exists?html}" />
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">레이아웃</th>
+    <td>
+      <div class="item">
+        <select name="layout_orl" id="layout_orl">
+          <option value="0" selected="selected">선택</option>
+          <#list O.listLayout as objLayout>
+          <option value="${objLayout.layout_orl?if_exists?html}">${objLayout.title}</option>
+          </#list>
+        </select>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">스킨</th>
+    <td>
+      <div class="item">
+        <select name="skin" id="skin">
+          <option value="" selected="selected">선택</option>
+          <#list O.listSkins as objSkins>
+          <option value="${objSkins?if_exists?html}">${objSkins}</option>
+          </#list>
+        </select>
+        <p>선택하지 않으면 기본 스킨으로 적용됩니다.</p>
+      </div>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 댓글</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+
+      <tr>
+        <th scope="row">사용여부</th>
+        <td>
+          <div class="item">
+          <select name="options_is_comment" id="options_is_comment">
+            <option value="N" selected="selected">미사용</option>
+            <option value="Y">사용</option>
+          </select>
+          </div>
+        </td>
+      </tr>
+      
+      <tr>
+        <th scope="row">스킨</th>
+        <td>
+          <div class="item">
+          <select name="options_comment_skin" id="options_comment_skin">
+            <option value="" selected="selected">선택</option>
+            <#list O.listCommentSkins as objSkins>
+            <option value="${objSkins?if_exists?html}">${objSkins}</option>
+            </#list>
+          </select>
+          <p>선택하지 않으면 기본 스킨으로 적용됩니다.</p>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <th scope="row">SNS 사용여부</th>
+        <td>
+          <div class="item">
+          <select name="options_is_sns" id="options_is_sns">
+            <option value="N" selected="selected">미사용</option>
+            <option value="Y">사용</option>
+          </select>
+          </div>
+        </td>
+      </tr>
+
+    </table>
+  </div>
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 확장기능</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+    <tr>
+    <th scope="row">확장변수</th>
+    <td>
+      <div class="item">
+        <select name="options_is_extravars" id="options_is_extravars">
+          <option value="N" selected="selected">미사용</option>
+          <option value="Y">사용</option>
+        </select>
+        <p>임의의 변수를 추가하여 입력 항목을 확장할 수 있습니다.</p>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">상담기능</th>
+    <td>
+      <div class="item">
+        <select name="options_is_consultation" id="options_is_consultation">
+          <option value="N" selected="selected">미사용</option>
+          <option value="Y">사용</option>
+        </select>
+        <p>상담 기능은 관리 권한이 없는 회원은 자신이 쓴 글만 보이도록 하는 기능입니다. 덧글 기능이 자동으로 활성화 됩니다.</p>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">답글(응답글)</th>
+    <td>
+      <div class="item">
+        <select name="options_is_reply" id="options_is_reply">
+          <option value="N" selected="selected">미사용</option>
+          <option value="Y">사용</option>
+        </select>
+        <p>상담 기능은 관리 권한이 없는 회원은 자신이 쓴 글만 보이도록 하는 기능입니다. 덧글 기능이 자동으로 활성화 됩니다.</p>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">분류</th>
+    <td>
+      <div class="item">
+        <select name="options_is_category" id="options_is_category">
+          <option value="N" selected="selected">미사용</option>
+          <option value="Y">사용</option>
+        </select>
+      </div>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 출력</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+    <tr>
+    <th scope="row">정렬순서</th>
+    <td>
+      <div class="item">
+        <select id="options_order_target" name="options_order_target">
+          <option selected="selected" value="listorder">번호</option>
+          <option value="regdate">등록일</option>
+          <option value="readed_count">조회 수</option>
+          <option value="title">제목</option>
+        </select>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">정렬방식</th>
+    <td>
+      <div class="item">
+        <select id="options_order_type" name="options_order_type">
+          <option selected="selected" value="asc">오름차순</option>
+          <option value="desc">내림차순</option>
+        </select>
+        <p>목록의 기본 정렬 항목과 정렬 방식을 지정합니다.</p>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">목록수</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w50" id="options_list_count" name="options_list_count" value="${O.objModule.options_list_count?if_exists?html}" />
+        <p>한 페이지에 표시될 글 수를 지정하실 수 있습니다. (기본 20개)</p>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">페이지수</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w50" id="options_page_count" name="options_page_count" value="${O.objModule.options_page_count?if_exists?html}" />
+        <p>목록 하단, 페이지를 이동하는 링크 수를 지정하실 수 있습니다. (기본 10개)</p>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">아이콘표시</th>
+    <td>
+      <div class="item">
+        <input type="checkbox" value="new" id="options_icons1" name="options_icons" class="i_check" />
+        <label for="options_icons1" class="i_label">새 글</label>
+        <input type="checkbox" value="update" id="options_icons2" name="options_icons" class="i_check" />
+        <label for="options_icons2" class="i_label">업데이트</label>
+        <input type="checkbox" value="file" id="options_icons3" name="options_icons" class="i_check" />
+        <label for="options_icons3" class="i_label">파일</label>
+        <p>목록의 제목 옆에 출력되는 아이콘들을 지정할 수 있습니다.</p>
+      </div>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 첨부파일</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="120"><col>
+  </colgroup>
+  <tbody>
+    <tr>
+    <th scope="row">허용 확장자</th>
+    <td>
+      <div class="item">
+      <input type="text" class="i_text w400" id="options_file_type" name="options_file_type" value="${O.objModule.options_file_type?if_exists?html}" />
+      <p>허용한 확장자만 첨부할 수 있습니다. "*.확장자"로 지정할 수 있고 ";" 으로 여러 개 지정이 가능합니다.<br />예) *.* or *.jpg;*.gif;</p>
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">개당 제한 용량</th>
+    <td>
+      <div class="item">
+      <input type="text" class="i_text w60" id="options_file_once_size" name="options_file_once_size" value="${O.objModule.options_file_once_size?if_exists?html}" /> KB
+      <p>하나의 파일에 대해 최고 용량을 지정할 수 있습니다. 정수로만 입력하세요.</p>
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">전체 제한 용량</th>
+    <td>
+      <div class="item">
+      <input type="text" class="i_text w60" id="options_file_size" name="options_file_size" value="${O.objModule.options_file_size?if_exists?html}" /> KB
+      <p>하나의 문서에 첨부할 수 있는 최고 용량을 지정할 수 있습니다. 정수로만 입력하세요.</p>
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">제한 수</th>
+    <td>
+      <div class="item">
+      <input type="text" class="i_text w60" id="options_file_limit" name="options_file_limit" value="${O.objModule.options_file_limit?if_exists?html}" /> 개
+      <p>파일을 첨부할 수 있는 최대 수를 지정할 수 있습니다. 0을 지정하면 제한하지 않습니다. 정수로만 입력하세요.</p>
+      </div>
+    </td>
+    </tr>
+
+    </tbody>
+    </table>
+  </div>
+
+  <h4 class="document-sub-title"><span class="iconset title"></span> 기타</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+    <tr>
+    <th scope="row">상단내용</th>
+    <td>
+      <div class="item">
+        <textarea class="i_text" id="header_content" name="header_content" cols="80" rows="10">${O.objModule.header_content?if_exists}</textarea>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">하단내용</th>
+    <td>
+      <div class="item">
+        <textarea class="i_text" id="footer_content" name="footer_content" cols="80" rows="10">${O.objModule.footer_content?if_exists}</textarea>
+        <p>해당 게시판 모듈의 상, 하단에 출력될 내용을 지정할 수 있습니다.</p>
+      </div>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+
+  <#if O.options_include?exists>
+  <#include O.options_include />
+  </#if>
+
+  <div class="document-foot-menu">
+    <span class="button medium icon"><a href="./dispDocumentAdminList.me${param.get('?module_orl=')?html}"><span class="iconset list"></span>목록</a></span>
+    <span class="button medium icon"><button type="button" onclick="save();"><span class="iconset accept"></span>저장</button></span>
+  </div>
+
+</form>
+</div>

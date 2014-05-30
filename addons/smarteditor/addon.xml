@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<addon>
+  <type>editor</type>
+  <version>4.1.2</version>
+  <name>smarteditor</name>
+  <title>스마트에디터 2</title>
+  <description>
+  위지윅 에디터
+  ewq
+  eqw
+  ewq
+  eqw
+  e
+  </description>
+  <developer>
+    <name>NHN</name>
+    <site>http://dev.naver.com/projects/smarteditor</site>
+  </developer>
+</addon>

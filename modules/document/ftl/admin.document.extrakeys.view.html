@@ -1,0 +1,56 @@
+<div id="extrakeys_insert"></div>
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+<div class="document-head-menu tr">
+<span class="button medium icon"><a href="./dispDocumentAdminExtraKeysInsert.me${param.get('?')?html}"><span class="iconset add"></span>추가</a></span>
+</div>
+
+  <form id="form" method="get" action="?">
+  <div class="document-list">
+  <div class="table-list-scope">
+    <table border="1" cellspacing="0">
+    <thead>
+    <tr>
+    <th scope="row">번호</th>
+    <th scope="row">이름</th>
+    <th scope="row">항목</th>
+    <th scope="row">형식</th>
+    <th scope="row">필수</th>
+    <th scope="row">검색</th>
+    <th scope="row"></th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <#list O.listExtra as objExtra>
+    <tr>
+    <td rowspan="3" scope="rowgroup">${objExtra.var_idx}</th>
+    <td rowspan="3" scope="rowgroup">${objExtra.eid}</th>
+    <th scope="row">${objExtra.var_name}</th>
+    <td>${objExtra.var_type}</td>
+    <td rowspan="3" scope="rowgroup">${objExtra.var_is_required}</th>
+    <td rowspan="3" scope="rowgroup">${objExtra.var_search}</th>
+    <td rowspan="3" scope="rowgroup">
+      <a href="./dispDocumentAdminExtraKeysInsert.me${param.get('?var_idx=${objExtra.var_idx}')?html}" title="설정"><span class="iconset setting"></span></a>
+      <a href="#" title="삭제"><span class="iconset delete"></span></a>
+    </th>
+    </tr>
+    <tr>
+    <th scope="row">기본값</th>
+    <td>${objExtra.var_default}</td>
+    </tr>
+    <tr>
+    <th scope="row">설명</th>
+    <td>${objExtra.var_desc}</td>
+    </tr>
+    </#list>
+
+    </tbody>
+    </table>
+  </div>
+  </div>
+
+  </form>
+</div>

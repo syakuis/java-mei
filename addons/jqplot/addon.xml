@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<addon>
+  <type>chart</type>
+  <version>1.0.0b2_r792</version>
+  <name>jqplot</name>
+  <title>jqplot 차트</title>
+  <description>jQuery 플러그인 차트</description>
+  <developer>
+    <name>jqplot</name>
+    <site>http://www.jqplot.com</site>
+  </developer>
+</addon>

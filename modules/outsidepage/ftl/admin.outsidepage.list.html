@@ -1,0 +1,62 @@
+<script type="text/javascript">//<![CDATA[
+
+  // 삭제
+  function del(module_orl) {
+    jQuery('#form').jaAction({ 
+      formAttr : 'action=./procOutsidepageAdminDelete.me&method=post', 
+      param : _mei_gb_params + '&module_orl=' + module_orl , 
+      ask : 'del' ,
+      afterSend : function() { location.reload(); }
+    });
+  }
+
+//]]></script>
+<div id="sub_column_content">
+<#include "./admin.sub.html">
+
+  <form id="form" method="get" action="?">
+  <div class="document-list">
+  <table cellspacing="0" border="1" summary="" class="table-list">
+  <colgroup>
+  <col width="120"><col width="120"><col><col width="140">
+  </colgroup>
+  <caption>Total ${paging.total_count?string(",###")} Page ${paging.page?string(",###")}/${paging.total_page?string(",###")}</caption>
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">모듈</th>
+      <th scope="col">브라우저 제목</th>
+      <th scope="col">등록일</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <#list O.listModule as objModule>
+    <tr>
+      <td>
+        <a href="./dispOutsidepageView.me${param.pick('?mid=${objModule.mid}')?html}" target="_blank" title="열기"><span class="iconset opener"></span></a>
+        <a href="./dispOutsidepageAdminInsert.me${param.get('?module_orl=${objModule.module_orl}')?html}" title="설정"><span class="iconset setting"></span></a>
+        <a href="javascript:del('${objModule.module_orl}');" title="삭제"><span class="iconset delete"></span></a>
+      </td>
+      <td>${objModule.mid}</td>
+      <td class="title">${objModule.browser_title}</td>
+      <td><#assign rdate = objModule.rdate?datetime("yyyyMMddHHmmss")>${rdate?string("yyyy/MM/dd")}</td>
+    </tr>
+    </#list>
+    <#if paging.total_count == 0>
+    <tr><td colspan="4" class="zero">등록된 자료가 없습니다.</td></tr>
+    </#if>
+
+  </tbody>
+  </table>
+  </div>
+
+  <div class="document-foot-menu tr">
+    <span class="button medium icon"><a href="./dispOutsidepageAdminInsert.me${param.get('?')?html}"><span class="iconset add"></span>추가
+  </div>
+
+  <@pagenavigator url = param.get('?page=')?j_string form="#form" params = paging />
+
+  </form>
+
+</div>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+  <package name="menu" extends="globals">
+
+    <action name="dispMenuAdminList" class="com.syaku.modules.menu.MenuAdminView" method="dispMenuAdminList">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.menu.list.html</param>
+    </action>
+
+    <action name="dispMenuAdminInsert" class="com.syaku.modules.menu.MenuAdminView" method="dispMenuAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.menu.insert.html</param>
+    </action>
+
+    <action name="dispMenuItemAdminView" class="com.syaku.modules.menu.MenuAdminView" method="dispMenuItemAdminView">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.menu.item.view.html</param>
+    </action>
+
+    <action name="dispMenuItemAdminInsert" class="com.syaku.modules.menu.MenuAdminView" method="dispMenuItemAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.menu.item.insert.html</param>
+    </action>
+
+    <action name="procMenuAdminCache" class="com.syaku.modules.menu.MenuAdminController" method="procMenuAdminCache">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procMenuAdminInsert" class="com.syaku.modules.menu.MenuAdminController" method="procMenuAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procMenuAdminDelete" class="com.syaku.modules.menu.MenuAdminController" method="procMenuAdminDelete">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procMenuItemAdminInsert" class="com.syaku.modules.menu.MenuAdminController" method="procMenuItemAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procMenuItemAdminMove" class="com.syaku.modules.menu.MenuAdminController" method="procMenuItemAdminMove">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="procMenuItemAdminDelete" class="com.syaku.modules.menu.MenuAdminController" method="procMenuItemAdminDelete">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="getMenuItemCache" class="com.syaku.modules.menu.MenuModel" method="getMenuItemCache">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+    <action name="getMenuItemXml" class="com.syaku.modules.menu.MenuModel" method="getMenuItemXml">
+      <param name="act_permission">everyone</param>
+      <param name="act_type">model</param>
+    </action>
+
+
+  </package>
+
+</struts>

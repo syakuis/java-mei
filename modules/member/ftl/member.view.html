@@ -1,0 +1,72 @@
+<script type="text/javascript">
+
+jQuery(function() {
+<#list O.listGroupMember?if_exists as obj>
+jQuery.ja.setValue('#group_${obj.group_orl}','${obj.group_orl}');
+</#list>
+});
+
+</script>
+
+<div id="sub_column_content">
+
+<div class="document-view">
+<table cellspacing="0" border="1" summary="" class="table-view">
+<colgroup>
+<col width="150"><col>
+</colgroup>
+<tbody>
+
+  <tr>
+    <th scope="row">아이디</th>
+    <td>${O.objMember.user_id}</td>
+  </tr>
+
+  <tr>
+    <th scope="row">이름</th>
+    <td>${O.objMember.user_name}</td>
+  </tr>
+
+  <tr>
+    <th scope="row">닉네임</th>
+    <td>${O.objMember.nickname}</td>
+  </tr>
+  <tr>
+    <th scope="row">가입일</th>
+    <td><#if O.objMember.rdate != ""><#assign rdate = O.objMember.rdate?datetime("yyyyMMddHHmmss")>${rdate}</#if></td>
+  </tr>
+
+  <tr>
+    <th scope="row">최근 접속일</th>
+    <td><#if O.objMember.last_login != ""><#assign last_login = O.objMember.last_login?datetime("yyyyMMddHHmmss")>${last_login}</#if></td>
+  </tr>
+
+  <tr>
+  <th scope="row">소속 그룹</th>
+  <td>
+    <div class="item">
+    <#list O.listGroup as obj>
+    <input type="checkbox" class="i_check" id="group_${obj.group_orl}" name="group_orl" value="${obj.group_orl}" disabled="disabled" />
+    <label for="group_${obj.group_orl}">${obj.title}</label>
+    </#list>
+    </div>
+  </td>
+  </tr>
+
+  <tr>
+    <th scope="row">이메일</th>
+    <td>${O.objMember.email}</td>
+  </tr>
+
+</tbody>
+</table>
+
+</form>
+</div>
+
+  <div class="document-foot-menu tr">
+    <span class="button medium icon"><a href="./dispMemberInsert.me${param.get('?')?html}"><span class="iconset modify"></span>수정</a></span>
+  </div>
+
+
+</div>

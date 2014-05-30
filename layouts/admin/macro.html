@@ -1,0 +1,23 @@
+<!-- 페이지네비게이션 -->
+<#macro pagenavigator url form params>
+<div class="paginate_complex" id="paginate">
+  <a class="direction sprev start" href="#"><span></span><span></span>&nbsp;처음</a>
+  <a class="direction sprev prevpage" href="#"><span></span>&nbsp;이전</a>
+  <span class="pageaction"></span>
+  <a class="num" href="">page</a>
+  <strong class="now">page</strong>
+  <span class="div">&nbsp;</span>
+  <a class="direction snext nextpage" href="#">다음&nbsp;<span></span></a>
+  <a class="direction snext end" href="#">끝&nbsp;<span></span><span></span></a>
+</div>
+<script type="text/javascript">
+  jQuery('.paginate_complex').jaPageNavigator({
+      url : "${url}"
+    , form : "${form}"
+    , page_row : "${params.page_row}"
+    , page : "${params.page}"
+    , total_count : "${params.total_count}"
+  });
+</script>
+</#macro>
+<!-- 페이지네비게이션 -->

@@ -1,0 +1,238 @@
+<#assign code_orl = param.value('code_orl')?if_exists>
+
+<script type="text/javascript">//<![CDATA[
+
+<#if code_orl == "">
+  var mod = "insert";
+<#else>
+  var mod = "update";
+</#if>
+  
+ function del(code_orl) {
+  jQuery('#form').jaAction({
+  formAttr :'action=./procCodeDelete.me',
+  param : _mei_gb_params + '&code_orl=' + code_orl,
+  ask : 'del',
+  redirect : "./dispCodeList.me?"+_mei_gb_params 
+  });
+}
+
+function target_del() {
+   $("#module_name").val("");
+   $("#module_orl").val('0');
+}
+
+function save() {
+
+  jQuery('#form').jaAction({
+    filter:[ 
+              { target :"#code_id",params: "&filter=notnull&filter=user_id&title=코드아이디"},
+              { target :"#title",params: "&filter=notnull&title=제목"}
+            ],
+    formAttr : 'action=./procCodeInsert.me' ,
+    param : _mei_gb_params,
+    ask : mod,
+    <#if code_orl == "">
+    redirect : "./dispCodeList.me?"+_mei_gb_params 
+    <#else>
+    afterSend : function() { location.reload(); }
+    </#if>
+  });
+}
+
+
+
+</script>
+<div id="sub_column_content">
+
+
+<#include "./admin.sub.html">
+
+  <form id="form" method="post">
+  <input type="hidden" id="code_orl" name="code_orl" value="${code_orl?html}"/>
+ 
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+
+    <colgroup>
+    <col width="100"><col>
+    </colgroup>
+    <tbody>
+
+      <tr>
+        <th>코드명</th>
+        <td>
+        <div class="item">
+
+        <#if code_orl !=""> 
+        <input type="hidden" id="code_id" name="code_id" value="${O.objCode.code_id?if_exists?html}" />
+        ${O.objCode.code_id?if_exists}
+        <#else>
+        <input type="text" id="code_id" class="i_text w250" name="code_id" />
+        </#if>
+
+        </div>
+        </td>
+      </tr>
+
+      <tr>
+        <th>대상 모듈</th>
+        <td>
+         <div>
+            <input type="hidden" id="module_orl" name="module_orl" value="${O.objCode.module_orl?if_exists}" />
+            <div class="item">
+            <input type="text" class="i_text  w150" id="module_name" value="${O.mid?if_exists?html}" readonly="readonly" />
+
+            <span class="button green medium icon"><button type="button" onclick="jQuery.module._open_search({return_mid : '#form #module_name' , return_module_orl : '#form #module_orl' });"><span class="iconset search"></span>검색</button></span>
+             <span class="button medium icon"><button type="button" onclick="target_del();"><span class="iconset delete"></span>삭제</button></span>
+            </div>
+         </div>
+        </td>
+      </tr>
+
+
+      <tr>
+        <th>제목</th>
+        <td>
+       <div class="item">
+         <input type="text" id="title" name="title"  class="i_text w95p" value="${O.objCode.title?if_exists?html}"/>
+          </div>
+        </td>
+      </tr>
+      
+       <tr>
+        <th>비고</th>
+        <td>
+           <div class="item">
+          <textarea type="text"  id="comment" name="comment" class="i_text w95p" cols="80" rows="10" >${O.objCode.comment?if_exists?html}</textarea>
+          </div>
+        </td>
+      </tr>
+  </table>
+  </div>
+
+  </form>
+
+
+  <div class="document-foot-menu">
+    <span class="button medium icon"><a href="./dispCodeList.me${param.pick('?mid=')?html}"><span class="iconset list"></span>목록</a></span>
+    <span class="button medium icon"><button type="button" onclick="save();"><span class="iconset accept"></span>저장</button></span>
+  </div>
+
+
+
+<#if code_orl != "">
+
+<link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="${MEI_PATH_RELATIVE}/common/ui.simple.tree/jquery.simple.tree.css" />
+<script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/ui.simple.tree/jquery.simple.tree.js"></script>
+<script type="text/javascript" language="javascript" src="${MEI_PATH_RELATIVE}/common/ui.simple.tree/jquery.simple.tree.extend.js"></script>
+
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+
+  jQuery('#form-tree').simpleTreeExtend({
+    title : '${O.objCode.title}',
+    target : '#set-tree',
+    node : 'tree_',
+
+    idx : 'code_item_orl',
+    parent_idx : 'parent_orl',
+    num : 'num',
+    name : 'name',
+    
+    // 시작 &
+    ajax_data : '&code_orl=${code_orl}&' + _mei_gb_params,
+    ajax_move_url : 'procCodeItemMove.me',
+    ajax_url_load : 'getCodeXml.me',
+
+    _add : function(idx,num) {
+      callInput('',idx,num);
+    },
+
+    _modify : function(idx) {
+      callInput(idx);
+    },
+
+    _del : function(idx) {
+      var obj = this;
+
+      if (confirm("삭제하시겠습니까?")) {
+        jQuery.ajax({
+          url : 'procCodeItemDelete.me',
+          data : obj.ajax_data + '&' + obj.idx + '=' + idx,
+          type : 'post',
+          success : function(xml) {
+            reload(xml);
+          }
+        });
+      }
+
+    }
+
+  });
+
+  jQuery("#code_input").dialog({
+    bgiframe: true,
+    autoOpen: false,
+    width: 400,
+    modal: true,
+    draggable: true,
+    closeOnEscape: true,
+    title: '코드관리',
+    resizable: false
+  });
+
+});
+
+
+function callInput(idx,parent_idx,num) {
+  var url = './dispCodeItemInsert.me?' + _mei_gb_params + '&code_orl=${code_orl}&code_item_orl=' + idx + '&parent_orl=' + parent_idx + '&num=' + num;
+
+  jQuery.get(url, function(data) {
+    jQuery('#code_input').html(data).dialog('open');
+  });
+
+}
+
+
+// callInput 처리 후 화면 리로딩
+function reload(xml) {
+  $.simpleTreeExtend._ajaxLoad();
+  $('#code_input').dialog('close');
+}
+
+function cache() {
+  jQuery.ajax({
+    url : 'getCodeCache.me',
+    data : _mei_gb_params + '&code_orl=${code_orl}',
+    type : 'post',
+    success : function(xml) {
+      $.simpleTreeExtend._ajaxLoad();
+    }
+  });
+}
+
+//]]></script>
+
+<div id="code_input"></div>
+
+<form id="form-tree" method="post" action="./getCodeXml.me">
+  <input type="hidden" id="code_orl" name="code_orl" value="${code_orl}" />
+
+  <div class="document-head-menu">
+    <span class="button medium icon"><a href="javascript:cache();"><span class="iconset cache"></span>캐쉬 새로고침</a></span>
+  </div>
+
+  <div class="pt10">
+    <div class="custom-simple-tree">
+      <ul id="set-tree" class="simpleTree"></ul>
+    </div>
+  </div>
+
+</form>
+
+</#if>
+
+</div>

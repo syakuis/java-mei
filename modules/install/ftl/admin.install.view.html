@@ -1,0 +1,52 @@
+<script type="text/javascript">//<![CDATA[
+
+function install(classes) {
+  jQuery('#form').jaAction({ 
+    formAttr : 'action=./procInstallAdminModuleInstall.me&method=post', 
+    param : _mei_gb_params + '&classes=' + classes , 
+    ask_msg : '설치하겠습니까?' ,
+    afterSend : function() { location.reload(); }
+  });
+
+}
+
+//]]></script>
+
+<div id="sub_column_content">
+<form id="form" method="get" action="?">
+<#include "./admin.sub.html">
+
+<div class="document-list">
+  <table cellspacing="0" border="1" summary="document list" class="table-list">
+    <colgroup>
+    <col width="100"><col><col width="250"><col width="100">
+    </colgroup>
+    <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">모듈</th>
+      <th scope="col">경로</th>
+      <th scope="col">설치여부</th>
+    </tr>
+    </thead>
+    <tbody>
+    <#list O.listModule as obj>
+    <tr>
+      <td>
+        <#if obj.prop_install == false && obj.prop_install_classes?if_exists != "">
+        <span class="button medium"><a href="javascript:install('${obj.prop_install_classes?if_exists}')">설치하기</a></span>
+        </#if>
+      </td>
+      <td class="tl">${obj.prop_name?if_exists} ( ${obj.prop_title?if_exists} )</td>
+      <td class="tl">${obj.prop_path?if_exists}<br />${obj.prop_classes_package?if_exists}</td>
+      <td><#if obj.prop_install == true>설치됨<#else>설치안됨</#if></td>
+    </tr>
+    </#list>
+    </tbody>
+  </table>
+
+</div>
+
+</form>
+
+</div>

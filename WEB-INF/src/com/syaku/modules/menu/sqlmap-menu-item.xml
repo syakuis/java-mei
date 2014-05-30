@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.menu">
+  <typeAlias alias="MenuItemBean" type="com.syaku.modules.menu.MenuItemBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-menu-item" class="MenuItemBean">
+    <result property="menu_item_orl" column="menu_item_orl" nullValue="" />
+    <result property="parent_orl" column="parent_orl" nullValue="" />
+    <result property="num" column="num" nullValue="" />
+    <result property="menu_orl" column="menu_orl" nullValue="" />
+    <result property="url" column="url" nullValue="" />
+    <result property="name" column="name" nullValue="" />
+    <result property="open_window" column="open_window" nullValue="" />
+    <result property="expand" column="expand" nullValue="" />
+    <result property="is_mobile" column="is_mobile" nullValue="" />
+    <result property="rdate" column="rdate" nullValue="" />
+
+    <result property="group_orls" column="group_orls" nullValue="" />
+    <result property="btn_normal" column="btn_normal" nullValue="" />
+    <result property="btn_hover" column="btn_hover" nullValue="" />
+    <result property="btn_active" column="btn_active" nullValue="" />
+    <result property="select_query" column="select_query" nullValue="" />
+
+  </resultMap>
+
+  <select id="select-menu-item-list" parameterClass="hashMap" resultMap="result-menu-item">
+    SELECT
+      menu_item_orl,
+      parent_orl,
+      num,
+      menu_orl,
+      url,
+      name,
+      open_window,
+      expand,
+      is_mobile,
+      rdate,
+      group_orls,
+      btn_normal,
+      btn_hover,
+      btn_active,
+      select_query
+    FROM SK_MENU_ITEM
+
+    WHERE menu_orl = #menu_orl#
+    ORDER BY num;
+  </select>
+
+  <select id="select-menu-item-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(menu_item_orl),0) FROM SK_MENU_ITEM
+    WHERE menu_orl = #menu_orl#
+    <isNotEmpty prepend="AND" property="name" >
+      name = #name#
+    </isNotEmpty>
+    <isNotEmpty prepend="AND" property="menu_item_orl" >
+      menu_item_orl = #menu_item_orl#
+    </isNotEmpty>
+  </select>
+
+  <select id="select-menu-item-one" parameterClass="hashMap" resultMap="result-menu-item">
+    SELECT
+      menu_item_orl,
+      parent_orl,
+      num,
+      menu_orl,
+      url,
+      name,
+      open_window,
+      expand,
+      is_mobile,
+      rdate,
+      group_orls,
+      btn_normal,
+      btn_hover,
+      btn_active,
+      select_query
+    FROM SK_MENU_ITEM
+    WHERE menu_item_orl = #menu_item_orl#
+  </select>
+
+  <select id="select-menu-item-one-search" parameterClass="hashMap" resultMap="result-menu-item">
+    SELECT
+      menu_item_orl,
+      parent_orl,
+      num,
+      menu_orl,
+      url,
+      name,
+      open_window,
+      expand,
+      is_mobile,
+      rdate,
+      group_orls,
+      btn_normal,
+      btn_hover,
+      btn_active,
+      select_query
+    FROM SK_MENU_ITEM
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="name" >
+        name = #name#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="url" >
+        url = #url#
+      </isNotEmpty>
+
+    </dynamic>
+
+    LIMIT 1
+  </select>
+
+
+  <select id="select-menu-item-max" parameterClass="hashMap" resultClass="int">
+    SELECT (IFNULL(MAX(#field#),0) + 1) FROM SK_MENU_ITEM
+    WHERE menu_orl = #menu_orl#
+  </select>
+
+
+  <insert id="insert-menu-item" parameterClass="MenuItemBean">
+
+    <selectKey resultClass="String" keyProperty="menu_item_orl">
+      SELECT (IFNULL(MAX(menu_item_orl),0) + 1) AS menu_item_orl FROM SK_MENU_ITEM
+    </selectKey>
+
+    INSERT INTO SK_MENU_ITEM
+    (
+      menu_item_orl,
+      parent_orl,
+      num,
+      menu_orl,
+      url,
+      name,
+      open_window,
+      expand,
+      is_mobile,
+      rdate,
+      group_orls,
+      btn_normal,
+      btn_hover,
+      btn_active,
+      select_query
+    ) VALUES (
+      #menu_item_orl#,
+      #parent_orl#,
+      #num#,
+      #menu_orl#,
+      #url#,
+      #name#,
+      #open_window#,
+      #expand#,
+      #is_mobile#,
+      #rdate#,
+      #group_orls#,
+      #btn_normal#,
+      #btn_hover#,
+      #btn_active#,
+      #select_query#
+    )
+  </insert>
+
+  <select id="select-menu-item-move-num" parameterClass="hashMap" resultClass="String">
+    SELECT
+      IFNULL(num,0)
+
+    FROM SK_MENU_ITEM
+    WHERE menu_orl = #menu_orl#
+    AND menu_item_orl = #menu_item_orl#
+  </select>
+
+  <select id="select-menu-item-max-num" parameterClass="hashMap" resultClass="String">
+    SELECT
+      IFNULL(MAX(num),0)
+
+    FROM SK_MENU_ITEM
+    WHERE menu_orl = #menu_orl#
+    AND parent_orl = #parent_orl#
+  </select>
+
+
+  <update id="update-menu-item-num-sort" parameterClass="hashMap">
+    UPDATE SK_MENU_ITEM SET
+      num = num + 1
+    WHERE menu_orl = #menu_orl#
+    AND num > #num#
+  </update>
+
+  <update id="update-menu-item-move" parameterClass="hashMap">
+    UPDATE SK_MENU_ITEM SET
+      num = #num#,
+      parent_orl = #parent_orl#
+    WHERE menu_orl = #menu_orl#
+    AND menu_item_orl = #menu_item_orl#
+  </update>
+
+  <update id="update-menu-item" parameterClass="MenuItemBean">
+    UPDATE SK_MENU_ITEM SET
+
+      url = #url#,
+      name = #name#,
+      open_window = #open_window#,
+      expand = #expand#,
+      is_mobile = #is_mobile#,
+      group_orls = #group_orls#,
+      btn_normal = #btn_normal#,
+      btn_hover = #btn_hover#,
+      btn_active = #btn_active#,
+      select_query = #select_query#
+    WHERE menu_item_orl = #menu_item_orl#
+  </update>
+
+  <delete id="delete-menu-item" parameterClass="hashMap">
+    DELETE FROM SK_MENU_ITEM 
+    WHERE menu_orl = #menu_orl#
+
+    <isEmpty prepend="AND" property="menu_item_orl_array" >
+      menu_item_orl = #menu_item_orl#
+    </isEmpty>
+
+    <isNotEmpty prepend="AND" property="menu_item_orl_array">
+      <iterate prepend="menu_item_orl NOT IN " property="menu_item_orl_array" open="(" close=")" conjunction=",">
+        #menu_item_orl_array[]#
+      </iterate>
+    </isNotEmpty>
+
+  </delete>
+
+  <delete id="delete-menu-item-remove" parameterClass="hashMap">
+    DELETE FROM SK_MENU_ITEM WHERE menu_orl = #menu_orl#
+  </delete>
+
+</sqlMap>

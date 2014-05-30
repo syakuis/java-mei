@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+  <package name="module" extends="globals">
+
+    <action name="dispModuleAdminPopupList" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminPopupList">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.module.list.select.html</param>
+    </action>
+
+    <action name="dispModuleAdminList" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminList">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.module.list.html</param>
+    </action>
+
+    <action name="procModuleAdminPropInsert" class="com.syaku.modules.module.ModuleAdminController" method="procModuleAdminPropInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+
+<!--
+    <action name="dispModuleAdminInsert" class="com.syaku.modules.module.ModuleAdminView" method="dispModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">view</param>
+      <param name="act_template">admin.module.insert.html</param>
+    </action>
+
+    <action name="procModuleAdminInsert" class="com.syaku.modules.module.ModuleAdminController" method="procModuleAdminInsert">
+      <param name="act_permission">member</param>
+      <param name="act_type">controller</param>
+    </action>
+-->
+  </package>
+
+</struts>

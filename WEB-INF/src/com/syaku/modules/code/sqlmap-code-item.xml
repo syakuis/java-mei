@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.code">
+  <typeAlias alias="CodeItemBean" type="com.syaku.modules.code.CodeItemBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-code-item" class="CodeItemBean">
+
+    <result property="code_item_orl" column="code_item_orl" nullValue="" />
+    <result property="parent_orl" column="parent_orl" nullValue="" />
+    <result property="num" column="num" nullValue="" />
+    <result property="code_orl" column="code_orl" nullValue="" />
+    <result property="name" column="name" nullValue="" />
+    <result property="color" column="color" nullValue="" />
+    <result property="rdate" column="rdate" nullValue="" />
+
+  </resultMap>
+
+  <select id="select-code-item-list" parameterClass="hashMap" resultMap="result-code-item">
+    SELECT
+    code_item_orl,
+    parent_orl,
+    num,
+    code_orl,
+    name,
+    color,
+    rdate
+
+    FROM SK_CODE_ITEM
+
+    WHERE code_orl = #code_orl#
+    ORDER BY num
+  </select>
+
+  <select id="select-code-item-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(code_item_orl),0) FROM SK_CODE_ITEM
+    WHERE code_orl = #code_orl#
+  </select>
+
+  <select id="select-code-item-one" parameterClass="hashMap" resultMap="result-code-item">
+    SELECT
+    code_item_orl,
+    parent_orl,
+    num,
+    code_orl,
+    name,
+    color,
+    rdate
+
+    FROM SK_CODE_ITEM
+    WHERE code_item_orl = #code_item_orl#
+  </select>
+
+  <select id="select-code-item-max" parameterClass="hashMap" resultClass="int">
+    SELECT (IFNULL(MAX(#field#),0) + 1) FROM SK_CODE_ITEM
+    WHERE code_orl = #code_orl#
+  </select>
+
+
+  <insert id="insert-code-item" parameterClass="CodeItemBean">
+    <selectKey resultClass="String" keyProperty="code_item_orl">
+      SELECT (IFNULL(MAX(code_item_orl),0) + 1) AS code_item_orl FROM SK_CODE_ITEM
+    </selectKey>
+
+    INSERT INTO SK_CODE_ITEM
+    (
+      code_item_orl,
+      parent_orl,
+      num,
+      code_orl,
+      name,
+      color,
+      rdate
+
+    ) VALUES (
+
+      #code_item_orl#,
+      #parent_orl#,
+      #num#,
+      #code_orl#,
+      #name#,
+      #color#,
+      #rdate#
+
+    )
+  </insert>
+
+  <select id="select-code-item-num-move" parameterClass="hashMap" resultClass="String">
+    SELECT
+      IFNULL(num,0)
+
+    FROM SK_CODE_ITEM
+    WHERE code_orl = #code_orl#
+    AND code_item_orl = #code_item_orl#
+  </select>
+
+  <select id="select-code-item-num-max" parameterClass="hashMap" resultClass="String">
+    SELECT
+      IFNULL(MAX(num),0)
+
+    FROM SK_CODE_ITEM
+    WHERE code_orl = #code_orl#
+    AND parent_orl = #parent_orl#
+  </select>
+
+
+  <update id="update-code-item-num-sort" parameterClass="hashMap">
+    UPDATE SK_CODE_ITEM SET
+      num = num + 1
+    WHERE code_orl = #code_orl#
+    AND num > #num#
+  </update>
+
+  <update id="update-code-item-move" parameterClass="hashMap">
+    UPDATE SK_CODE_ITEM SET
+      num = #num#,
+      parent_orl = #parent_orl#
+    WHERE code_orl = #code_orl#
+    AND code_item_orl = #code_item_orl#
+  </update>
+
+  <update id="update-code-item" parameterClass="CodeItemBean">
+    UPDATE SK_CODE_ITEM SET
+
+    parent_orl = #parent_orl#,
+    num = #num#,
+    code_orl = #code_orl#,
+    name = #name#,
+    color = #color#,
+    rdate = #rdate#
+    WHERE code_item_orl = #code_item_orl#
+  </update>
+
+  <delete id="delete-code-item" parameterClass="hashMap">
+    DELETE FROM SK_CODE_ITEM 
+    WHERE code_orl = #code_orl#
+
+    <isEmpty prepend="AND" property="code_item_orl_array" >
+      code_item_orl = #code_item_orl#
+    </isEmpty>
+
+    <isNotEmpty prepend="AND" property="code_item_orl_array">
+      <iterate prepend="code_item_orl NOT IN " property="code_item_orl_array" open="(" close=")" conjunction=",">
+        #code_item_orl_array[]#
+      </iterate>
+    </isNotEmpty>
+
+  </delete>
+
+  <delete id="delete-code-item-remove" parameterClass="hashMap">
+    DELETE FROM SK_CODE_ITEM WHERE code_orl = #code_orl#
+  </delete>
+
+</sqlMap>

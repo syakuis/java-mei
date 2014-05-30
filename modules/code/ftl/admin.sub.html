@@ -1,0 +1,24 @@
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+targetOnClass('#admin-menu-tab li','on','single', { target : [
+  { search : ['dispCodeAdminInsert'] , def : false } ,
+  { search : ['dispCodeList','dispCodeView','dispCodeInsert'] , def : false , condition : 'or'}
+]} );
+
+});
+
+//]]></script>
+
+
+<div class="document-title">
+<div class="document-title-name">코드관리</div>
+</div>
+
+<div class="document-tab">
+<ul id="admin-menu-tab">
+<li><a href="./dispCodeAdminInsert.me${param.get('?')?html}">모듈관리</a></li>
+<li><a href="./dispCodeList.me${param.get('?menu_orl=')?html}">목록</a></li>
+</ul>
+</div>

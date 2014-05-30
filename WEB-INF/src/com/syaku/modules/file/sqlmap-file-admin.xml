@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.file">
+  <typeAlias alias="FileBean" type="com.syaku.modules.file.FileBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-file-admin" class="FileBean">
+    <result property="file_orl" column="file_orl" nullValue="" />
+    <result property="target_orl" column="target_orl" nullValue="" />
+    <result property="sid" column="sid" nullValue="" />
+    <result property="seq" column="seq" nullValue="" />
+    <result property="module_orl" column="module_orl" nullValue="" />
+    <result property="member_orl" column="member_orl" nullValue="" />
+    <result property="filename" column="filename" nullValue="" />
+    <result property="re_filename" column="re_filename" nullValue="" />
+    <result property="folder" column="folder" nullValue="" />
+    <result property="folder_date" column="folder_date" nullValue="" />
+    <result property="size" column="size" nullValue="" />
+    <result property="checksum" column="checksum" nullValue="" />
+    <result property="extension" column="extension" nullValue="" />
+    <result property="type" column="type" nullValue="" />
+    <result property="rdate" column="rdate" nullValue="" />
+    <result property="ip" column="ip" nullValue="" />
+    <result property="num" column="num" nullValue="" />
+    <result property="listorder" column="listorder" nullValue="" />
+
+    <result property="mid" column="mid" nullValue="" />
+    <result property="browser_title" column="browser_title" nullValue="" />
+
+    <result property="user_id" column="user_id" nullValue="" />
+    <result property="user_name" column="user_name" nullValue="" />
+    <result property="nickname" column="nickname" nullValue="" />
+  </resultMap>
+
+
+  <select id="select-file-admin-module-list" parameterClass="hashMap" resultClass="hashMap">
+    SELECT
+    A.module_orl,
+    C.browser_title,
+    C.mid,
+    IFNULL(sum(A.size),0) AS total_file_size,
+    IFNULL(count(A.file_orl),0) AS total_file_count,
+    IFNULL(sum(B.size),0) AS file_size,
+    IFNULL(count(B.file_orl),0) AS file_count
+    FROM sk_file A
+    LEFT JOIN sk_file B ON B.file_orl = A.file_orl AND B.target_orl &lt;&gt; 0
+    LEFT JOIN sk_module C ON C.module_orl = A.module_orl
+    GROUP BY A.module_orl,C.browser_title,C.mid
+  </select>
+
+
+  <select id="select-file-admin-list" parameterClass="hashMap" resultMap="result-file-admin">
+    SELECT
+    F.*,
+    MEM.user_id,
+    MEM.user_name,
+    MEM.nickname,
+    M.mid,
+    M.browser_title
+    FROM SK_FILE F
+    LEFT JOIN SK_MODULE M ON M.module_orl = F.module_orl
+    LEFT JOIN SK_MEMBER MEM ON MEM.member_orl = F.member_orl
+
+  <dynamic prepend="WHERE">
+
+    <isNotEmpty prepend="AND" property="sch_value">
+
+      <isNotEmpty property="sch_type">
+        F.$sch_type$ LIKE CONCAT('%', #sch_value#, '%')
+      </isNotEmpty>
+    </isNotEmpty>
+
+  </dynamic>
+
+  ORDER BY listorder
+
+  <isNotEmpty prepend="LIMIT" property="page_start" >
+   $page_start$,$page_row$
+  </isNotEmpty>
+
+  </select>
+
+  <select id="select-file-admin-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(file_orl),0) FROM SK_FILE
+
+    <dynamic prepend="WHERE">
+
+      <isNotEmpty prepend="AND" property="sch_value">
+
+        <isNotEmpty property="sch_type">
+          $sch_type$ LIKE CONCAT('%', #sch_value#, '%')
+        </isNotEmpty>
+      </isNotEmpty>
+
+    </dynamic>
+
+  </select>
+
+</sqlMap>

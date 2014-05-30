@@ -1,0 +1,92 @@
+<script type="text/javascript">//<![CDATA[
+
+
+function schedule_exec(schedule_orl) {
+  jQuery('#form').jaAction({ 
+    formAttr : 'method=post&action=procScheduleAdminExecute.me',
+    direct : _mei_gb_params + '&schedule_orl=' + schedule_orl,
+    ask : 'execute',
+    afterSend : function() { alert("완료되었습니다."); location.reload(); }
+  });
+}
+
+function schedule_delete(schedule_orl) {
+  jQuery('#form').jaAction({ 
+    formAttr : 'method=post&action=procScheduleItemAdminDelete.me',
+    direct : _mei_gb_params + '&schedule_orl=' + schedule_orl,
+    ask : 'del',
+    afterSend : function() { alert("완료되었습니다."); location.reload(); }
+  });
+}
+
+function schedule_state(state) {
+  jQuery('#form').jaAction({ 
+    formAttr : 'method=post&action=procScheduleAdminState.me',
+    direct : _mei_gb_params + '&state=' + state,
+    ask : 'execute',
+    afterSend : function() { alert("완료되었습니다."); location.reload(); }
+  });
+} 
+
+//]]></script>
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+<div class="mt5">
+  <#if O.objSchedule.is_shutdown>
+  <span class="button medium"><a href ="javascript:schedule_state('start');">스케줄 시작</a></span>
+  <#else>
+  <span class="button medium"><a href ="javascript:schedule_state('stop');">스케줄 정지</a></span>
+  </#if>
+</div>
+
+<form id="form" method="get" action="?">
+<div class="document-list">
+  <table cellspacing="0" border="1" summary="document list" class="table-list">
+  <caption>Total ${paging.total_count?string(",###")} Page ${paging.page?string(",###")}/${paging.total_page?string(",###")}</caption>
+  <colgroup>
+  <col width="80"><col width="140"><col><col width="100"><col width="110"><col width="60">
+  </colgroup>
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">제목</th>
+      <th scope="col">클래스</th>
+      <th scope="col">반복시간(초)</th>
+      <th scope="col">최근실행</th>
+      <th scope="col">사용여부</th>
+    </tr>
+  </thead>
+  <tbody>
+    <#list O.listSchedule as obj>
+      <tr>
+        <td><a href="javascript:schedule_exec('${obj.schedule_orl}');" title="실행"><span class="iconset cache"></span></a>
+          <a href= "./dispScheduleItemAdminInsert.me${param.get('?schedule_orl=${obj.schedule_orl}')?html}" title="설정"><span class="iconset setting"></span></a>
+          <a href="javascript:schedule_delete('${obj.schedule_orl}');" title="삭제"><span class="iconset delete"></span></a>
+        </td>
+        <td>${obj.title}</td>
+        <td class="title">${obj.classes}</td>
+        <td class="num">${obj.repeat_time?number?string(",###")}</td>
+        <td class="date">
+        <#if obj.last_date != ""> 
+        <#assign last_date = obj.last_date?datetime("yyyyMMddHHmmss")>${last_date?string("yyyy/MM/dd HH:mm")}
+        </#if></td>
+        <td>${obj.isused}</td>
+      </tr>
+    </#list>
+
+  </tbody>
+  </table>
+</div>
+
+<@pagenavigator url = param.get('?page=')?j_string form="#form" params = paging />
+
+<div class="document-foot-menu">
+<#if MEI_GRANT_WRITE>
+<span class="button medium"><a href="./dispScheduleItemAdminInsert.me${param.get('?')?html}">등록</a></span>
+</#if>
+</div>
+
+</form>
+</div>

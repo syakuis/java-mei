@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<addon>
+  <type>datepicker</type>
+  <version>3.7.4</version>
+  <name>jquerydatepick</name>
+  <title>jQuery UI datepick</title>
+  <description>jQuery UI 이용하여 개발한 datepick</description>
+  <developer>
+    <name>jquerydatepick</name>
+    <site>http://keith-wood.name/datepick.html</site>
+  </developer>
+</addon>

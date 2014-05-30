@@ -1,0 +1,202 @@
+<script type="text/javascript">//<![CDATA[
+
+
+jQuery(function(){
+
+  var article = jQuery('.faq .article');
+	article.addClass('disp-hide');
+	article.find('.a').slideUp(100);
+	
+	jQuery('.faq .article .trigger').click(function(){
+		var myArticle = jQuery(this).parents('.article:first');
+		if(myArticle.hasClass('disp-hide')){
+			article.addClass('disp-hide').removeClass('show'); // 아코디언 효과를 원치 않으면 이 라인을 지우세요
+			article.find('.a').slideUp(100); // 아코디언 효과를 원치 않으면 이 라인을 지우세요
+			myArticle.removeClass('disp-hide').addClass('show');
+			myArticle.find('.a').slideDown(100);
+		} else {
+			myArticle.removeClass('show').addClass('disp-hide');
+			myArticle.find('.a').slideUp(100);
+		}
+	});
+	
+	jQuery('.faq .hgroup .trigger').click(function(){
+		var hidden = jQuery('.faq .article.disp-hide').length;
+		if(hidden > 0){
+			article.removeClass('disp-hide').addClass('show');
+			article.find('.a').slideDown(100);
+		} else {
+			article.removeClass('show').addClass('disp-hide');
+			article.find('.a').slideUp(100);
+		}
+	});
+	
+});
+
+function addon_install(addon) {
+  jQuery('#form').jaAction({ 
+    formAttr : 'method=post&action=procAddonInstall.me',
+    direct : _mei_gb_params + '&addon=' + addon,
+    ask_msg : '애드온을 설치하시겠습니까?',
+    afterSend : function() { 
+      location.reload();
+      alert("완료되었습니다."); 
+    }
+  });
+}
+
+function addon_delete(addon,addon_orl) {
+  jQuery('#form').jaAction({ 
+    formAttr : 'method=post&action=procAddonDelete.me',
+    direct : _mei_gb_params + '&addon_orl=' + addon_orl,
+    ask : 'del',
+    afterSend : function() { 
+      location.reload();
+      alert("삭제되었습니다."); 
+    }
+  });
+}
+
+function addon_isuse(isuse,addon_orl) {
+  jQuery('#form').jaAction({ 
+    formAttr : 'method=post&action=procAddonIsUseUpdate.me',
+    direct : _mei_gb_params + '&addon_orl=' + addon_orl + '&is_use=' + isuse,
+    ask_msg : '애드온 사용유무를 변경하시겠습니까?',
+    afterSend : function() { 
+      location.reload();
+      alert("완료되었습니다."); 
+    }
+  });
+}
+
+function addon_first_load(addon,addon_orl) {
+  jQuery('#form').jaAction({ 
+    formAttr : 'method=post&action=procAddonFirstLoadUpdate.me',
+    direct : _mei_gb_params + '&addon_type=' + addon + '&addon_orl=' + addon_orl,
+    ask_msg : '기본 애드온으로 설정하시겠습니까?',
+    afterSend : function() { 
+      location.reload();
+      alert("완료되었습니다."); 
+    }
+  });
+}
+
+//]]></script>
+
+<style>
+
+.list_open{border-bottom:1px solid #ddd;font-size:12px}
+.list_open .ul_list_open{margin:0;padding:0;list-style:none}
+.list_open .title{margin:0;border-top:1px solid #ddd}
+.list_open .title .trigger{font-size:24px;display:block;padding:10px 15px;background:#fafafa;font-weight:bold;color:#333;text-decoration:none !important}
+.list_open .content{margin:0;padding:10px 15px;line-height:1.5}
+
+
+
+.faq{border-bottom:1px solid #ddd;font-size:12px}
+.faq .hgroup{position:relative;margin:0 0 10px 0;*zoom:1}
+.faq .hgroup .trigger{overflow:visible;position:absolute;top:50%;right:0;margin:-7px 0 0 0;padding:0;border:0;background:none;font-size:12px;cursor:pointer}
+.faq ul{margin:0;padding:0;list-style:none}
+.faq .q{margin:0;border-top:1px solid #ddd}
+.faq .q a.trigger{display:block;padding:10px 15px;background:#fafafa;font-weight:bold;color:#333;text-align:left;text-decoration:none !important}
+.faq .disp-hide .q a.trigger{font-weight:normal;background:none}
+.faq .q a.trigger:hover,
+.faq .q a.trigger:active,
+.faq .q a.trigger:focus{background:#f8f8f8;color:#000}
+.faq .a{margin:0;padding:10px 15px;line-height:2}
+
+
+</style>
+
+<div id="sub_column_content">
+  <#include "./admin.sub.html">
+
+  <form id="form">
+  </form>
+
+  <div class="list_open">
+    <ul class="ul_list_open">
+    <#list O.listAddonType as addon>
+    <li>
+    <p class="title"><span class="trigger">${addon}</span></p>
+    <div class="content" style="overflow:hidden; padding-top:10px; margin-top:0px; padding-bottom:10px; margin-bottom:0px;">
+
+    <div class="faq">
+      <ul>
+
+      <#list O.listAddonLoad as load>
+      
+      <#assign install = "N">
+      <#assign is_use = "N">
+      <#assign addon_orl = "">
+      <#assign first_load = "N">
+
+      <#list O.listAddon as obj>
+      
+      <#if load.name == obj.addon>
+      <#assign addon_orl = obj.addon_orl>
+      <#assign first_load = obj.first_load>
+      <#assign install = "Y">
+      <#assign is_use = obj.is_use>
+      <#break>
+      </#if>
+
+      </#list>
+
+      <#if addon == load.type>
+
+      <li class="article disp-hide">
+        <div class="q">
+          <a href="#a1" class="trigger">
+          <#if is_use == 'Y'>
+          <img src="${MEI_IMAGES_STYLES_ICONS}/brick_add.png" title="사용함" />
+          <#else>
+          <img src="${MEI_IMAGES_STYLES_ICONS}/brick_delete.png" title="사용안함" />
+          </#if>
+          <#if first_load == 'Y'>
+          <img src="${MEI_IMAGES_STYLES_ICONS}/brick_link.png" title="기본애드온" />
+          </#if>
+          ${load.name} (${load.version})</a>
+        </div>
+        <div class="a" style="overflow:hidden; padding-top:10px; margin-top:0px; padding-bottom:10px; margin-bottom:0px;">
+        
+        <p>
+          <#if install == 'N'>
+          <span class="button green small"><button type="button" onclick="addon_install('${load.name}');">설치</button></span>
+          <#else>
+          <span class="button red small"><button type="button" onclick="addon_delete('${load.name}','${addon_orl}');">삭제</button></span>
+
+          <#if is_use == 'N'>
+          <span class="button blue small"><button type="button" onclick="addon_isuse('Y','${addon_orl}');">사용함</button></span>
+          <#else>
+          <span class="button small"><button type="button" onclick="addon_isuse('N','${addon_orl}');">사용안함</button></span>
+          <span class="button green small"><button type="button" onclick="addon_first_load('${addon}','${addon_orl}');">기본애드온</button></span>
+          </#if>
+
+          </#if>
+        </p>
+
+        <p>애드온 명 : ${load.title}</p>
+        <p>애드온 경로 : ${load.path}</p>
+        <p>공식 사이트 : <a href="${load.site}" target="_blank">${load.site}</a></p>
+        <p>
+          ${load.description?replace('\n','</br>')}
+        </p>
+
+        </div>
+      </li>
+
+      </#if>
+      </#list>
+
+      </ul>
+    </div>
+
+    </div>
+    </li>
+    </#list>
+
+    </ul>
+  </div>
+
+</div>

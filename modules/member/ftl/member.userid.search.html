@@ -1,0 +1,151 @@
+<script type="text/javascript">//<![CDATA[
+
+  function userid_search() {
+    jQuery('#form1').jaAction({
+      filter : [
+        { target : "#user_name", params : "&filter=notnull&title=이름" },
+        { target : "#email", params : "&filter=notnull&title=이메일" }
+      ],
+      param : _mei_gb_params,
+      beforeAction : function() {
+          jQuery('#userid_text').text('');
+      },
+      setAjax : {
+        success : function(xml) {
+          var message = jQuery(xml).find('message').text();
+          jQuery('#userid_text').text(message);
+        }
+      }
+
+    });
+
+  }
+
+  function password_search() {
+    jQuery('#form2').jaAction({
+      filter : [
+        { target : "#user_name", params : "&filter=notnull&title=이름" },
+        { target : "#user_id", params : "&filter=notnull&title=아이디" },
+        { target : "#email", params : "&filter=notnull&title=이메일" }
+      ],
+      param : _mei_gb_params,
+      beforeAction : function() {
+          jQuery('#password_text').text('');
+      },
+      setAjax : {
+        success : function(xml) {
+          var message = jQuery(xml).find('message').text();
+          jQuery('#password_text').text(message);
+        }
+      }
+
+    });
+
+  }
+
+//]]></script>
+
+
+<div id="sub_column_content">
+
+<div class="document-title">
+  <div class="document-title-name">회원 아이디/비밀번호 조회</div>
+</div>
+
+  <form id="form1" method="post" action="procMemberUserIdSearch.me">
+  <h4 class="document-sub-title"><span class="iconset title"></span> 아이디 조회</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+
+    <tr>
+    <th scope="row">이름</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w150" id="user_name" name="user_name" maxlength="15" value="" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">이메일</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w450" id="email" name="email" maxlength="250" value="" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">결과</th>
+    <td>
+      <div class="item">
+      <span class="button medium"><button type="button" onclick="userid_search();">아이디 조회</button></span>
+      <span id="userid_text"></span>
+      </div>
+    </td>
+    </tr>
+
+  </tbody>
+  </table>
+  </div>
+
+  </tbody>
+  </table>
+  </div>
+  </form>
+
+  <form id="form2" method="post" action="procMemberPasswordSearch.me">
+  <h4 class="document-sub-title"><span class="iconset title"></span> 비밀번호 조회</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+
+    <tr>
+    <th scope="row">이름</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w150" id="user_name" name="user_name" maxlength="15" value="" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">아이디</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w150" id="user_id" name="user_id" maxlength="15" value="" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">이메일</th>
+    <td>
+      <div class="item">
+        <input type="text" class="i_text w450" id="email" name="email" maxlength="250" value="" />
+      </div>
+    </td>
+    </tr>
+
+    <tr>
+    <th scope="row">결과</th>
+    <td>
+      <div class="item">
+      <span class="button medium"><button type="button" onclick="password_search();">비밀번호 조회</button></span>
+      <span id="password_text"></span>
+      </div>
+    </td>
+    </tr>
+
+  </tbody>
+  </table>
+  </form>
+
+</div>

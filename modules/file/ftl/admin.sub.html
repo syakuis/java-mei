@@ -1,0 +1,30 @@
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+
+  // Tab on class
+  targetOnClass('#admin-tab li','on','single', { target : [
+    { search : ['dispFileAdminInsert'] , def : true },
+    { search : ['dispFileAdminView'] , def : false },
+    { search : ['dispFileAdminClearView'] , def : false },
+    { search : ['dispFileAdminItemList'] , def : false }
+  ]} );
+
+});
+
+//]]></script>
+
+<div class="document-title">
+  <div class="document-title-name">파일</div>
+</div>
+
+<div class="document-tab">
+<ul id="admin-tab">
+  <li><a href="./dispFileAdminInsert.me${param.pick('?mid=&module_orl=${MODULE_ORL}')?html}">모듈</a></li>
+  <#if MODULE_ORL?exists>
+  <li><a href="./dispFileAdminView.me${param.pick('?mid=&module_orl=${MODULE_ORL}')?html}">파일정보</a></li>
+  <li><a href="./dispFileAdminClearView.me${param.pick('?mid=&module_orl=${MODULE_ORL}')?html}">파일정리</a></li>
+  <li><a href="./dispFileAdminItemList.me${param.pick('?mid=&module_orl=${MODULE_ORL}')?html}">파일관리</a></li>
+  </#if>
+</ul>
+</div>

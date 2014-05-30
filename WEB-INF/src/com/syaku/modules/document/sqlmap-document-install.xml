@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.document">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-document" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS DOCUMENT (
+      document_orl BIGINT(11) NOT NULL COMMENT '문서 ORL' ,
+      category_orl BIGINT(11) NOT NULL DEFAULT 0 COMMENT '분류 ORL' ,
+      module_orl BIGINT(11) NOT NULL DEFAULT 0 COMMENT '모듈 ORL' ,
+      member_orl BIGINT(11) NOT NULL COMMENT '회원 ORL' ,
+      user_id VARCHAR(100) NULL DEFAULT NULL COMMENT '아이디' ,
+      user_name VARCHAR(100) NOT NULL COMMENT '이름' ,
+      password VARCHAR(100) NULL DEFAULT NULL COMMENT '비밀번호' ,
+      nickname VARCHAR(100) NOT NULL COMMENT '닉네임' ,
+      email VARCHAR(250) NULL DEFAULT NULL COMMENT '이메일' ,
+      homepage VARCHAR(250) NULL DEFAULT NULL COMMENT '홈페이지' ,
+      title VARCHAR(250) NULL DEFAULT NULL COMMENT '제목' ,
+      content LONGTEXT NOT NULL COMMENT '내용' ,
+      content_text     LONGTEXT     NULL     COMMENT '텍스트 내용',
+      extra_vars TEXT NULL DEFAULT NULL COMMENT '확장변수' ,
+      readed_count BIGINT(11) NOT NULL DEFAULT 0 COMMENT '조회수' ,
+      vote_count BIGINT(11) NOT NULL DEFAULT 0 COMMENT '추천수' ,
+      ipaddress VARCHAR(128) NOT NULL COMMENT '아이피주소' ,
+      regdate VARCHAR(14) NULL COMMENT '등록일' ,
+      last_update VARCHAR(14) NULL COMMENT '수정일' ,
+      last_updater VARCHAR(100) NULL COMMENT '수정자' ,
+      parent_orl BIGINT(11) NOT NULL DEFAULT 0 COMMENT '부모 ORL' ,
+      reply_member_orl BIGINT(11) NOT NULL DEFAULT 0 COMMENT '최초 답글작성자 ORL' ,
+      reply_group BIGINT(11) NOT NULL DEFAULT 0 COMMENT '그룹 ORL' ,
+      reply_depth BIGINT(11) NOT NULL DEFAULT 0 COMMENT '깊이 ORL' ,
+      reply_num BIGINT(11) NOT NULL DEFAULT 0 COMMENT '순서 ORL' ,
+      grouporder BIGINT(11) NULL COMMENT '그룹역정렬' ,
+      listorder BIGINT(11) NULL COMMENT '역정렬' ,
+      is_notice CHAR(1) NOT NULL DEFAULT 'N' COMMENT '공지사항 여부' ,
+      title_bold CHAR(1) NOT NULL DEFAULT 'N' COMMENT '제목 찐하기 여부' ,
+      title_color VARCHAR(7) NULL DEFAULT 'N' COMMENT '제목 색깔' ,
+      PRIMARY KEY (document_orl) ,
+      INDEX idx_category_orl (category_orl ASC) ,
+      INDEX idx_module_orl (module_orl ASC) ,
+      INDEX idx_member_orl (member_orl ASC) ,
+      INDEX idx_readed_count (readed_count ASC) ,
+      INDEX idx_regdate (regdate ASC) ,
+      INDEX idx_listorder (listorder ASC) ,
+      INDEX idx_grouporder (grouporder ASC, reply_num ASC) ,
+      INDEX idx_is_notice (is_notice ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '문서' 
+  </insert>
+
+   <insert id="create-document-extra-vars" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS DOCUMENT_EXTRA_VARS (
+      module_orl BIGINT(11) NOT NULL COMMENT '모듈 ORL' ,
+      document_orl BIGINT(11) NOT NULL COMMENT '문서 ORL' ,
+      var_idx BIGINT(11) NOT NULL COMMENT '변수INDEX' ,
+      value LONGTEXT NULL DEFAULT NULL COMMENT '변수값' ,
+      eid VARCHAR(40) NULL DEFAULT NULL COMMENT '변수ID' ,
+      UNIQUE INDEX unique_extra_vars (module_orl ASC, document_orl ASC, var_idx ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '확장변수 값' 
+  </insert>
+
+  <insert id="create-document-extra-keys" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS DOCUMENT_EXTRA_KEYS (
+      module_orl BIGINT(11) NOT NULL COMMENT '모듈 ORL' ,
+      var_idx BIGINT(11) NOT NULL COMMENT '변수 INDEX' ,
+      var_name VARCHAR(250) NOT NULL COMMENT '변수이름' ,
+      var_type VARCHAR(50) NOT NULL COMMENT '변수형태' ,
+      var_is_required CHAR(1) NOT NULL DEFAULT 'N' COMMENT '필수입력여부' ,
+      var_search CHAR(1) NOT NULL DEFAULT 'N' COMMENT '검색여부' ,
+      var_default TEXT NULL DEFAULT NULL COMMENT '기본값' ,
+      var_desc TEXT NULL DEFAULT NULL COMMENT '변수설명' ,
+      eid VARCHAR(40) NULL DEFAULT NULL COMMENT '변수ID' ,
+      UNIQUE INDEX unique_module_keys (module_orl ASC, var_idx ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '문서 확장변수' 
+  </insert>
+
+</sqlMap>

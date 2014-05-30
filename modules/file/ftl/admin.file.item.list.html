@@ -1,0 +1,67 @@
+<script type="text/javascript">//<![CDATA[
+
+  // 삭제
+  function del(file_orl) {
+    jQuery('#form').jaAction({ 
+      formAttr : 'action=./procFileDelete.me&method=post', 
+      param : _mei_gb_params + '&file_orl=' + file_orl , 
+      ask : 'del' ,
+      afterSend : function() { location.reload(); }
+    });
+  }
+
+//]]></script>
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+  <form id="form" method="get" action="?">
+  <div class="document-list">
+  <table cellspacing="0" border="1" summary="" class="table-list">
+  <colgroup>
+  <col width="40"><col width="40"><col width="160"><col><col width="100"><col width="100"><col width="100"><col width="100">
+  </colgroup>
+  <caption>Total ${paging.total_count?string(",###")} Page ${paging.page?string(",###")}/${paging.total_page?string(",###")}</caption>
+  <thead>
+    <tr>
+      <th scope="col"><input type="checkbox" onclick="jQuery.ja.checked('#form input:checkbox:[name=file_orl]',true);" /></th>
+      <th scope="col"></th>
+      <th scope="col">브라우저 제목</th>
+      <th scope="col">파일명</th>
+      <th scope="col">용량</th>
+      <th scope="col">ip</th>
+      <th scope="col">작성자</th>
+      <th scope="col">등록일</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <#list O.listFile as obj>
+    <tr>
+      <td>
+        <input type="checkbox" id="file_orl{obj.file_orl}" name="file_orl" value="${obj.file_orl}" />
+      </td>
+      <td>
+        <a href="javascript:del('${obj.file_orl}');" title="삭제"><span class="iconset delete"></span></a>
+      </td>
+      <td>${obj.browser_title?if_exists}</td>
+      <td class="title"><a href="./getFileDownload.me?file_orl=${obj.file_orl?if_exists}">${obj.filename}</a><br />${obj.re_filename}</td>
+      <td>${fnCls.getFileSizeUnit('${obj.size}',0,true)}</td>
+      <td>${obj.ip}</td>
+      <td>${obj.nickname?if_exists} (${obj.user_id?if_exists})</td>
+      <td><#assign rdate = obj.rdate?datetime("yyyyMMddHHmmss")>${rdate?string("yyyy/MM/dd")}<br />${rdate?string("HH:mm:ss")}</td>
+    </tr>
+    </#list>
+    <#if paging.total_count == 0>
+    <tr><td colspan="5" class="zero">등록된 자료가 없습니다.</td></tr>
+    </#if>
+
+  </tbody>
+  </table>
+  </div>
+
+  <@pagenavigator url = param.get('?page=')?j_string form="#form" params = paging />
+
+  </form>
+
+</div>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.comment">
+  <typeAlias alias="CommentSnsBean" type="com.syaku.modules.comment.CommentSnsBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-commentsns" class="CommentSnsBean">
+  <result property="comment_orl" column="comment_orl" nullValue="" />
+  <result property="sns_name" column="sns_name" nullValue="" />
+  <result property="module_orl" column="module_orl" nullValue="" />
+  <result property="target_orl" column="target_orl" nullValue="" />
+  <result property="msg_id" column="msg_id" nullValue="" />
+  </resultMap>
+
+
+  <select id="select-commentsns-list" parameterClass="hashMap" resultMap="result-commentsns">
+
+    SELECT 
+      comment_orl,
+      sns_name,
+      module_orl,
+      target_orl,
+      msg_id
+    FROM SK_COMMENT_SNS
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="module_orl" >
+        module_orl = #module_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="target_orl" >
+        target_orl = #target_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="comment_orl" >
+        comment_orl = #comment_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="sns_name" >
+        sns_name = #sns_name#
+      </isNotEmpty>
+
+
+    </dynamic>
+
+  </select>
+
+  <select id="select-commentsns-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(comment_orl),0) FROM SK_COMMENT_SNS
+
+    <dynamic prepend="WHERE">
+      <isNotEmpty prepend="AND" property="module_orl" >
+        module_orl = #module_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="target_orl" >
+        target_orl = #target_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="comment_orl" >
+        comment_orl = #comment_orl#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="AND" property="sns_name" >
+        sns_name = #sns_name#
+      </isNotEmpty>
+
+    </dynamic>
+
+  </select>
+
+
+  <select id="select-commentsns-one" parameterClass="hashMap" resultMap="result-commentsns">
+    SELECT 
+      comment_orl,
+      sns_name,
+      module_orl,
+      target_orl,
+      msg_id
+    FROM SK_COMMENT_SNS
+    WHERE comment_orl = #comment_orl#
+    AND sns_name = #sns_name#
+    LIMIT 1
+  </select>
+
+
+  <insert id="insert-commentsns" parameterClass="CommentSnsBean">
+
+    INSERT INTO SK_COMMENT_SNS
+    (
+      comment_orl,
+      sns_name,
+      module_orl,
+      target_orl,
+      msg_id
+    ) VALUES (
+      #comment_orl#,
+      #sns_name#,
+      #module_orl#,
+      #target_orl#,
+      #msg_id#
+    )
+  </insert>
+
+  <delete id="delete-commentsns" parameterClass="hashMap">
+    DELETE FROM SK_COMMENT_SNS WHERE comment_orl = #comment_orl#
+  </delete>
+
+  <delete id="delete-commentsns-module" parameterClass="hashMap">
+    DELETE FROM SK_COMMENT_SNS WHERE module_orl = #module_orl#
+  </delete>
+
+  <delete id="delete-commentsns-target" parameterClass="hashMap">
+    DELETE FROM SK_COMMENT_SNS 
+    WHERE module_orl = #module_orl#
+    AND target_orl = #target_orl#
+  </delete>
+
+</sqlMap>

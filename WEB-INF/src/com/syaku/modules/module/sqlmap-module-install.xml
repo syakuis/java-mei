@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.module">
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <insert id="create-module" parameterClass="hashMap">
+       CREATE  TABLE IF NOT EXISTS  SK_MODULE (
+        module_orl BIGINT(11) NOT NULL COMMENT '모듈 ORL' ,
+        module VARCHAR(250) NOT NULL COMMENT '모듈명' ,
+        mid VARCHAR(50) NOT NULL COMMENT '모듈 MID' ,
+        browser_title VARCHAR(250) NOT NULL COMMENT '브라우저 제목' ,
+        skin VARCHAR(250) NULL DEFAULT NULL COMMENT '스킨' ,
+        layout_orl BIGINT(11) NULL DEFAULT 0 COMMENT '레이아웃 ORL' ,
+        menu_orl BIGINT(11) NULL DEFAULT 0 COMMENT '메뉴 ORL' ,
+        content LONGTEXT NULL DEFAULT NULL ,
+        rdate CHAR(14) NULL DEFAULT NULL COMMENT '등록일' ,
+        header_content LONGTEXT NULL DEFAULT NULL COMMENT '상단 내용' ,
+        footer_content LONGTEXT NULL DEFAULT NULL COMMENT '하단 내용' ,
+        PRIMARY KEY (module_orl) ,
+        INDEX idx_module (module ASC) ,
+        UNIQUE INDEX idx_mid (mid ASC) )
+      ENGINE = InnoDB, 
+      COMMENT = '모듈' 
+  </insert>
+
+  
+  <insert id="create-module-options" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_MODULE_OPTIONS (
+      module_orl BIGINT(11) NOT NULL COMMENT '모듈 ORL' ,
+      name VARCHAR(80) NOT NULL COMMENT '옵션명' ,
+      value TEXT NULL DEFAULT NULL COMMENT '옵션값' ,
+      UNIQUE INDEX unique_sk_module_options (module_orl ASC, name ASC) ,
+      INDEX idx_module_orl (module_orl ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '모듈 추가옵션' 
+  </insert>
+
+  <insert id="create-module-grants" parameterClass="hashMap">
+    CREATE  TABLE IF NOT EXISTS SK_MODULE_GRANTS (
+      module_orl BIGINT(11) NOT NULL COMMENT '모듈 ORL' ,
+      name VARCHAR(20) NOT NULL COMMENT '권한명' ,
+      group_orl BIGINT(11) NOT NULL COMMENT '그룹 ORL' ,
+      UNIQUE INDEX unique_module (module_orl ASC, name ASC, group_orl ASC) )
+    ENGINE = InnoDB, 
+    COMMENT = '모듈 권한' 
+  </insert>
+
+</sqlMap>

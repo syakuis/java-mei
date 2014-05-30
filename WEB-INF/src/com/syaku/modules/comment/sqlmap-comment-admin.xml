@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--//
+ * programmed by Seok Kyun. Choi.
+ * http://syaku.tistory.com
+//-->
+
+<sqlMap namespace="modules.comment">
+  <typeAlias alias="CommentBean" type="com.syaku.modules.comment.CommentBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-comment-admin" class="CommentBean">
+
+    <result property="comment_orl" column="comment_orl" nullValue="" />
+    <result property="module_orl" column="module_orl" nullValue="" />
+    <result property="target_orl" column="target_orl" nullValue="" />
+    <result property="parent_orl" column="parent_orl" nullValue="" />
+    <result property="reply_group" column="reply_group" nullValue="" />
+    <result property="reply_depth" column="reply_depth" nullValue="" />
+    <result property="reply_seq" column="reply_seq" nullValue="" />
+    <result property="member_orl" column="member_orl" nullValue="" />
+    <result property="user_id" column="user_id" nullValue="" />
+    <result property="password" column="password" nullValue="" />
+    <result property="user_name" column="user_name" nullValue="" />
+    <result property="nickname" column="nickname" nullValue="" />
+    <result property="content" column="content" nullValue="" />
+    <result property="rdate" column="rdate" nullValue="" />
+    <result property="ip" column="ip" nullValue="" />
+    <result property="listorder" column="listorder" nullValue="" />
+    <result property="sns_name" column="sns_name" nullValue="" />
+    <result property="sns_photo" column="sns_photo" nullValue="" />
+    <result property="sns_id" column="sns_id" nullValue="" />
+    <result property="is_del" column="is_del" nullValue="" />
+
+    <result property="mid" column="mid" nullValue="" />
+  </resultMap>
+
+  <select id="select-comment-admin-list" parameterClass="hashMap" resultMap="result-comment-admin">
+    SELECT 
+      C.*,
+      M.mid
+    FROM SK_COMMENT C
+    LEFT JOIN SK_MODULE M ON M.module_orl = C.module_orl
+
+
+    <dynamic prepend="WHERE">
+
+      <isNotEmpty prepend="AND" property="sch_value">
+
+        <isNotEmpty property="sch_type">
+          C.$sch_type$ LIKE CONCAT('%', #sch_value#, '%')
+        </isNotEmpty>
+      </isNotEmpty>
+
+    </dynamic>
+
+    ORDER BY listorder
+
+    <isNotEmpty prepend="LIMIT" property="page_start" >
+     $page_start$,$page_row$
+    </isNotEmpty>
+
+  </select>
+
+
+  <select id="select-comment-admin-count" parameterClass="hashMap" resultClass="long">
+    SELECT IFNULL(COUNT(comment_orl),0) FROM SK_COMMENT
+
+    <dynamic prepend="WHERE">
+
+      <isNotEmpty prepend="AND" property="sch_value">
+
+        <isNotEmpty property="sch_type">
+          $sch_type$ LIKE CONCAT('%', #sch_value#, '%')
+        </isNotEmpty>
+      </isNotEmpty>
+
+    </dynamic>
+
+  </select>
+
+
+</sqlMap>

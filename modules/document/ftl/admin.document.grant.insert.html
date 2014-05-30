@@ -1,0 +1,163 @@
+<script type="text/javascript">//<![CDATA[
+
+jQuery(function() {
+  jQuery('.grant_selectbox').change(function() { jQuery.module._grant_zone_show(); });
+  
+  jQuery.module._grant_zone_show();
+
+  jQuery.module._grant_values({
+    access : [${O.objModuleGrants.access_string?if_exists}],
+    list : [${O.objModuleGrants.list_string?if_exists}],
+    view : [${O.objModuleGrants.view_string?if_exists}],
+    write : [${O.objModuleGrants.write_string?if_exists}],
+    comment : [${O.objModuleGrants.comment_string?if_exists}],
+    manager : [${O.objModuleGrants.manager_string?if_exists}]
+  });
+
+});
+
+function save() {
+
+  jQuery('#form').jaAction({
+    formAttr : 'action=./procDocumentAdminGrantInsert.me' ,
+    param : _mei_gb_params , 
+    ask : 'save',
+    afterSend : function() { location.reload(); }
+  });
+}
+
+//]]></script>
+
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+<form id="form" method="post">
+  <h4 class="document-sub-title"><span class="iconset title"></span> 특정 권한의 대상을 모두 해제하면 로그인하지 않은 회원까지 권한을 가질 수 있습니다.</h4>
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="100"><col>
+  </colgroup>
+  <tbody>
+    <tr>
+    <th scope="row">접근</th>
+    <td>
+      <div class="item">
+        <select class="grant_selectbox" id="access_default" name="access_default">
+          <option value="0" selected="selected">모든 사용자</option>
+          <option value="-1">로그인 사용자</option>
+          <option value="-2">가입한 사용자</option>
+          <option value="-99">최고관리자</option>
+          <option value="">특정 그룹 사용자</option>
+        </select>
+        <p id="zone_access">
+          <#list O.listGroup as obj>
+          <input type="checkbox"  class="i_check" id="grant_access_${obj.group_orl}" name="grant_access" value="${obj.group_orl}" /> <label for="grant_access_${obj.group_orl}" class="i_label">${obj.title}</label>&nbsp;
+          </#list>
+        </p>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">목록</th>
+    <td>
+      <div class="item">
+        <select class="grant_selectbox" id="list_default" name="list_default">
+          <option value="0" selected="selected">모든 사용자</option>
+          <option value="-1">로그인 사용자</option>
+          <option value="-2">가입한 사용자</option>
+          <option value="-99">최고관리자</option>
+          <option value="">특정 그룹 사용자</option>
+        </select>
+        <p id="zone_list" >
+          <#list O.listGroup as obj>
+          <input type="checkbox" class="i_check" id="grant_list_${obj.group_orl}" name="grant_list" value="${obj.group_orl}" /> <label for="grant_list_${obj.group_orl}" class="i_label">${obj.title}</label>&nbsp;
+          </#list>
+        </p>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">열람</th>
+    <td>
+      <div class="item">
+        <select class="grant_selectbox" id="view_default" name="view_default">
+          <option value="0" selected="selected">모든 사용자</option>
+          <option value="-1">로그인 사용자</option>
+          <option value="-2">가입한 사용자</option>
+          <option value="-99">최고관리자</option>
+          <option value="">특정 그룹 사용자</option>
+        </select>
+        <p id="zone_view">
+          <#list O.listGroup as obj>
+          <input type="checkbox"  class="i_check" id="grant_view_${obj.group_orl}" name="grant_view" value="${obj.group_orl}" /> <label for="grant_view_${obj.group_orl}" class="i_label">${obj.title}</label>&nbsp;
+          </#list>
+        </p>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">글작성</th>
+    <td>
+      <div class="item">
+        <select class="grant_selectbox" id="write_default" name="write_default">
+          <option value="0" selected="selected">모든 사용자</option>
+          <option value="-1">로그인 사용자</option>
+          <option value="-2">가입한 사용자</option>
+          <option value="-99">최고관리자</option>
+          <option value="">특정 그룹 사용자</option>
+        </select>
+        <p id="zone_write">
+          <#list O.listGroup as obj>
+          <input type="checkbox"  class="i_check" id="grant_write_${obj.group_orl}" name="grant_write" value="${obj.group_orl}" /> <label for="grant_write_${obj.group_orl}" class="i_label">${obj.title}</label>&nbsp;
+          </#list>
+        </p>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">댓글작성</th>
+    <td>
+      <div class="item">
+        <select class="grant_selectbox" id="comment_default" name="comment_default">
+          <option value="0" selected="selected">모든 사용자</option>
+          <option value="-1">로그인 사용자</option>
+          <option value="-2">가입한 사용자</option>
+          <option value="-99">최고관리자</option>
+          <option value="">특정 그룹 사용자</option>
+        </select>
+        <p id="zone_comment">
+          <#list O.listGroup as obj>
+          <input type="checkbox"  class="i_check" id="grant_comment_${obj.group_orl}" name="grant_comment" value="${obj.group_orl}" /> <label for="grant_comment_${obj.group_orl}" class="i_label">${obj.title}</label>&nbsp;
+          </#list>
+        </p>
+      </div>
+    </td>
+    </tr>
+    <tr>
+    <th scope="row">관리자</th>
+    <td>
+      <div class="item">
+        <select class="grant_selectbox" id="manager_default" name="manager_default">
+          <option value="-99" selected="selected">최고관리자</option>
+          <option value="">특정 그룹 사용자</option>
+        </select>
+        <p id="zone_manager">
+          <#list O.listGroup as obj>
+          <input type="checkbox"  class="i_check" id="grant_manager_${obj.group_orl}" name="grant_manager" value="${obj.group_orl}" /> <label for="grant_manager_${obj.group_orl}" class="i_label">${obj.title}</label>&nbsp;
+          </#list>
+        </p>
+      </div>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+
+  <div class="document-foot-menu">
+    <span class="button medium icon"><button type="button" onclick="save();"><span class="iconset accept"></span>저장</button></span>
+  </div>
+
+</form>
+</div>

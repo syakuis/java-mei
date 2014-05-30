@@ -1,0 +1,26 @@
+<script type="text/javascript">
+
+jQuery(function() {
+
+  // Tab on class
+  targetOnClass('#admin-tab li','on','single', { target : [
+    { search : ['dispMemberAdminConfigInsert'] , def : true },
+    { search : ['dispMemberAdminList','dispMemberAdminInsert','dispMemberAdminView'] , def : false , condition : 'or' },
+    { search : ['dispGroupAdmin'] , def : false }
+  ]} );
+
+});
+
+</script>
+
+<div class="document-title">
+  <div class="document-title-name">회원</div>
+</div>
+
+<div class="document-tab">
+  <ul id="admin-tab">
+    <li><a href="./dispMemberAdminConfigInsert.me${param.pick('?mid=&module_orl=')?html}">모듈</a></li>
+    <li><a href="./dispMemberAdminList.me${param.get('?member_orl=')?html}">회원</a></li>
+    <li><a href="./dispGroupAdminList.me${param.get('?')?html}">그룹</a></li>
+  </ul>
+</div>

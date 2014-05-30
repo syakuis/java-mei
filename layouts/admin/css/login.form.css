@@ -1,0 +1,79 @@
+* {margin:0; padding:0;}
+body {color:#fff; background-color:#2C303A;}
+body {margin:0 !important;}
+ul,ol{list-style:none}
+
+/** login **/
+#login {
+  margin: 50px auto;
+  padding: 20px;
+  width: 358px;
+}
+
+#login h1 {
+  color: #FFFF00;
+  font-size: 18px;
+  margin: 0 28px 20px;
+}
+
+#login .login-input {
+  margin: 0 28px 20px;
+}
+
+#login .login-input .idpw li {
+  margin: 0 0 5px;
+}
+
+#login .button-area {
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+
+#login .button-area .left {
+  color: #fff;
+  margin-top: 4px;
+  float: left;
+  font-size: 12px;
+}
+
+#login .button-area .right {
+  float: right;
+}
+
+#login .login-input {
+  color: #767676;
+  margin: 0 28px;
+  padding: 0;
+  position: relative;
+}
+
+
+#login .i_text {
+  padding: 8px 0 0 10px;
+  border-color: #b7b7b7 #e1e1e1 #e1e1e1 #b7b7b7;
+  border-style: solid;
+  border-width: 1px;
+  color: #767676;
+  font-size: 14px;
+  font-weight: bold;
+  height: 22px;
+}
+
+#login .foot {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top:1px solid #fff;
+  color: #fff;
+}
+
+#login .i_label{
+  color: #8f939d;
+  padding-top: 8px;
+  padding-left: 10px;
+  position:static;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#login .foot address { font-family:Verdana, sans-serif !important; font-size:11px !important; font-style:normal;}
+#login .foot address a {font-weight:bold; color:#0098d7; text-decoration:none;}

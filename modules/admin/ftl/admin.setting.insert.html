@@ -1,0 +1,51 @@
+<script type="text/javascript">//<![CDATA[
+
+function save() {
+
+  jQuery('#form').jaAction({
+    param : _mei_gb_params , 
+    ask : 'save',
+    afterSend : function() {
+      location.reload();
+    }
+  });
+
+}
+
+//]]></script>
+
+
+<div id="sub_column_content">
+<#include "admin.sub.html">
+
+<form id="form" method="post" action="./procAdminSettingInsert.me">
+<input type="hidden" id="admin_orl" name="admin_orl" value="${O.objAdmin.admin_orl?if_exists}" />
+
+  <div class="document-write">
+  <table class="table-write" summary="document write" border="1" cellspacing="0">
+  <colgroup>
+  <col width="150"><col>
+  </colgroup>
+  <tbody>
+
+  <tr>
+  <th scope="row">기본 모듈 설정</th>
+  <td>
+    <div class="item">
+      <input type="hidden" id="module_orl" name="module_orl" value="${O.objAdmin.module_orl?if_exists}" />
+      <input type="text" class="i_text w150" id="module_id" name="module_id" value="${O.objModule.mid?if_exists}" readonly = "readonly" />
+      <span class="button green medium icon"><button type="button" onclick="jQuery.module._open_search({return_mid : '#form #module_id' , return_module_orl : '#form #module_orl' });"><span class="iconset search"></span>검색</button></span>
+    </div>
+  </td>
+  </tr>
+
+  </tbody>
+  </table>
+  </div>
+
+  <div class="document-foot-menu">
+    <span class="button medium icon"><button type="button" onclick="save();"><span class="iconset accept"></span>저장</button></span>
+  </div>
+
+</form>
+</div>

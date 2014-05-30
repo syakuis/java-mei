@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="modules.note">
+  <typeAlias alias="NoteBean" type="com.syaku.modules.note.NoteBean"/>
+  <typeAlias alias="hashMap" type="java.util.HashMap" />
+
+  <resultMap id="result-note" class="NoteBean">
+
+    <result property="note_orl" column="note_orl" nullValue="" />
+    <result property="member_orl" column="member_orl" nullValue="" />
+    <result property="user_id" column="user_id" nullValue="" />
+    <result property="user_name" column="user_name" nullValue="" />
+    <result property="nickname" column="nickname" nullValue="" />
+    <result property="rec_member_orl" column="rec_member_orl" nullValue="" />
+    <result property="rec_user_id" column="rec_user_id" nullValue="" />
+    <result property="rec_user_name" column="rec_user_name" nullValue="" />
+    <result property="rec_nickname" column="rec_nickname" nullValue="" />
+    <result property="title" column="title" nullValue="" />
+    <result property="content" column="content" nullValue="" />
+    <result property="send_date" column="send_date" nullValue="" />
+    <result property="readed_date" column="readed_date" nullValue="" />
+    <result property="ipaddress" column="ipaddress" nullValue="" />
+    <result property="listorder" column="listorder" nullValue="" />
+     
+  </resultMap>
+  <sql id="sql-note">
+
+    SELECT
+
+    note_orl,
+    member_orl,
+    user_id,
+    user_name,
+    nickname,
+    rec_member_orl,
+    rec_user_id,
+    rec_user_name,
+    rec_nickname,
+    title,
+    content,
+    send_date,
+    readed_date,
+    ipaddress,
+    listorder
+
+    FROM SK_NOTE
+  </sql>
+
+ <select id="select-note-list" parameterClass="hashMap" resultMap="result-note">
+  <include refid="sql-note" />
+
+    <dynamic prepend="WHERE">
+
+      <isNotEmpty prepend="AND" property="module_orl" >
+      module_orl = #module_orl#
+      </isNotEmpty>
+
+    </dynamic>
+
+    ORDER BY listorder
+
+  <isNotEmpty prepend="LIMIT" property="page_start" >
+  $page_start$,$page_row$
+  </isNotEmpty>
+  </select>
+
+    <select id="select-note-count" parameterClass="hashMap" resultClass="long">
+      SELECT IFNULL(COUNT(note_orl),0) FROM SK_NOTE
+
+    <dynamic prepend="WHERE">
+
+      <isNotEmpty prepend="AND" property="module_orl" >
+      module_orl = #module_orl#
+      </isNotEmpty>
+
+    </dynamic>
+
+    </select>
+
+  <select id="select-note-one" parameterClass="hashMap" resultMap="result-note">
+    SELECT
+
+    note_orl,
+    member_orl,
+    user_id,
+    user_name,
+    nickname,
+    rec_member_orl,
+    rec_user_id,
+    rec_user_name,
+    rec_nickname,
+    title,
+    content,
+    send_date,
+    readed_date,
+    ipaddress,
+    listorder
+
+    FROM SK_NOTE 
+    
+    <dynamic prepend="WHERE">
+
+      <isNotEmpty prepend="AND" property="note_orl" >
+      note_orl = #note_orl#
+      </isNotEmpty>
+
+    </dynamic>
+
+    LIMIT 1
+
+  </select>
+
+  <insert id="insert-note" parameterClass="NoteBean">
+  <selectKey resultClass="String" keyProperty="note_orl">
+  SELECT (IFNULL(MAX(note_orl),0) + 1) AS note_orl FROM SK_NOTE
+  </selectKey>
+
+    INSERT INTO SK_NOTE
+    (
+
+    note_orl,
+    member_orl,
+    user_id,
+    user_name,
+    nickname,
+    rec_member_orl,
+    rec_user_id,
+    rec_user_name,
+    rec_nickname,
+    title,
+    content,
+    send_date,
+    readed_date,
+    ipaddress,
+    listorder
+
+     ) VALUES (
+
+
+    #note_orl#,
+    #member_orl#,
+    #user_id#,
+    #user_name#,
+    #nickname#,
+    #rec_member_orl#,
+    #rec_user_id#,
+    #rec_user_name#,
+    #rec_nickname#,
+    #title#,
+    #content#,
+    #send_date#,
+    #readed_date#,
+    #ipaddress#,
+    #note_orl# * -1
+    )
+  </insert>
+
+  <delete id="delete-note" parameterClass="hashMap">
+    DELETE FROM SK_NOTE WHERE note_orl = #note_orl#
+  </delete>
+
+</sqlMap>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<layout>
+  <name>admin</name>
+  <description>관리자 레이아웃</description>
+  <login_layout_hide>false</login_layout_hide>
+  <login_ftl>/layouts/admin/login.form.html</login_ftl>
+</layout>

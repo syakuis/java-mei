@@ -1,0 +1,72 @@
+<script type="text/javascript">//<![CDATA[
+
+  function check_del() {
+
+     jQuery('#form').jaAction({ 
+      formAttr :'action=./procNoteDelete.me&method=post', 
+      filter : [
+      { target : "input:checkbox:[name=note_orl]", params : "&selected=1&title=게시물" }
+       ],
+      param : _mei_gb_params ,
+      ask_msg : '선택된 게시물을 처리하겠습니까?',
+      afterSend : function() { alert("완료되었습니다."); location.reload(); }
+    });
+   }
+
+  //]]></script>
+
+<div id="sub_column_content">
+  <#include "./admin.sub.html">
+
+  <form id="form"  method="get" action="?">
+ 
+  <div class="document-list">
+
+  <table cellspacing="0" border="1" summary="document list" class="table-list">
+    <caption>Total ${paging.total_count?string(",###")} Page ${paging.page?string(",###")}/${paging.total_page?string(",###")}</caption>
+    <colgroup>
+      <col width="50"><col width="150"><col><col width="150"><col width="100"><col width="100">
+    </colgroup>
+
+  <thead>
+  <tr>
+    <th scope="col"><input type="checkbox" onclick="jQuery.ja.checked('#form input:checkbox:[name=note_orl]',true);" /></th>
+    <th scope="col">보낸이</th>
+    <th scope="col">제목</th>
+    <th scope="col">받는이</th>
+    <th scope="col">보낸일</th>
+    <th scope="col">읽은일</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  <#list O.listNote as obj>
+  <tr>
+    <td><input type="checkbox" id="note_orl${obj.note_orl}" name="note_orl" value="${obj.note_orl}" /> </td>
+    <td>${obj.user_name} (${obj.user_id }) </td>
+    <td class="title"><a href="./dispNoteView.me${param.get('?note_orl=${obj.note_orl}')?html}">${obj.title}</a></td>
+    <td>${obj.rec_user_id} (${obj.rec_user_name})</td>
+    <td><#if obj.send_date != ""><#assign send_date  = obj.send_date ?datetime("yyyyMMddHHmmss")>${send_date ?string("yy/MM/dd HH:mm")}</#if></td>
+    <td>-</td>
+  </tr>
+  </#list>
+
+  <#if paging.total_count == 0>
+  <tr><td colspan="6" class="zero">등록된 자료가 없습니다.</td></tr>
+  </#if>
+
+  </tbody>
+
+  </table>
+  </div>
+  </form>
+
+
+  <div class="document-foot-menu tl"> 
+    <span class="button medium icon"><a href="javascript:check_del();"><span class="iconset delete"></span>삭제</a></span>
+    <span class="button medium icon"><a href="./dispNoteSendInsert.me${param.get('?')?html}"><span class="iconset accept"></span>쪽지 보내기</a></span>
+  </div>
+
+  <@pagenavigator url = param.get('?page=')?j_string form="#form" params = paging />
+
+</div>
