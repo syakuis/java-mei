@@ -35,9 +35,9 @@ MEI는 다음과 같은 오픈 프레임워크를 이용하여 최적의 모듈�
  * 데이터베이스 맵퍼 myBatis
 <br/>
 
-### 사용된 라이브러리 =
+# 사용된 라이브러리 =
 
-#### Struts 2.3.1.2
+## Struts 2.3.1.2
  * commons-beanutils-1.7.0.jar
  * commons-fileupload-1.2.2.jar
  * commons-validator-1.3.1.jar
@@ -58,13 +58,13 @@ MEI는 다음과 같은 오픈 프레임워크를 이용하여 최적의 모듈�
  * Xerces2 Java 2.11.0 ( xml-apis.jar , xercesImpl.jar )
 <br/>
 
-#### mybatis 3.0.6
+## mybatis 3.0.6
  * mybatis-3.0.6.jar
  * mysql-connector-java-5.1.18-bin.jar
 <br/>
 
 
-#### Javascript
+## Javascript
  * xml2json
  * jQuery
  * jQuery Action
