@@ -15,7 +15,7 @@ Apache Tomcat 5.x 이상<br>
 MySQL 5.x 이상<br/>
 
 
-### 소 개
+# 소개
 
 *MEI (Modularize Extension Interaction)* 란 모듈기반 방식의 프로그래밍을 제시하는 프레임워크입니다.<br>
 모듈기반 방식이란, 하나의 어플리케이션을 기능별로 세분화하여 모듈화하는 방식을 말합니다.<br>
