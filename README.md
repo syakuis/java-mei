@@ -6,6 +6,7 @@ Powered by Seok Kyun. Choi. 최석균.<br>
 MEI (Modularize. Extension. Interaction.)<br/>
 
 ※ 개발자 블로그 : http://syaku.tistory.com<br>
+※  Github : https://github.com/syakuis/java-mei<br>
 
 ※ 개발 언어 : JAVA<br/>
 
